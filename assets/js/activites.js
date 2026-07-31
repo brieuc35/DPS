@@ -143,35 +143,44 @@ function activitesFiltrees() {
   return resultat.sort(tris[etatFiltres.tri] || tris.date);
 }
 
+/**
+ * Rend toutes les grilles présentes dans la page. Chacune peut limiter le
+ * nombre de cartes affichées via l'attribut data-limite (l'accueil n'en montre
+ * que six, le catalogue les affiche toutes).
+ */
 function rendreGrille() {
-  const grille = $('[data-grille-activites]');
-  if (!grille) return;
+  const grilles = $$('[data-grille-activites]');
+  if (!grilles.length) return;
 
-  const limite = Number(grille.dataset.limite) || Infinity;
-  const liste = activitesFiltrees().slice(0, limite);
-  const compteur = $('[data-compteur-activites]');
+  const resultats = activitesFiltrees();
 
-  if (compteur) {
+  $$('[data-compteur-activites]').forEach((compteur) => {
     compteur.textContent =
-      liste.length === 0
+      resultats.length === 0
         ? 'Aucune activité'
-        : `${liste.length} activité${liste.length > 1 ? 's' : ''} disponible${liste.length > 1 ? 's' : ''}`;
-  }
+        : `${resultats.length} activité${resultats.length > 1 ? 's' : ''} disponible${resultats.length > 1 ? 's' : ''}`;
+  });
 
-  if (!liste.length) {
-    grille.innerHTML = `
-      <div class="message-vide">
-        <span class="message-vide__emoji" aria-hidden="true">🧭</span>
-        <h3>Rien ne correspond à votre recherche</h3>
-        <p>Essayez une autre thématique, ou élargissez vos mots-clés.</p>
-        <button type="button" class="btn btn--fantome" data-reinitialiser>Réinitialiser les filtres</button>
-      </div>
-    `;
-    return;
-  }
+  grilles.forEach((grille) => {
+    const limite = Number(grille.dataset.limite) || Infinity;
+    const liste = resultats.slice(0, limite);
 
-  grille.innerHTML = liste.map(gabaritCarte).join('');
-  echelonnerApparitions(grille);
+    if (!liste.length) {
+      grille.innerHTML = `
+        <div class="message-vide">
+          <span class="message-vide__emoji" aria-hidden="true">🧭</span>
+          <h3>Rien ne correspond à votre recherche</h3>
+          <p>Essayez une autre thématique, ou élargissez vos mots-clés.</p>
+          <button type="button" class="btn btn--fantome" data-reinitialiser>Réinitialiser les filtres</button>
+        </div>
+      `;
+      return;
+    }
+
+    grille.innerHTML = liste.map(gabaritCarte).join('');
+    echelonnerApparitions(grille);
+  });
+
   initApparitions();
 }
 
@@ -198,11 +207,9 @@ function appliquerAncre() {
 function initFiltres() {
   appliquerAncre();
 
-  const puces = $('[data-puces-thematiques]');
+  const options = [{ id: 'toutes', nom: 'Toutes', emoji: '✨' }, ...THEMATIQUES];
 
-  if (puces) {
-    const options = [{ id: 'toutes', nom: 'Toutes', emoji: '✨' }, ...THEMATIQUES];
-
+  $$('[data-puces-thematiques]').forEach((puces) => {
     puces.innerHTML = options
       .map(
         (option) => `
@@ -220,12 +227,16 @@ function initFiltres() {
       if (!bouton) return;
 
       etatFiltres.thematique = bouton.dataset.thematique;
-      $$('[data-thematique]', puces).forEach((autre) =>
-        autre.setAttribute('aria-pressed', String(autre === bouton))
+      // Toutes les séries de puces de la page restent synchronisées.
+      $$('[data-thematique]').forEach((autre) =>
+        autre.setAttribute(
+          'aria-pressed',
+          String(autre.dataset.thematique === etatFiltres.thematique)
+        )
       );
       rendreGrille();
     });
-  }
+  });
 
   const recherche = $('[data-recherche]');
   if (recherche) {
@@ -248,9 +259,8 @@ function initFiltres() {
     });
   }
 
-  // Bouton « réinitialiser » du message vide (délégation sur la grille).
-  const grille = $('[data-grille-activites]');
-  if (grille) {
+  // Bouton « réinitialiser » du message vide (délégation sur chaque grille).
+  $$('[data-grille-activites]').forEach((grille) => {
     grille.addEventListener('click', (evenement) => {
       if (!evenement.target.closest('[data-reinitialiser]')) return;
 
@@ -262,7 +272,7 @@ function initFiltres() {
       );
       rendreGrille();
     });
-  }
+  });
 }
 
 /* ==========================================================================
@@ -601,8 +611,8 @@ function enregistrerReservation(activite, participant) {
    ========================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
-  const grille = $('[data-grille-activites]');
-  if (!grille) return;
+  const grilles = $$('[data-grille-activites]');
+  if (!grilles.length) return;
 
   initFiltres();
   rendreGrille();
@@ -614,9 +624,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (appliquerAncre()) rendreGrille();
   });
 
-  grille.addEventListener('click', (evenement) => {
-    const bouton = evenement.target.closest('[data-reserver]');
-    if (!bouton || bouton.disabled) return;
-    ouvrirModale(bouton.dataset.reserver, bouton);
+  grilles.forEach((grille) => {
+    grille.addEventListener('click', (evenement) => {
+      const bouton = evenement.target.closest('[data-reserver]');
+      if (!bouton || bouton.disabled) return;
+      ouvrirModale(bouton.dataset.reserver, bouton);
+    });
   });
 });
