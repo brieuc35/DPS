@@ -16,6 +16,7 @@ const THEMATIQUES = [
   { id: 'nature',      nom: 'Nature & faune',   emoji: '🦌', degrade: 'linear-gradient(150deg, #4fa36b, #1f5c39)' },
   { id: 'atelier',     nom: 'Ateliers',         emoji: '🧶', degrade: 'linear-gradient(150deg, #d96c4f, #7e3524)' },
   { id: 'bienetre',    nom: 'Sport & bien-être',emoji: '🧘', degrade: 'linear-gradient(150deg, #3d8bbf, #1f4f70)' },
+  { id: 'rencontre',   nom: 'Rencontres',       emoji: '💬', degrade: 'linear-gradient(150deg, #c76b8a, #6e2f47)' },
 ];
 
 /* Activités proposées. `placesPrises` évolue avec les réservations locales. */
@@ -261,6 +262,28 @@ const ACTIVITES = [
       'Accrochage improvisé des tirages',
     ],
     inclus: ['Prêt du boîtier', 'Pellicule et chimie', 'Vos tirages'],
+  },
+  {
+    id: 'rencontre-luthier',
+    titre: 'Une soirée avec un luthier passionné',
+    thematique: 'rencontre',
+    lieu: 'Rennes, Ille-et-Vilaine',
+    date: '2026-09-03T19:00',
+    duree: '2 h',
+    prix: 10,
+    placesTotal: 12,
+    placesPrises: 4,
+    niveau: 'Accessible à tous',
+    hote: { nom: 'Gwen A.', initiales: 'GA', couleur: 'avatar--terre' },
+    resume:
+      'Trente ans à fabriquer des instruments, et l’envie de raconter. On écoute, on pose des questions, on touche le bois.',
+    programme: [
+      'Visite de l’atelier et des instruments en cours',
+      'Le métier raconté sans jargon : essences, courbes, patience',
+      'Essai libre des instruments terminés',
+      'Discussion ouverte autour d’un verre',
+    ],
+    inclus: ['Rencontre avec l’artisan', 'Essai des instruments', 'Une boisson'],
   },
   {
     id: 'marche-producteurs',

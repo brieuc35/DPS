@@ -614,6 +614,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const grilles = $$('[data-grille-activites]');
   if (!grilles.length) return;
 
+  // Compteurs rédactionnels (« Voir les N activités »), tenus à jour depuis
+  // les données pour ne pas se désynchroniser du catalogue.
+  $$('[data-total-activites]').forEach((element) => {
+    element.textContent = ACTIVITES.length;
+  });
+
   initFiltres();
   rendreGrille();
   creerModale();

@@ -12,11 +12,12 @@ aux participants d’échanger avant et après la sortie.
 | `index.html` | Accueil : proposition de valeur, six activités à la une, fonctionnement, charte, témoignages |
 | `activites.html` | Catalogue complet avec recherche, filtres par thématique et tri |
 | `communaute.html` | Fil social : cercles de discussion, composeur, réactions et réponses |
+| `vision.html` | Le projet : la vision, le concept, la vie de la communauté, l'ambition et la promesse |
 
 ## Fonctionnalités
 
 **Activités**
-- Grille de cases thématiques (8 thématiques, 12 activités).
+- Grille de cases thématiques (9 thématiques, 13 activités).
 - Recherche plein texte (titre, lieu, description, thématique), filtres par
   thématique et tri par date / prix / places disponibles.
 - Jauge de remplissage du groupe et étiquette « Plus que N places » / « Complet ».
