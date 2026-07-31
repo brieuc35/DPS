@@ -63,9 +63,9 @@ function gabaritCarte(activite) {
   const complet = restantes === 0;
 
   const etiquetteDispo = complet
-    ? '<span class="etiquette-flottante">Complet</span>'
+    ? '<span class="etiquette-flottante carte-activite__dispo">Complet</span>'
     : presqueComplet
-      ? `<span class="etiquette-flottante">Plus que ${restantes} place${restantes > 1 ? 's' : ''}</span>`
+      ? `<span class="etiquette-flottante carte-activite__dispo">Plus que ${restantes} place${restantes > 1 ? 's' : ''}</span>`
       : '';
 
   return `
@@ -73,9 +73,10 @@ function gabaritCarte(activite) {
       <div class="carte-activite__visuel" style="background:${theme.degrade}">
         <div class="carte-activite__etiquettes">
           <span class="etiquette-flottante">${echapper(theme.nom)}</span>
-          ${etiquetteDispo}
+          <span class="etiquette-flottante etiquette-flottante--prix">${activite.prix} € <small>/ pers.</small></span>
         </div>
         <span class="carte-activite__emoji" aria-hidden="true">${theme.emoji}</span>
+        ${etiquetteDispo}
       </div>
 
       <div class="carte-activite__corps">
@@ -98,9 +99,8 @@ function gabaritCarte(activite) {
         </div>
 
         <div class="carte-activite__pied">
-          <p class="prix">${activite.prix} €<small>par personne</small></p>
           <button type="button"
-                  class="btn ${complet ? 'btn--fantome' : 'btn--primaire'}"
+                  class="btn btn--bloc ${complet ? 'btn--fantome' : 'btn--primaire'}"
                   data-reserver="${activite.id}"
                   ${complet ? 'disabled' : ''}>
             ${complet ? 'Complet' : 'Je participe'}
