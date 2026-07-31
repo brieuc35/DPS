@@ -104,7 +104,7 @@ function gabaritCarte(activite) {
                   class="btn ${complet ? 'btn--fantome' : 'btn--primaire'}"
                   data-reserver="${activite.id}"
                   ${complet ? 'disabled' : ''}>
-            ${complet ? 'Complet' : 'Réserver'}
+            ${complet ? 'Complet' : 'Je participe'}
           </button>
         </div>
       </div>
