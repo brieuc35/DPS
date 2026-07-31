@@ -752,14 +752,6 @@ select {
   position: relative;
   display: grid;
   gap: var(--e-7);
-  align-items: center;
-}
-
-@media (min-width: 960px) {
-  .hero__interieur {
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: var(--e-8);
-  }
 }
 
 /* Échelle propre au titre d'ouverture : plus contenue que l'échelle des h1,
@@ -791,10 +783,12 @@ select {
   background: var(--spectre);
 }
 
+/* Le texte d'ouverture occupe toute la largeur du conteneur. Un cran de corps
+   en plus compense la longueur de ligne. */
 .hero__texte {
-  font-size: var(--t-md);
+  font-size: var(--t-lg);
+  line-height: 1.5;
   color: var(--texte-doux);
-  max-width: 52ch;
 }
 
 .hero__actions {
@@ -825,98 +819,6 @@ select {
   font-size: var(--t-xs);
   color: var(--texte-doux);
 }
-
-/* Collage de cartes illustrant l'ambiance */
-.hero__collage {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--e-4);
-}
-
-.tuile-ambiance {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  min-height: 180px;
-  padding: var(--e-4);
-  border-radius: var(--r-lg);
-  color: #fff;
-  box-shadow: var(--ombre-md);
-  overflow: hidden;
-  isolation: isolate;
-}
-
-.tuile-ambiance::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(160deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.45));
-}
-
-.tuile-ambiance__emoji {
-  position: absolute;
-  top: var(--e-3);
-  right: var(--e-3);
-  font-size: 1.6rem;
-  line-height: 1;
-}
-
-.tuile-ambiance__titre {
-  font-family: var(--police-titre);
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-
-.tuile-ambiance__meta {
-  font-size: var(--t-xs);
-  opacity: 0.9;
-}
-
-.tuile-ambiance--1 { background: linear-gradient(150deg, #5fd3e0, #2f6fe0); }
-.tuile-ambiance--2 { background: linear-gradient(150deg, #f5a65a, #ec4899); margin-top: var(--e-6); }
-.tuile-ambiance--3 { background: linear-gradient(150deg, #7c4df0, #3b39c4); margin-top: calc(var(--e-6) * -1); }
-.tuile-ambiance--4 { background: linear-gradient(150deg, #f2718c, #b03fd0); }
-
-@media (max-width: 959px) {
-  .tuile-ambiance--2,
-  .tuile-ambiance--3 { margin-top: 0; }
-}
-
-/* Ouverture du manifeste : le texte à gauche, la signature en contrepoint. */
-.vision-ouverture {
-  position: relative;
-  display: grid;
-  gap: var(--e-6);
-  align-items: center;
-}
-
-@media (min-width: 900px) {
-  .vision-ouverture {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-    gap: var(--e-8);
-  }
-}
-
-/* Signature de marque : les trois mots empilés, un par ligne. */
-.signature {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding-left: var(--e-5);
-  border-left: 3px solid var(--accent);
-  font-family: var(--police-titre);
-  font-size: clamp(1.6rem, 1.1rem + 2vw, 2.6rem);
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  color: var(--primaire);
-}
-
-.signature span:nth-child(1) { color: var(--ambre); }
-.signature span:nth-child(2) { color: var(--magenta); }
-.signature span:nth-child(3) { color: var(--cyan); }
 
 /* --- Bandeau valeurs --- */
 .bandeau-valeurs {
