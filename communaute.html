@@ -1,32 +1,49 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Communauté — DPS</title>
+  <title>Communauté — DPS Collective</title>
   <meta name="description" content="Le fil bienveillant de DPS : posez vos questions, racontez vos sorties, rencontrez les autres participants avant le jour J.">
-  <meta name="theme-color" content="#0e6e5c">
+  <meta name="theme-color" content="#f8f7fc" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#08080f" media="(prefers-color-scheme: dark)">
 
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 
-  <!-- Signale que le script est actif : les apparitions au défilement ne
-       s'appliquent que dans ce cas, le contenu reste visible sans JavaScript. -->
-  <script>document.documentElement.classList.add('js');</script>
+  <!-- Posé avant le premier rendu : évite que la page s'affiche en clair
+       avant de basculer. La classe « js » conditionne les apparitions au
+       défilement — sans JavaScript, le contenu reste simplement visible. -->
+  <script>
+    (function () {
+      var racine = document.documentElement;
+      racine.classList.add('js');
+      var stocke = null;
+      try { stocke = JSON.parse(localStorage.getItem('dps.theme')); } catch (erreur) {}
+      // Le monde de la marque est nocturne : on n'éclaircit que si le
+      // système le demande explicitement.
+      var clair = window.matchMedia('(prefers-color-scheme: light)').matches;
+      racine.setAttribute('data-theme', stocke || (clair ? 'light' : 'dark'));
+    })();
+  </script>
 </head>
 <body>
   <a class="saut-contenu" href="#contenu">Aller au contenu principal</a>
 
   <header class="entete">
     <div class="conteneur entete__interieur">
-      <a class="logo" href="index.html" aria-label="DPS, accueil">
-        <span class="logo__marque" aria-hidden="true">DPS</span>
+      <a class="logo" href="index.html" aria-label="DPS Collective, accueil">
+        <span class="logo__marque" aria-hidden="true"></span>
         <span class="logo__texte">
-          <span class="logo__nom">DPS</span>
-          <span class="logo__baseline">Découvrir · Partager · Simplement</span>
+          <span class="logo__nom">
+            <span class="logo__sigle">DPS</span><span class="logo__collective">Collective</span>
+          </span>
+          <span class="logo__baseline" aria-hidden="true">
+            <span>Découvrir</span><span>Partager</span><span>Simplement</span>
+          </span>
         </span>
       </a>
 
@@ -182,10 +199,14 @@
       <div class="pied__grille">
         <div>
           <a class="logo" href="index.html">
-            <span class="logo__marque" aria-hidden="true">DPS</span>
+            <span class="logo__marque" aria-hidden="true"></span>
             <span class="logo__texte">
-              <span class="logo__nom">DPS</span>
-              <span class="logo__baseline">Découvrir · Partager · Simplement</span>
+              <span class="logo__nom">
+                <span class="logo__sigle">DPS</span><span class="logo__collective">Collective</span>
+              </span>
+              <span class="logo__baseline" aria-hidden="true">
+                <span>Découvrir</span><span>Partager</span><span>Simplement</span>
+              </span>
             </span>
           </a>
           <p class="pied__texte">
@@ -226,7 +247,7 @@
       </div>
 
       <div class="pied__bas">
-        <p style="margin:0">© <span id="annee">2026</span> DPS — Découvrir, Partager, Simplement.</p>
+        <p style="margin:0">© <span id="annee">2026</span> DPS Collective — Découvrir, Partager, Simplement.</p>
         <p style="margin:0">Fait avec attention, pour se rencontrer pour de vrai.</p>
       </div>
     </div>

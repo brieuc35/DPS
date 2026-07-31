@@ -1,5 +1,5 @@
 /**
- * DPS — Comportements communs à toutes les pages
+ * DPS Collective — Comportements communs à toutes les pages
  * ---------------------------------------------------------------------------
  * Thème clair/sombre, navigation mobile, en-tête collant, apparition au
  * défilement, notifications éphémères et petits utilitaires partagés.
@@ -103,9 +103,13 @@ function appliquerTheme(theme) {
 }
 
 function initTheme() {
+  // Même résolution que le script inline du <head>, qui pose déjà le thème
+  // avant le premier rendu : ici on ne fait que la confirmer et brancher
+  // le bouton. Le monde de la marque est nocturne, donc « sombre » est le
+  // choix par défaut ; seul un système réglé en clair l'emporte.
   const stocke = Stockage.lire(CLE_THEME, null);
-  const preferSombre = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  appliquerTheme(stocke || (preferSombre ? 'dark' : 'light'));
+  const clairDemande = window.matchMedia('(prefers-color-scheme: light)').matches;
+  appliquerTheme(stocke || (clairDemande ? 'light' : 'dark'));
 
   const bouton = $('.bascule-theme');
   if (!bouton) return;

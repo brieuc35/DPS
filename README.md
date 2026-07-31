@@ -1,4 +1,4 @@
-# DPS — Découvrir, Partager, Simplement
+# DPS Collective — Découvrir, Partager, Simplement
 
 Site vitrine d’une plateforme d’activités à taille humaine : on réserve une place
 seul·e (randonnée, visite d’usine, brasserie, atelier…) et on rejoint un petit
@@ -35,7 +35,9 @@ aux participants d’échanger avant et après la sortie.
 - Signalement d’un message vers la modération.
 
 **Transversal**
-- Thème clair / sombre, initialisé selon la préférence système puis mémorisé.
+- Thème sombre par défaut — le monde du logo — sauf si le système demande
+  explicitement le thème clair. Le choix de l'utilisateur est mémorisé et
+  appliqué avant le premier rendu, sans clignotement.
 - Navigation responsive avec menu mobile.
 - Apparitions au défilement, désactivées si l’utilisateur a demandé de réduire
   les animations (`prefers-reduced-motion`) et sans effet si JavaScript est absent.
@@ -54,6 +56,25 @@ python3 -m http.server 8000
 
 Le site peut être publié tel quel sur GitHub Pages, Netlify ou tout hébergeur
 de fichiers statiques.
+
+## Direction artistique
+
+Elle découle du logo : un sigle en dégradé posé sur un fond nuit, des lettres
+géométriques, une porte ouverte comme motif.
+
+- **Spectre** — ambre `#f5a65a` → magenta `#ec4899` → violet `#7c4df0` →
+  cyan `#5fd3e0`, dans l'ordre de lecture du sigle (D chaud, P médian, S froid).
+  Il habille le sigle, les jauges, les vignettes thématiques et la signature.
+- **Fond nuit** `#08080f`, décliné jusqu'à `#262649` pour les surfaces. Les
+  neutres du thème clair sont légèrement tirés vers le violet plutôt que gris.
+- **Typographie** — Outfit en titres (géométrique, comme les lettres du logo),
+  Manrope en texte courant, capitales très espacées pour les libellés, à
+  l'image du « COLLECTIVE » du logo.
+- **Le glyphe** (le « D » ouvert sur une porte et son escalier) est appliqué en
+  masque CSS sur le dégradé : une seule définition, aucune couleur figée, et
+  aucun identifiant SVG dupliqué entre l'en-tête et le pied de page.
+- Chacune des neuf thématiques reçoit un pan du spectre, pour que les vignettes
+  forment une seule famille au lieu de neuf couleurs indépendantes.
 
 ## Organisation
 
@@ -78,5 +99,5 @@ assets/
   conservées dans `localStorage` (clés préfixées `dps.`). Les accès sont
   protégés : en navigation privée ou cookies bloqués, le site fonctionne sans
   mémoriser.
-- **Polices** : Fraunces et Inter sont chargées depuis Google Fonts, avec des
-  polices système en repli si le réseau les bloque.
+- **Polices** : Outfit (titres) et Manrope (texte) sont chargées depuis Google
+  Fonts, avec des polices système en repli si le réseau les bloque.

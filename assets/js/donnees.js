@@ -1,5 +1,5 @@
 /**
- * DPS — Données de démonstration
+ * DPS Collective — Données de démonstration
  * ---------------------------------------------------------------------------
  * Ce fichier tient lieu de « base de données » pour la maquette : il alimente
  * la grille d'activités et le fil de la communauté. Dans une version connectée
@@ -8,15 +8,15 @@
 
 /* Thématiques : servent aux filtres, aux couleurs et aux pictogrammes. */
 const THEMATIQUES = [
-  { id: 'rando',       nom: 'Randonnée',        emoji: '🥾', degrade: 'linear-gradient(150deg, #1c9d84, #0a4a3f)' },
-  { id: 'patrimoine',  nom: 'Visites d’usine',  emoji: '🏭', degrade: 'linear-gradient(150deg, #6b7f8c, #2f3f4a)' },
-  { id: 'brasserie',   nom: 'Brasseries',       emoji: '🍺', degrade: 'linear-gradient(150deg, #f5a25d, #d96c4f)' },
-  { id: 'gastronomie', nom: 'Gastronomie',      emoji: '🍲', degrade: 'linear-gradient(150deg, #e0803a, #8c3f2a)' },
-  { id: 'culture',     nom: 'Culture & art',    emoji: '🎨', degrade: 'linear-gradient(150deg, #7a5aa8, #4a3170)' },
-  { id: 'nature',      nom: 'Nature & faune',   emoji: '🦌', degrade: 'linear-gradient(150deg, #4fa36b, #1f5c39)' },
-  { id: 'atelier',     nom: 'Ateliers',         emoji: '🧶', degrade: 'linear-gradient(150deg, #d96c4f, #7e3524)' },
-  { id: 'bienetre',    nom: 'Sport & bien-être',emoji: '🧘', degrade: 'linear-gradient(150deg, #3d8bbf, #1f4f70)' },
-  { id: 'rencontre',   nom: 'Rencontres',       emoji: '💬', degrade: 'linear-gradient(150deg, #c76b8a, #6e2f47)' },
+  { id: 'rando',       nom: 'Randonnée',        emoji: '🥾', degrade: 'linear-gradient(150deg, #5fd3e0, #2f6fe0)' },
+  { id: 'patrimoine',  nom: 'Visites d’usine',  emoji: '🏭', degrade: 'linear-gradient(150deg, #7c4df0, #3b39c4)' },
+  { id: 'brasserie',   nom: 'Brasseries',       emoji: '🍺', degrade: 'linear-gradient(150deg, #f5a65a, #ec4899)' },
+  { id: 'gastronomie', nom: 'Gastronomie',      emoji: '🍲', degrade: 'linear-gradient(150deg, #f7b267, #e8556d)' },
+  { id: 'culture',     nom: 'Culture & art',    emoji: '🎨', degrade: 'linear-gradient(150deg, #ec4899, #7c4df0)' },
+  { id: 'nature',      nom: 'Nature & faune',   emoji: '🦌', degrade: 'linear-gradient(150deg, #4fd1c5, #237f95)' },
+  { id: 'atelier',     nom: 'Ateliers',         emoji: '🧶', degrade: 'linear-gradient(150deg, #f2718c, #b03fd0)' },
+  { id: 'bienetre',    nom: 'Sport & bien-être',emoji: '🧘', degrade: 'linear-gradient(150deg, #6ea8fe, #4f46e5)' },
+  { id: 'rencontre',   nom: 'Rencontres',       emoji: '💬', degrade: 'linear-gradient(150deg, #f5a65a, #7c4df0)' },
 ];
 
 /* Activités proposées. `placesPrises` évolue avec les réservations locales. */

@@ -1,6 +1,10 @@
 /* ==========================================================================
-   DPS — Découvrir, Partager, Simplement
+   DPS Collective — Découvrir, Partager, Simplement
    Feuille de styles principale
+   --------------------------------------------------------------------------
+   Direction artistique dérivée du logo : sigle en dégradé du spectre
+   (ambre → magenta → violet → cyan) posé sur un fond nuit, lettres
+   géométriques, porte ouverte comme motif de marque.
    --------------------------------------------------------------------------
    Sommaire
    1.  Jetons de design (couleurs, typo, espacements)
@@ -20,54 +24,63 @@
    ========================================================================== */
 
 :root {
-  /* Palette — vert forêt (confiance, nature) + ambre (chaleur, convivialité) */
-  --pin-900: #06302a;
-  --pin-800: #0a4a3f;
-  --pin-700: #0e6e5c;
-  --pin-600: #12836e;
-  --pin-500: #1c9d84;
-  --pin-200: #a8ded1;
-  --pin-100: #d9f0ea;
+  /* Spectre de la marque — repris du logo, de la chaleur au froid.
+     C'est l'ordre de lecture du sigle : D ambre, P magenta/violet, S cyan. */
+  --ambre: #f5a65a;
+  --corail: #f2718c;
+  --magenta: #ec4899;
+  --violet: #7c4df0;
+  --indigo: #4f46e5;
+  --bleu: #3b82f6;
+  --cyan: #5fd3e0;
 
-  --ambre-600: #e0803a;
-  --ambre-500: #f5a25d;
-  --ambre-200: #fbdcc0;
-  --ambre-100: #fdefe1;
+  /* Le dégradé complet, réservé aux moments forts (sigle, jauges, badges). */
+  --spectre: linear-gradient(
+    120deg,
+    var(--ambre) 0%,
+    var(--magenta) 34%,
+    var(--violet) 62%,
+    var(--cyan) 100%
+  );
 
-  --terre-500: #d96c4f;
-  --prune-500: #7a5aa8;
-  --ciel-500: #3d8bbf;
+  /* Nuit — le fond de la marque */
+  --nuit-900: #08080f;
+  --nuit-800: #0b0b17;
+  --nuit-700: #12122a;
+  --nuit-600: #1a1a35;
+  --nuit-500: #262649;
 
-  /* Neutres */
-  --creme: #fbf7f1;
+  /* Neutres clairs, légèrement biaisés vers le violet de la marque */
   --blanc: #ffffff;
-  --gris-100: #f1ede6;
-  --gris-200: #e2dcd2;
-  --gris-400: #a8a196;
-  --gris-600: #6b6459;
-  --encre: #12211f;
+  --brume-50: #f8f7fc;
+  --brume-100: #f1eff9;
+  --brume-200: #e4e0f0;
+  --brume-300: #d0cae4;
+  --brume-600: #5d5880;
+  --encre: #131228;
 
   /* Rôles sémantiques — surchargés en thème sombre */
-  --fond: var(--creme);
-  --fond-alt: #f5efe6;
+  --fond: var(--brume-50);
+  --fond-alt: var(--brume-100);
   --surface: var(--blanc);
-  --surface-2: var(--gris-100);
-  --bordure: var(--gris-200);
-  --bordure-forte: #cec6b9;
+  --surface-2: var(--brume-100);
+  --bordure: var(--brume-200);
+  --bordure-forte: var(--brume-300);
   --texte: var(--encre);
-  --texte-doux: var(--gris-600);
+  --texte-doux: var(--brume-600);
   --texte-inverse: var(--blanc);
-  --primaire: var(--pin-700);
-  --primaire-fort: var(--pin-800);
-  --primaire-doux: var(--pin-100);
-  --accent: var(--ambre-500);
-  --accent-fort: var(--ambre-600);
-  --accent-doux: var(--ambre-100);
+  --primaire: #6b3fe0;
+  --primaire-fort: #5a2fce;
+  --primaire-doux: #ece5fd;
+  --accent: var(--magenta);
+  --accent-fort: #d92d84;
+  --accent-doux: #fde6f1;
+  --sur-accent: #ffffff;
 
-  /* Typographie */
-  --police-titre: "Fraunces", "Iowan Old Style", Georgia, serif;
-  --police-texte: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+  /* Typographie — géométrique, comme les lettres du sigle */
+  --police-titre: "Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --police-texte: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* Échelle typographique fluide */
   --t-xs: 0.78rem;
@@ -96,38 +109,47 @@
   --r-xl: 32px;
   --r-full: 999px;
 
-  --ombre-sm: 0 1px 2px rgba(18, 33, 31, 0.06),
-    0 2px 6px rgba(18, 33, 31, 0.04);
-  --ombre-md: 0 4px 12px rgba(18, 33, 31, 0.07),
-    0 12px 28px rgba(18, 33, 31, 0.07);
-  --ombre-lg: 0 10px 24px rgba(18, 33, 31, 0.1),
-    0 24px 60px rgba(18, 33, 31, 0.12);
+  --ombre-sm: 0 1px 2px rgba(19, 18, 40, 0.06),
+    0 2px 6px rgba(19, 18, 40, 0.05);
+  --ombre-md: 0 4px 12px rgba(19, 18, 40, 0.07),
+    0 12px 28px rgba(19, 18, 40, 0.08);
+  --ombre-lg: 0 10px 24px rgba(19, 18, 40, 0.1),
+    0 24px 60px rgba(19, 18, 40, 0.14);
 
   --largeur-max: 1180px;
   --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Glyphe de marque : le « D » ouvert sur une porte et trois marches.
+     Utilisé comme masque, il ne porte aucune couleur propre. */
+  --glyphe-dps: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='9 5 49 52'%3E%3Cpath fill='%23000' fill-rule='evenodd' d='M9 5h23a26 26 0 0 1 0 52H9zM22 57V37a8 8 0 0 1 16 0v20zM22 57v-3h3v-3h3v-3h3v-3h7v12z'/%3E%3C/svg%3E");
 }
 
-/* Thème sombre — activé par l'attribut data-theme sur <html> */
+/* Thème sombre — le monde d'origine du logo, activé par data-theme sur <html>.
+   Les couleurs du spectre sont éclaircies : sur fond nuit, les mêmes valeurs
+   qu'en thème clair perdraient trop de contraste. */
 [data-theme="dark"] {
-  --fond: #0d1a18;
-  --fond-alt: #101f1c;
-  --surface: #162523;
-  --surface-2: #1d2f2c;
-  --bordure: #263a36;
-  --bordure-forte: #34504a;
-  --texte: #eef4f2;
-  --texte-doux: #a3b5b0;
-  --texte-inverse: #0d1a18;
-  --primaire: var(--pin-500);
-  --primaire-fort: var(--pin-600);
-  --primaire-doux: #133a33;
-  --accent: var(--ambre-500);
-  --accent-fort: var(--ambre-500);
-  --accent-doux: #3a2a1a;
+  --fond: var(--nuit-900);
+  --fond-alt: var(--nuit-800);
+  --surface: #101024;
+  --surface-2: var(--nuit-700);
+  --bordure: #23234a;
+  --bordure-forte: #35356b;
+  --texte: #eeecfb;
+  --texte-doux: #a29ecb;
+  --texte-inverse: var(--nuit-900);
+  --primaire: #a78bff;
+  --primaire-fort: #bda7ff;
+  --primaire-doux: #221a47;
+  --accent: #f472b6;
+  --accent-fort: #f892c8;
+  --accent-doux: #34142a;
+  --sur-accent: #1a0a13;
 
-  --ombre-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --ombre-md: 0 4px 12px rgba(0, 0, 0, 0.35);
-  --ombre-lg: 0 12px 40px rgba(0, 0, 0, 0.45);
+  /* Sur fond nuit, la profondeur vient d'une lueur colorée plus que d'une ombre. */
+  --ombre-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --ombre-md: 0 4px 14px rgba(0, 0, 0, 0.55);
+  --ombre-lg: 0 12px 44px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(124, 77, 240, 0.12);
 }
 
 /* ==========================================================================
@@ -354,17 +376,17 @@ select {
   box-shadow: var(--ombre-md);
 }
 
-[data-theme="dark"] .btn--primaire { color: var(--pin-900); }
+[data-theme="dark"] .btn--primaire { color: var(--texte-inverse); }
 
 .btn--accent {
   background: var(--accent);
-  color: #40230a;
+  color: var(--sur-accent);
   box-shadow: var(--ombre-sm);
 }
 
 .btn--accent:hover:not(:disabled) {
   background: var(--accent-fort);
-  color: #40230a;
+  color: var(--sur-accent);
   box-shadow: var(--ombre-md);
 }
 
@@ -410,7 +432,7 @@ select {
 .badge--alerte { background: #fde8e4; color: #b1442a; }
 
 [data-theme="dark"] .badge--alerte { background: #3d211b; color: #f0a08a; }
-[data-theme="dark"] .badge--accent { color: var(--ambre-500); }
+[data-theme="dark"] .badge--accent { color: var(--accent); }
 
 /* --- Cartes génériques --- */
 .carte {
@@ -536,39 +558,74 @@ select {
 
 .logo:hover { color: var(--texte); }
 
+/* Le « D » du sigle, porte et marches comprises, découpé dans le dégradé de
+   marque : le masque évite tout identifiant SVG dupliqué entre l'en-tête et
+   le pied de page, et suit automatiquement les couleurs du thème. */
 .logo__marque {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--pin-700), var(--pin-500));
-  color: #fff;
-  font-family: var(--police-titre);
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  box-shadow: var(--ombre-sm);
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  background: var(--spectre);
+  -webkit-mask: var(--glyphe-dps) center / contain no-repeat;
+  mask: var(--glyphe-dps) center / contain no-repeat;
 }
 
 .logo__texte {
   display: flex;
   flex-direction: column;
-  line-height: 1.1;
+  gap: 3px;
+  line-height: 1;
 }
 
 .logo__nom {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
   font-family: var(--police-titre);
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--primaire);
 }
 
-.logo__baseline {
-  font-size: 0.66rem;
-  letter-spacing: 0.06em;
+/* Le sigle reprend le dégradé ; on ne rend le texte transparent que si le
+   navigateur sait le découper, sinon il resterait invisible. */
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .logo__sigle {
+    background: var(--spectre);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+.logo__collective {
+  font-family: var(--police-titre);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--texte-doux);
+}
+
+/* Baseline tricolore : un mot, une couleur du spectre — comme sur le logo. */
+.logo__baseline {
+  display: flex;
+  gap: 0.45em;
+  font-size: 0.57rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.logo__baseline span:nth-child(1) { color: var(--ambre); }
+.logo__baseline span:nth-child(2) { color: var(--magenta); }
+.logo__baseline span:nth-child(3) { color: var(--cyan); }
+
+.logo__baseline span + span::before {
+  content: "·";
+  margin-right: 0.45em;
+  color: var(--bordure-forte);
 }
 
 /* --- Navigation --- */
@@ -726,7 +783,7 @@ select {
   height: 380px;
   bottom: -180px;
   left: -140px;
-  background: color-mix(in srgb, var(--pin-500) 45%, transparent);
+  background: color-mix(in srgb, var(--cyan) 45%, transparent);
 }
 
 .hero__interieur {
@@ -754,17 +811,17 @@ select {
   white-space: nowrap;
 }
 
-/* Trait dessiné à la main sous le mot mis en avant */
+/* Trait de spectre sous le mot mis en avant — assez fin pour ne pas être
+   confondu avec un soulignement de lien. */
 .hero__titre em::after {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  bottom: -0.08em;
-  height: 0.16em;
+  bottom: 0.02em;
+  height: 0.09em;
   border-radius: var(--r-full);
-  background: var(--accent);
-  opacity: 0.55;
+  background: var(--spectre);
 }
 
 .hero__texte {
@@ -850,10 +907,10 @@ select {
   opacity: 0.9;
 }
 
-.tuile-ambiance--1 { background: linear-gradient(150deg, #1c9d84, #0a4a3f); }
-.tuile-ambiance--2 { background: linear-gradient(150deg, #f5a25d, #d96c4f); margin-top: var(--e-6); }
-.tuile-ambiance--3 { background: linear-gradient(150deg, #3d8bbf, #1f4f70); margin-top: calc(var(--e-6) * -1); }
-.tuile-ambiance--4 { background: linear-gradient(150deg, #7a5aa8, #4a3170); }
+.tuile-ambiance--1 { background: linear-gradient(150deg, #5fd3e0, #2f6fe0); }
+.tuile-ambiance--2 { background: linear-gradient(150deg, #f5a65a, #ec4899); margin-top: var(--e-6); }
+.tuile-ambiance--3 { background: linear-gradient(150deg, #7c4df0, #3b39c4); margin-top: calc(var(--e-6) * -1); }
+.tuile-ambiance--4 { background: linear-gradient(150deg, #f2718c, #b03fd0); }
 
 @media (max-width: 959px) {
   .tuile-ambiance--2,
@@ -890,10 +947,9 @@ select {
   color: var(--primaire);
 }
 
-.signature span:nth-child(2) { color: var(--accent-fort); }
-.signature span:nth-child(3) { color: var(--texte-doux); }
-
-[data-theme="dark"] .signature span:nth-child(2) { color: var(--accent); }
+.signature span:nth-child(1) { color: var(--ambre); }
+.signature span:nth-child(2) { color: var(--magenta); }
+.signature span:nth-child(3) { color: var(--cyan); }
 
 /* --- Bandeau valeurs --- */
 .bandeau-valeurs {
@@ -1006,7 +1062,7 @@ select {
   font-weight: 600;
 }
 
-[data-theme="dark"] .puce[aria-pressed="true"] { color: var(--pin-900); }
+[data-theme="dark"] .puce[aria-pressed="true"] { color: var(--texte-inverse); }
 
 /* --- Carte activité --- */
 .carte-activite {
@@ -1133,12 +1189,12 @@ select {
 .jauge__remplissage {
   height: 100%;
   border-radius: var(--r-full);
-  background: linear-gradient(90deg, var(--pin-500), var(--pin-700));
+  background: linear-gradient(90deg, var(--cyan), var(--violet));
   transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .jauge__remplissage.est-presque-complet {
-  background: linear-gradient(90deg, var(--ambre-500), var(--terre-500));
+  background: linear-gradient(90deg, var(--ambre), var(--magenta));
 }
 
 .carte-activite__pied {
@@ -1213,7 +1269,7 @@ select {
   height: 48px;
   border-radius: var(--r-full);
   background: var(--accent);
-  color: #40230a;
+  color: var(--sur-accent);
   font-family: var(--police-titre);
   font-size: 1.3rem;
   font-weight: 700;
@@ -1230,7 +1286,7 @@ select {
   align-items: center;
   padding: var(--e-7);
   border-radius: var(--r-xl);
-  background: linear-gradient(140deg, var(--pin-800), var(--pin-600));
+  background: linear-gradient(140deg, #2b1a6e 0%, var(--violet) 55%, #6d2fa8 100%);
   color: #fff;
   box-shadow: var(--ombre-lg);
 }
@@ -1322,13 +1378,13 @@ select {
 .avatar--lg { width: 56px; height: 56px; font-size: var(--t-base); }
 
 .avatar--ambre { background: var(--accent-doux); color: var(--accent-fort); }
-.avatar--ciel { background: #dceaf5; color: #2b6b96; }
-.avatar--prune { background: #e8e0f5; color: #5d4185; }
-.avatar--terre { background: #fae2da; color: #b1442a; }
+.avatar--ciel { background: #dbeafe; color: #2d5fd0; }
+.avatar--prune { background: #ece5fd; color: #6b3fe0; }
+.avatar--terre { background: #fde6f1; color: #c02a72; }
 
-[data-theme="dark"] .avatar--ciel { background: #1c3345; color: #8fc3e5; }
-[data-theme="dark"] .avatar--prune { background: #2e2542; color: #bda6e5; }
-[data-theme="dark"] .avatar--terre { background: #3d211b; color: #f0a08a; }
+[data-theme="dark"] .avatar--ciel { background: #16244a; color: #93b8ff; }
+[data-theme="dark"] .avatar--prune { background: #251b47; color: #bda7ff; }
+[data-theme="dark"] .avatar--terre { background: #34142a; color: #f892c8; }
 
 .identite__nom {
   font-weight: 600;
@@ -1404,7 +1460,7 @@ select {
 .modale__voile {
   position: absolute;
   inset: 0;
-  background: rgba(6, 48, 42, 0.55);
+  background: rgba(8, 8, 15, 0.7);
   backdrop-filter: blur(4px);
 }
 
@@ -1762,7 +1818,7 @@ select {
 .pied {
   margin-top: var(--e-9);
   padding-block: var(--e-8) var(--e-5);
-  background: var(--pin-900);
+  background: var(--nuit-900);
   color: rgba(255, 255, 255, 0.72);
 }
 
@@ -1783,7 +1839,9 @@ select {
 .pied .logo,
 .pied .logo:hover { color: #fff; }
 
-.pied .logo__baseline { color: rgba(255, 255, 255, 0.6); }
+/* Le pied reste nocturne quel que soit le thème : la baseline y garde ses
+   couleurs de marque, seul « Collective » doit être réaccordé. */
+.pied .logo__collective { color: rgba(255, 255, 255, 0.55); }
 
 .pied__texte {
   font-size: var(--t-sm);
