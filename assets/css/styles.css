@@ -572,17 +572,15 @@ select {
 
 .logo__texte {
   display: flex;
-  flex-direction: column;
-  gap: 3px;
   line-height: 1;
 }
 
 .logo__nom {
   display: flex;
   align-items: baseline;
-  gap: 0.5em;
+  gap: 0.45em;
   font-family: var(--police-titre);
-  font-size: 1.3rem;
+  font-size: 1.55rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--primaire);
@@ -601,31 +599,11 @@ select {
 
 .logo__collective {
   font-family: var(--police-titre);
-  font-size: 0.58rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.34em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--texte-doux);
-}
-
-/* Baseline tricolore : un mot, une couleur du spectre — comme sur le logo. */
-.logo__baseline {
-  display: flex;
-  gap: 0.45em;
-  font-size: 0.57rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.logo__baseline span:nth-child(1) { color: var(--ambre); }
-.logo__baseline span:nth-child(2) { color: var(--magenta); }
-.logo__baseline span:nth-child(3) { color: var(--cyan); }
-
-.logo__baseline span + span::before {
-  content: "·";
-  margin-right: 0.45em;
-  color: var(--bordure-forte);
 }
 
 /* --- Navigation --- */
@@ -736,12 +714,12 @@ select {
   .entete__actions .btn--cta { display: none; }
 }
 
-/* Sur petits écrans, la baseline du logo prend trop de place et repousse
-   les actions hors du cadre : on ne garde que la marque dans l'en-tête. */
+/* Sur petits écrans, on resserre la gouttière pour que le lockup et les
+   actions de l'en-tête tiennent sans déborder. */
 @media (max-width: 600px) {
   .conteneur { padding-inline: var(--e-4); }
   .entete__interieur { gap: var(--e-3); }
-  .entete .logo__baseline { display: none; }
+  .entete .logo__collective { display: none; }
 }
 
 /* ==========================================================================
@@ -1573,6 +1551,58 @@ select {
   background: var(--primaire-doux);
   color: var(--primaire);
   font-size: 2rem;
+}
+
+/* --- Portail d'entrée dans la communauté --- */
+
+.portail {
+  position: relative;
+  max-width: 640px;
+  margin-inline: auto;
+  padding: var(--e-8) var(--e-7) var(--e-7);
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--r-xl);
+  box-shadow: var(--ombre-lg);
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .portail { padding: var(--e-6) var(--e-5); }
+}
+
+/* Un seuil coloré en haut de la carte : la porte du logo, réduite à un trait. */
+.portail__seuil {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 5px;
+  background: var(--spectre);
+}
+
+.portail__titre {
+  font-size: var(--t-xl);
+  margin-bottom: var(--e-4);
+}
+
+.portail__intro {
+  margin-bottom: var(--e-6);
+}
+
+.portail__question {
+  font-family: var(--police-titre);
+  font-size: var(--t-lg);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--e-4);
+}
+
+.portail__charte {
+  margin: var(--e-5) 0 0;
+  padding-top: var(--e-5);
+  border-top: 1px solid var(--bordure);
+  font-size: var(--t-xs);
+  color: var(--texte-doux);
 }
 
 /* ==========================================================================

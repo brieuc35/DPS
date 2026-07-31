@@ -41,9 +41,6 @@
           <span class="logo__nom">
             <span class="logo__sigle">DPS</span><span class="logo__collective">Collective</span>
           </span>
-          <span class="logo__baseline" aria-hidden="true">
-            <span>Découvrir</span><span>Partager</span><span>Simplement</span>
-          </span>
         </span>
       </a>
 
@@ -77,7 +74,56 @@
   </header>
 
   <main id="contenu">
-    <section class="section" style="padding-block:var(--e-7) var(--e-6)">
+    <!-- ============ Portail d'entrée ============
+         Affiché tant que la question d'adhésion n'a pas reçu de réponse.
+         Le script bascule ensuite vers le fil, et retient la réponse. -->
+    <section class="section" data-portail style="padding-block:var(--e-8) var(--e-7)">
+      <div class="conteneur">
+        <div class="portail apparait">
+          <div class="portail__seuil" aria-hidden="true"></div>
+
+          <p class="sur-titre">Rejoindre la communauté</p>
+          <h1 class="portail__titre">Une question avant d’entrer</h1>
+          <p class="plomb portail__intro">
+            Le fil de DPS Collective n’est pas une place publique : c’est un endroit où
+            l’on se parle. Dites-nous ce qui vous amène, et la porte s’ouvre.
+          </p>
+
+          <form data-formulaire-portail novalidate>
+            <div class="champ">
+              <label class="champ__label portail__question" for="motivation">
+                Pourquoi souhaitez-vous rentrer dans la communauté ?
+              </label>
+              <textarea class="zone-texte" id="motivation" name="motivation" rows="5"
+                        placeholder="Ex. : je viens d’arriver dans la région, j’aimerais rencontrer des gens autour d’activités simples et sans pression."></textarea>
+              <span class="champ__aide">
+                Quelques mots suffisent. Votre réponse n’est lue que par les modérateurs
+                bénévoles — elle n’est pas publiée sur le fil.
+              </span>
+              <span class="champ__erreur">
+                Dites-nous-en un peu plus : une phrase, même courte, suffit.
+              </span>
+            </div>
+
+            <button type="submit" class="btn btn--primaire btn--large">
+              Entrer dans la communauté
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </button>
+          </form>
+
+          <p class="portail__charte">
+            En entrant, vous adhérez à la
+            <a href="index.html#charte">charte de bienveillance</a> :
+            on accueille, on nuance, on respecte.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-communaute hidden style="padding-block:var(--e-7) var(--e-6)">
       <div class="conteneur">
         <div class="section__entete" style="margin-bottom:var(--e-6)">
           <p class="sur-titre">La communauté</p>
@@ -203,9 +249,6 @@
             <span class="logo__texte">
               <span class="logo__nom">
                 <span class="logo__sigle">DPS</span><span class="logo__collective">Collective</span>
-              </span>
-              <span class="logo__baseline" aria-hidden="true">
-                <span>Découvrir</span><span>Partager</span><span>Simplement</span>
               </span>
             </span>
           </a>

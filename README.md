@@ -27,6 +27,9 @@ aux participants d’échanger avant et après la sortie.
   y compris sans rechargement de page.
 
 **Communauté**
+- Portail d'entrée : le fil ne s'ouvre qu'après avoir répondu à « Pourquoi
+  souhaitez-vous rentrer dans la communauté ? ». La réponse est conservée
+  localement, la question n'est donc posée qu'une fois.
 - Fil filtrable par cercle, avec compteur de messages par cercle.
 - Publication de messages, réactions (« soutiens ») et réponses.
 - Garde-fou de bienveillance : si un message contient un terme susceptible de
@@ -96,7 +99,8 @@ assets/
   appels API — le reste du code n’en dépend qu’à travers `ACTIVITES`,
   `THEMATIQUES`, `CERCLES` et `PUBLICATIONS`.
 - **Persistance** : réservations, publications, réactions et réponses sont
-  conservées dans `localStorage` (clés préfixées `dps.`). Les accès sont
+  conservées dans `localStorage` (clés préfixées `dps.`), tout comme la
+  réponse au portail d'entrée de la communauté. Les accès sont
   protégés : en navigation privée ou cookies bloqués, le site fonctionne sans
   mémoriser.
 - **Polices** : Outfit (titres) et Manrope (texte) sont chargées depuis Google

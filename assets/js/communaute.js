@@ -6,6 +6,7 @@
  * intactes, seules les contributions de l'utilisateur sont persistées.
  */
 
+const CLE_ADHESION = 'dps.adhesion';
 const CLE_PUBLICATIONS = 'dps.publications';
 const CLE_JAIMES = 'dps.jaimes';
 const CLE_REPONSES = 'dps.reponses';
@@ -398,6 +399,55 @@ function initFiltreCercles() {
 }
 
 /* ==========================================================================
+   Portail d'entrée
+   ========================================================================== */
+
+/**
+ * Le fil n'est accessible qu'après avoir répondu à la question d'adhésion.
+ * La réponse est conservée localement : on ne la redemande pas à chaque visite.
+ */
+function initPortail() {
+  const portail = $('[data-portail]');
+  const espace = $('[data-communaute]');
+  if (!portail || !espace) return;
+
+  const ouvrir = () => {
+    portail.hidden = true;
+    espace.hidden = false;
+    // Le fil vient d'apparaître : ses éléments n'ont jamais été en vue.
+    initApparitions();
+  };
+
+  if (Stockage.lire(CLE_ADHESION, null)) {
+    ouvrir();
+    return;
+  }
+
+  const formulaire = $('[data-formulaire-portail]', portail);
+  const champ = $('#motivation', formulaire);
+
+  champ.addEventListener('input', () => {
+    champ.closest('.champ').classList.remove('est-invalide');
+  });
+
+  formulaire.addEventListener('submit', (evenement) => {
+    evenement.preventDefault();
+
+    const reponse = champ.value.trim();
+    if (reponse.length < 10) {
+      champ.closest('.champ').classList.add('est-invalide');
+      champ.focus();
+      return;
+    }
+
+    Stockage.ecrire(CLE_ADHESION, { motivation: reponse, creeLe: new Date().toISOString() });
+    ouvrir();
+    espace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    notifier('Bienvenue — le fil est à vous', '👋');
+  });
+}
+
+/* ==========================================================================
    Démarrage
    ========================================================================== */
 
@@ -409,4 +459,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initFiltreCercles();
   initComposeur();
   initInteractions();
+  initPortail();
 });
