@@ -1,5 +1,5 @@
 /**
- * DPS — Grille d'activités, filtres et réservation
+ * DPS Collective — Grille d'activités, recherche et réservation
  * ---------------------------------------------------------------------------
  * Alimente toute grille portant l'attribut [data-grille-activites] et gère la
  * modale de réservation (créée à la volée, donc disponible sur chaque page qui
@@ -13,7 +13,6 @@ const CLE_RESERVATIONS = 'dps.reservations';
    ========================================================================== */
 
 const etatFiltres = {
-  thematique: 'toutes',
   recherche: '',
   tri: 'date',
 };
@@ -112,16 +111,11 @@ function gabaritCarte(activite) {
   `;
 }
 
-/** Applique filtres, recherche et tri à la liste complète. */
+/** Applique la recherche et le tri à la liste complète. */
 function activitesFiltrees() {
   const requete = etatFiltres.recherche.trim().toLowerCase();
 
   const resultat = ACTIVITES.filter((activite) => {
-    const bonneThematique =
-      etatFiltres.thematique === 'toutes' ||
-      activite.thematique === etatFiltres.thematique;
-
-    if (!bonneThematique) return false;
     if (!requete) return true;
 
     const champs = [
@@ -147,8 +141,8 @@ function activitesFiltrees() {
 
 /**
  * Rend toutes les grilles présentes dans la page. Chacune peut limiter le
- * nombre de cartes affichées via l'attribut data-limite (l'accueil n'en montre
- * que six, le catalogue les affiche toutes).
+ * nombre de cartes affichées via l'attribut data-limite : l'accueil n'en montre
+ * qu'une sélection, le catalogue les affiche toutes.
  */
 function rendreGrille() {
   const grilles = $$('[data-grille-activites]');
@@ -172,8 +166,8 @@ function rendreGrille() {
         <div class="message-vide">
           <span class="message-vide__emoji" aria-hidden="true">🧭</span>
           <h3>Rien ne correspond à votre recherche</h3>
-          <p>Essayez une autre thématique, ou élargissez vos mots-clés.</p>
-          <button type="button" class="btn btn--fantome" data-reinitialiser>Réinitialiser les filtres</button>
+          <p>Essayez d’autres mots-clés : une ville, une envie, un type de sortie.</p>
+          <button type="button" class="btn btn--fantome" data-reinitialiser>Effacer la recherche</button>
         </div>
       `;
       return;
@@ -191,54 +185,25 @@ function rendreGrille() {
    ========================================================================== */
 
 /**
- * Une ancre du type activites.html#brasserie présélectionne la thématique.
+ * Une ancre du type activites.html#brasserie pré-remplit la recherche avec le
+ * nom de la thématique. Le filtre reste ainsi visible dans le champ, et
+ * l'utilisateur peut l'effacer comme n'importe quelle recherche.
  * Renvoie true si l'état a changé.
  */
 function appliquerAncre() {
   const ancre = window.location.hash.replace('#', '');
-  if (!ancre || !THEMATIQUES.some((theme) => theme.id === ancre)) return false;
-  if (etatFiltres.thematique === ancre) return false;
+  const theme = THEMATIQUES.find((element) => element.id === ancre);
+  if (!theme || etatFiltres.recherche === theme.nom) return false;
 
-  etatFiltres.thematique = ancre;
-  $$('[data-thematique]').forEach((bouton) =>
-    bouton.setAttribute('aria-pressed', String(bouton.dataset.thematique === ancre))
-  );
+  etatFiltres.recherche = theme.nom;
+  $$('[data-recherche]').forEach((champ) => {
+    champ.value = theme.nom;
+  });
   return true;
 }
 
 function initFiltres() {
   appliquerAncre();
-
-  const options = [{ id: 'toutes', nom: 'Toutes', emoji: '✨' }, ...THEMATIQUES];
-
-  $$('[data-puces-thematiques]').forEach((puces) => {
-    puces.innerHTML = options
-      .map(
-        (option) => `
-          <li>
-            <button type="button" class="puce" data-thematique="${option.id}"
-                    aria-pressed="${option.id === etatFiltres.thematique}">
-              <span aria-hidden="true">${option.emoji}</span> ${echapper(option.nom)}
-            </button>
-          </li>`
-      )
-      .join('');
-
-    puces.addEventListener('click', (evenement) => {
-      const bouton = evenement.target.closest('[data-thematique]');
-      if (!bouton) return;
-
-      etatFiltres.thematique = bouton.dataset.thematique;
-      // Toutes les séries de puces de la page restent synchronisées.
-      $$('[data-thematique]').forEach((autre) =>
-        autre.setAttribute(
-          'aria-pressed',
-          String(autre.dataset.thematique === etatFiltres.thematique)
-        )
-      );
-      rendreGrille();
-    });
-  });
 
   const recherche = $('[data-recherche]');
   if (recherche) {
@@ -261,17 +226,13 @@ function initFiltres() {
     });
   }
 
-  // Bouton « réinitialiser » du message vide (délégation sur chaque grille).
+  // Bouton « effacer » du message vide (délégation sur chaque grille).
   $$('[data-grille-activites]').forEach((grille) => {
     grille.addEventListener('click', (evenement) => {
       if (!evenement.target.closest('[data-reinitialiser]')) return;
 
-      etatFiltres.thematique = 'toutes';
       etatFiltres.recherche = '';
       if (recherche) recherche.value = '';
-      $$('[data-thematique]').forEach((bouton) =>
-        bouton.setAttribute('aria-pressed', String(bouton.dataset.thematique === 'toutes'))
-      );
       rendreGrille();
     });
   });

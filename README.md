@@ -20,13 +20,14 @@ aux participants d’échanger avant et après la sortie.
 - Grille de cases thématiques compactes (9 thématiques, 13 activités) : visuel,
   ville, date, titre et jauge de groupe. Le nombre de colonnes s'adapte à la
   largeur disponible. Le détail complet est dans la fiche de réservation.
-- Recherche plein texte (titre, lieu, description, thématique), filtres par
-  thématique et tri par date / prix / places disponibles.
+- Recherche plein texte (titre, ville, description, thématique) et tri par
+  date / prix / places disponibles.
 - Jauge de remplissage du groupe et étiquette « Plus que N places » / « Complet ».
 - Réservation en modale : récapitulatif de prix en direct, validation des champs,
   adhésion à la charte obligatoire, écran de confirmation.
-- Une ancre du type `activites.html#brasserie` présélectionne une thématique,
-  y compris sans rechargement de page.
+- Une ancre du type `activites.html#brasserie` pré-remplit la recherche avec le
+  nom de la thématique — le filtre reste visible et effaçable — y compris sans
+  rechargement de page.
 
 **Communauté**
 - Portail d'entrée : le fil ne s'ouvre qu'après avoir répondu à « Pourquoi
