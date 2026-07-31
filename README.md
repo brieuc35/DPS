@@ -76,9 +76,11 @@ géométriques, une porte ouverte comme motif.
 - **Typographie** — Outfit en titres (géométrique, comme les lettres du logo),
   Manrope en texte courant, capitales très espacées pour les libellés, à
   l'image du « COLLECTIVE » du logo.
-- **Le glyphe** (le « D » ouvert sur une porte et son escalier) est appliqué en
-  masque CSS sur le dégradé : une seule définition, aucune couleur figée, et
-  aucun identifiant SVG dupliqué entre l'en-tête et le pied de page.
+- **Le logo** est le fichier fourni par la marque (`assets/img/logo.png`,
+  découpé sur le sigle) : ses couleurs propres tiennent aussi bien sur fond
+  clair que sur fond nuit, aucune variante de thème n'est nécessaire.
+  `logo-complet.png` conserve le verrouillage entier (sigle, « COLLECTIVE » et
+  baseline) pour les aperçus de partage, `favicon.png` le « D » seul.
 - Chacune des neuf thématiques reçoit un pan du spectre, pour que les vignettes
   forment une seule famille au lieu de neuf couleurs indépendantes.
 

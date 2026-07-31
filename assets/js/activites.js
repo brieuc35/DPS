@@ -380,7 +380,7 @@ function gabaritFormulaire(activite) {
       <div class="champ">
         <label style="display:flex;gap:var(--e-3);align-items:flex-start;font-size:var(--t-sm);cursor:pointer">
           <input type="checkbox" name="charte" required style="margin-top:0.3em;width:18px;height:18px;flex-shrink:0;accent-color:var(--primaire)">
-          <span>J’adhère à la <a href="communaute.html#charte">charte de bienveillance</a> : écoute, respect et accueil des nouveaux venus.</span>
+          <span>J’adhère à la <a href="index.html#charte">charte de bienveillance</a> : écoute, respect et accueil des nouveaux venus.</span>
         </label>
         <span class="champ__erreur">L’adhésion à la charte est nécessaire pour rejoindre un groupe.</span>
       </div>
