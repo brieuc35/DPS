@@ -58,6 +58,13 @@ function formaterDate(iso) {
   }).format(date);
 }
 
+/** « 15 août » — version compacte, pour les cartes d'activité. */
+function formaterDateCourte(iso) {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short' }).format(date);
+}
+
 /** « il y a 2 h » — utilisé dans le fil social. */
 function formaterDepuis(iso) {
   const date = new Date(iso);

@@ -40,6 +40,11 @@ function placesReserveesLocalement(activiteId) {
     .reduce((total, reservation) => total + reservation.places, 0);
 }
 
+/** « Marseille, Bouches-du-Rhône » → « Marseille ». Le détail est dans la fiche. */
+function ville(lieu) {
+  return lieu.split(',')[0].trim();
+}
+
 /** Places encore disponibles, en tenant compte des réservations locales. */
 function placesRestantes(activite) {
   const prises = activite.placesPrises + placesReserveesLocalement(activite.id);
@@ -76,12 +81,11 @@ function gabaritCarte(activite) {
 
       <div class="carte-activite__corps">
         <div class="carte-activite__meta">
-          <span><span aria-hidden="true">📍</span> ${echapper(activite.lieu)}</span>
-          <span><span aria-hidden="true">🗓️</span> ${formaterDate(activite.date)}</span>
+          <span><span aria-hidden="true">📍</span> ${echapper(ville(activite.lieu))}</span>
+          <span><span aria-hidden="true">🗓️</span> ${formaterDateCourte(activite.date)}</span>
         </div>
 
         <h3 class="carte-activite__titre">${echapper(activite.titre)}</h3>
-        <p class="carte-activite__desc">${echapper(activite.resume)}</p>
 
         <div class="jauge">
           <div class="jauge__entete">
@@ -353,6 +357,10 @@ function gabaritFormulaire(activite) {
   }).join('');
 
   return `
+    <p class="plomb" style="font-size:var(--t-sm);margin-bottom:var(--e-5)">
+      ${echapper(activite.resume)}
+    </p>
+
     <div class="recap">
       <div>
         <p class="recap__libelle" style="margin:0">Total pour <span data-recap-places>1 personne</span></p>
