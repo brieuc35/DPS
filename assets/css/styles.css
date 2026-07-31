@@ -551,10 +551,13 @@ select {
 }
 
 /* --- Logo --- */
+/* Le verrouillage reprend la disposition du logo d'origine : « Collective »
+   est posé sous le sigle et calé sur sa largeur. */
 .logo {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.6em;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
   text-decoration: none;
   color: var(--texte);
   flex-shrink: 0;
@@ -567,16 +570,21 @@ select {
 .logo__marque {
   flex-shrink: 0;
   width: auto;
-  height: 36px;
+  height: 34px;
 }
 
 .logo__collective {
   font-family: var(--police-titre);
-  font-size: 0.7rem;
+  font-size: 0.5rem;
   font-weight: 600;
-  letter-spacing: 0.3em;
+  /* Réglé pour que le mot reste un peu plus étroit que le sigle, comme sur
+     le logo d'origine. */
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--texte-doux);
+  /* L'interlettrage ajoute une espace après la dernière lettre : on la retire
+     pour que le mot reste optiquement centré sous le sigle. */
+  margin-right: -0.18em;
 }
 
 /* --- Navigation --- */
@@ -685,14 +693,17 @@ select {
   }
 
   .entete__actions .btn--cta { display: none; }
+
+  /* La navigation passe en position fixe : elle ne pousse plus les actions
+     vers la droite, il faut donc les y caler explicitement. */
+  .entete__actions { margin-left: auto; }
 }
 
-/* Sur petits écrans, on resserre la gouttière pour que le lockup et les
-   actions de l'en-tête tiennent sans déborder. */
+/* Sur petits écrans, on resserre la gouttière. Le verrouillage étant empilé,
+   il ne prend que la largeur du sigle : « Collective » peut rester affiché. */
 @media (max-width: 600px) {
   .conteneur { padding-inline: var(--e-4); }
   .entete__interieur { gap: var(--e-3); }
-  .entete .logo__collective { display: none; }
 }
 
 /* ==========================================================================
