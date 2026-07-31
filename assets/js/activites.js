@@ -78,7 +78,6 @@ function gabaritCarte(activite) {
         <div class="carte-activite__meta">
           <span><span aria-hidden="true">📍</span> ${echapper(activite.lieu)}</span>
           <span><span aria-hidden="true">🗓️</span> ${formaterDate(activite.date)}</span>
-          <span><span aria-hidden="true">⏱️</span> ${echapper(activite.duree)}</span>
         </div>
 
         <h3 class="carte-activite__titre">${echapper(activite.titre)}</h3>
@@ -87,7 +86,6 @@ function gabaritCarte(activite) {
         <div class="jauge">
           <div class="jauge__entete">
             <span>${occupees} / ${activite.placesTotal} participants</span>
-            <span>${complet ? 'Complet' : `${restantes} place${restantes > 1 ? 's' : ''} libre${restantes > 1 ? 's' : ''}`}</span>
           </div>
           <div class="jauge__barre" role="img"
                aria-label="${occupees} participants sur ${activite.placesTotal}">

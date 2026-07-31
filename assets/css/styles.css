@@ -800,7 +800,12 @@ select {
   }
 }
 
+/* Échelle propre au titre d'ouverture : plus contenue que l'échelle des h1,
+   parce que la phrase de marque est longue et doit tenir en trois lignes.
+   `balance` répartit les lignes au lieu d'en laisser une orpheline. */
 .hero__titre {
+  font-size: clamp(2rem, 1.35rem + 2.2vw, 3.05rem);
+  text-wrap: balance;
   margin-bottom: var(--e-4);
 }
 
@@ -1204,6 +1209,13 @@ select {
   gap: var(--e-3);
   padding-top: var(--e-4);
   border-top: 1px solid var(--bordure);
+}
+
+/* Réserver est l'action principale de la carte : elle doit peser plus que
+   le reste, maintenant que le texte alentour a été allégé. */
+.carte-activite__pied .btn {
+  padding: 0.9em 1.9em;
+  font-size: var(--t-base);
 }
 
 .prix {

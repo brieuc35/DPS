@@ -34,7 +34,7 @@ const ACTIVITES = [
     niveau: 'Intermédiaire',
     hote: { nom: 'Camille R.', initiales: 'CR', couleur: 'avatar' },
     resume:
-      'Une boucle panoramique avec pause pique-nique au lac. Rythme tranquille, on s’attend et on discute.',
+      'Boucle panoramique et pique-nique au lac, au rythme du groupe.',
     programme: [
       'Café d’accueil et tour de table (personne ne connaît personne, c’est normal !)',
       'Montée progressive vers les crêtes, pauses photo régulières',
@@ -56,7 +56,7 @@ const ACTIVITES = [
     niveau: 'Accessible à tous',
     hote: { nom: 'Étienne M.', initiales: 'EM', couleur: 'avatar--terre' },
     resume:
-      'De la fève à la tablette : visite guidée de l’atelier, rencontre avec les artisans et dégustation.',
+      'De la fève à la tablette, atelier et dégustation commentée.',
     programme: [
       'Histoire de la maison et de ses producteurs',
       'Passage en atelier : torréfaction, conchage, tempérage',
@@ -78,7 +78,7 @@ const ACTIVITES = [
     niveau: 'Accessible à tous',
     hote: { nom: 'Sofia B.', initiales: 'SB', couleur: 'avatar--ambre' },
     resume:
-      'On met les mains dans le malt, on comprend le métier, puis on trinque autour d’une planche partagée.',
+      'Les mains dans le malt, puis dégustation autour d’une planche.',
     programme: [
       'Visite de la salle de brassage en pleine production',
       'Atelier participatif : concassage et empâtage',
@@ -100,7 +100,7 @@ const ACTIVITES = [
     niveau: 'Débutant bienvenu',
     hote: { nom: 'Nadia K.', initiales: 'NK', couleur: 'avatar--prune' },
     resume:
-      'Un petit groupe, de la terre, et le droit de rater. On repart avec sa pièce, cuite et livrée.',
+      'De la terre, le droit de rater, et votre pièce livrée cuite.',
     programme: [
       'Découverte de la terre et des gestes de base',
       'Tournage accompagné, deux pièces par personne',
@@ -122,7 +122,7 @@ const ACTIVITES = [
     niveau: 'Facile',
     hote: { nom: 'Yann D.', initiales: 'YD', couleur: 'avatar' },
     resume:
-      'Marche silencieuse guidée par un garde forestier, à l’heure où la forêt change de voix.',
+      'Marche silencieuse avec un garde forestier, à l’heure du brame.',
     programme: [
       'Briefing et consignes de discrétion',
       'Approche des places de brame',
@@ -144,7 +144,7 @@ const ACTIVITES = [
     niveau: 'Accessible à tous',
     hote: { nom: 'Leïla F.', initiales: 'LF', couleur: 'avatar--prune' },
     resume:
-      'Fresques monumentales, artistes locaux et anecdotes de quartier, guidés par une médiatrice culturelle.',
+      'Douze fresques monumentales racontées par une médiatrice.',
     programme: [
       'Point de départ au café associatif',
       'Parcours de douze fresques commentées',
@@ -166,7 +166,7 @@ const ACTIVITES = [
     niveau: 'Tous niveaux',
     hote: { nom: 'Marc T.', initiales: 'MT', couleur: 'avatar--ciel' },
     resume:
-      'Une séance douce sur la plage, suivie d’un petit-déjeuner partagé pour faire connaissance.',
+      'Séance douce sur la plage, puis petit-déjeuner partagé.',
     programme: [
       'Installation face à l’océan',
       'Séance de hatha yoga accessible',
@@ -188,7 +188,7 @@ const ACTIVITES = [
     niveau: 'Accessible à tous',
     hote: { nom: 'Pierre-Yves L.', initiales: 'PL', couleur: 'avatar--terre' },
     resume:
-      'Machines impressionnantes, savoir-faire transmis depuis 1890 et atelier de fabrication de papier à la main.',
+      'Machines de 1890 et atelier de papier fait main.',
     programme: [
       'Histoire industrielle de la vallée',
       'Visite des machines en fonctionnement',
@@ -210,7 +210,7 @@ const ACTIVITES = [
     niveau: 'Débutant bienvenu',
     hote: { nom: 'Giulia P.', initiales: 'GP', couleur: 'avatar--ambre' },
     resume:
-      'On pétrit, on rit, on passe à table ensemble. Le dîner fait partie de l’atelier.',
+      'On pétrit, on rit, on passe à table. Le dîner est compris.',
     programme: [
       'Apéritif de bienvenue et présentations',
       'Pâte fraîche : tagliatelles et raviolis',
@@ -232,7 +232,7 @@ const ACTIVITES = [
     niveau: 'Facile',
     hote: { nom: 'Amine Z.', initiales: 'AZ', couleur: 'avatar--ciel' },
     resume:
-      'Le massif sous les étoiles, un ciel dégagé et une pause chocolat chaud au sommet du rocher.',
+      'Le massif sous les étoiles, chocolat chaud au sommet.',
     programme: [
       'Prêt et réglage des frontales',
       'Marche accompagnée sur sentier balisé',
@@ -254,7 +254,7 @@ const ACTIVITES = [
     niveau: 'Débutant bienvenu',
     hote: { nom: 'Hugo V.', initiales: 'HV', couleur: 'avatar--prune' },
     resume:
-      'Une pellicule, une balade en ville, puis la magie du labo. Petit groupe garanti.',
+      'Une pellicule, une balade en ville, puis la chambre noire.',
     programme: [
       'Prise en main des boîtiers argentiques',
       'Balade photo dans le vieux Bordeaux',
@@ -276,7 +276,7 @@ const ACTIVITES = [
     niveau: 'Accessible à tous',
     hote: { nom: 'Gwen A.', initiales: 'GA', couleur: 'avatar--terre' },
     resume:
-      'Trente ans à fabriquer des instruments, et l’envie de raconter. On écoute, on pose des questions, on touche le bois.',
+      'Trente ans de lutherie racontés dans l’atelier, instruments en main.',
     programme: [
       'Visite de l’atelier et des instruments en cours',
       'Le métier raconté sans jargon : essences, courbes, patience',
@@ -298,7 +298,7 @@ const ACTIVITES = [
     niveau: 'Accessible à tous',
     hote: { nom: 'Claire H.', initiales: 'CH', couleur: 'avatar' },
     resume:
-      'Rencontre avec cinq producteurs, dégustations tout au long du parcours et grande tablée finale.',
+      'Cinq producteurs, des dégustations, une grande tablée finale.',
     programme: [
       'Rendez-vous devant la halle',
       'Parcours de cinq stands, dégustations',
