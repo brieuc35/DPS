@@ -9,7 +9,7 @@ aux participants d’échanger avant et après la sortie.
 
 | Page | Rôle |
 | --- | --- |
-| `index.html` | Accueil : proposition de valeur, huit activités à la une, fonctionnement, charte, témoignages |
+| `index.html` | Accueil : proposition de valeur, les activités à la une, fonctionnement, charte, témoignages |
 | `activites.html` | Catalogue complet avec recherche, filtres par thématique et tri |
 | `communaute.html` | Fil social : cercles de discussion, composeur, réactions et réponses |
 | `vision.html` | Le projet : la vision, le concept, la vie de la communauté, l'ambition et la promesse |
@@ -17,7 +17,7 @@ aux participants d’échanger avant et après la sortie.
 ## Fonctionnalités
 
 **Activités**
-- Grille de cases thématiques compactes (9 thématiques, 13 activités) : visuel,
+- Grille de cases thématiques compactes (4 thématiques, 4 activités) : visuel,
   ville, date, titre et jauge de groupe. Le nombre de colonnes s'adapte à la
   largeur disponible. Le détail complet est dans la fiche de réservation.
 - Recherche plein texte (titre, ville, description, thématique) et tri par
@@ -85,8 +85,8 @@ géométriques, une porte ouverte comme motif.
   clair que sur fond nuit, aucune variante de thème n'est nécessaire.
   `logo-complet.png` conserve le verrouillage entier (sigle, « COLLECTIVE » et
   baseline) pour les aperçus de partage, `favicon.png` le « D » seul.
-- Chacune des neuf thématiques reçoit un pan du spectre, pour que les vignettes
-  forment une seule famille au lieu de neuf couleurs indépendantes.
+- Chaque thématique reçoit un pan du spectre, pour que les vignettes forment
+  une seule famille au lieu de couleurs indépendantes.
 
 ## Organisation
 
@@ -103,7 +103,10 @@ assets/
 
 ## Notes techniques
 
-- **Données** : `assets/js/donnees.js` tient lieu de base de données. Dans une
+- **Données** : `assets/js/donnees.js` tient lieu de base de données. Les
+  quatre activités correspondent à des lieux réels autour de Vitré ; en
+  revanche, durées, programmes et prestations incluses sont des textes
+  d'attente, à valider avec chaque partenaire avant mise en ligne publique. Dans une
   version connectée à un back-end, ces tableaux seraient remplacés par des
   appels API — le reste du code n’en dépend qu’à travers `ACTIVITES`,
   `THEMATIQUES`, `CERCLES` et `PUBLICATIONS`.
