@@ -44,7 +44,9 @@ aux participants d’échanger avant et après la sortie.
 - Thème sombre par défaut — le monde du logo — sauf si le système demande
   explicitement le thème clair. Le choix de l'utilisateur est mémorisé et
   appliqué avant le premier rendu, sans clignotement.
-- Navigation responsive avec menu mobile.
+- Navigation : Accueil, Le projet, Communauté. Le catalogue s'atteint par le
+  bouton « Trouver une activité », identique sur les quatre pages, et par les
+  liens du pied de page. Menu replié en burger sous 900 px.
 - Apparitions au défilement, désactivées si l’utilisateur a demandé de réduire
   les animations (`prefers-reduced-motion`) et sans effet si JavaScript est absent.
 - Accessibilité : lien d’évitement, focus visible, piège à focus et fermeture
