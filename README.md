@@ -22,7 +22,9 @@ aux participants d’échanger avant et après la sortie.
   largeur disponible. Le détail complet est dans la fiche de réservation.
 - Recherche plein texte (titre, ville, description, thématique) et tri par
   date / prix / places disponibles.
-- Jauge de remplissage du groupe et étiquette « Plus que N places » / « Complet ».
+- Jauge de remplissage du groupe — douze places pour toutes les activités,
+  conformément à la promesse affichée sur l'accueil — et étiquette
+  « Plus que N places » / « Complet ».
 - Réservation en modale : récapitulatif de prix en direct, validation des champs,
   adhésion à la charte obligatoire, écran de confirmation.
 - Une ancre du type `activites.html#brasserie` pré-remplit la recherche avec le
