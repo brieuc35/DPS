@@ -43,8 +43,8 @@ aux participants d’échanger avant et après la sortie.
 - Signalement d’un message vers la modération.
 
 **Transversal**
-- Thème sombre par défaut — le monde du logo — sauf si le système demande
-  explicitement le thème clair. Le choix de l'utilisateur est mémorisé et
+- Thème clair chaud par défaut, sauf si le système demande explicitement le
+  thème sombre — lui aussi réchauffé. Le choix de l'utilisateur est mémorisé et
   appliqué avant le premier rendu, sans clignotement.
 - Navigation : Accueil, Le projet, Communauté. Le catalogue s'atteint par le
   bouton « Trouver une activité », identique sur les quatre pages, et par les
@@ -86,14 +86,26 @@ autre hébergeur statique.
 
 ## Direction artistique
 
-Elle découle du logo : un sigle en dégradé posé sur un fond nuit, des lettres
-géométriques, une porte ouverte comme motif.
+Elle découle du logo : un sigle en dégradé, des lettres géométriques, une porte
+ouverte comme motif. Les fonds, eux, sont volontairement chauds : le site doit
+mettre à l'aise quelqu'un qui hésite à réserver seul, pas l'impressionner.
 
 - **Spectre** — ambre `#f5a65a` → magenta `#ec4899` → violet `#7c4df0` →
   cyan `#5fd3e0`, dans l'ordre de lecture du sigle (D chaud, P médian, S froid).
   Il habille le sigle, les jauges, les vignettes thématiques et la signature.
-- **Fond nuit** `#08080f`, décliné jusqu'à `#262649` pour les surfaces. Les
-  neutres du thème clair sont légèrement tirés vers le violet plutôt que gris.
+- **Sable** — les fonds clairs vont vers l'ivoire (`#fdf8f2`) et le papier, pas
+  vers le gris ni le blanc pur ; même les ombres sont teintées de brun, une
+  ombre grise suffisant à éteindre un fond crème.
+- **Braise** — les fonds sombres sont des bruns profonds (`#14100e`) et non un
+  noir bleuté : une pièce éclairée le soir plutôt qu'un écran de terminal.
+- **Le halo** du haut de page reprend l'ambre du sigle. Il s'éteint sur la
+  couleur de fond avant la fin de la section, pour qu'aucune couture n'apparaisse
+  au raccord.
+- Les seuls écarts au chaud sont assumés : le violet des boutons et le cyan de
+  la thématique « Patrimoine » viennent du logo et tiennent la marque.
+- Les contrastes texte/fond ont été mesurés page par page dans les deux thèmes :
+  tous atteignent le seuil AA. C'est ce qui a imposé un magenta plus foncé sur
+  les boutons pleins et une extrémité sombre au dégradé de la charte.
 - **Typographie** — Outfit en titres (géométrique, comme les lettres du logo),
   Manrope en texte courant, capitales très espacées pour les libellés, à
   l'image du « COLLECTIVE » du logo.

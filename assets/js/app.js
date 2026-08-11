@@ -112,11 +112,11 @@ function appliquerTheme(theme) {
 function initTheme() {
   // Même résolution que le script inline du <head>, qui pose déjà le thème
   // avant le premier rendu : ici on ne fait que la confirmer et brancher
-  // le bouton. Le monde de la marque est nocturne, donc « sombre » est le
-  // choix par défaut ; seul un système réglé en clair l'emporte.
+  // le bouton. On accueille dans les tons chauds et clairs ; seul un système
+  // réglé en sombre l'emporte.
   const stocke = Stockage.lire(CLE_THEME, null);
-  const clairDemande = window.matchMedia('(prefers-color-scheme: light)').matches;
-  appliquerTheme(stocke || (clairDemande ? 'light' : 'dark'));
+  const sombreDemande = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  appliquerTheme(stocke || (sombreDemande ? 'dark' : 'light'));
 
   const bouton = $('.bascule-theme');
   if (!bouton) return;

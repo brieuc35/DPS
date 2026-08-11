@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Le projet — DPS Collective</title>
   <meta name="description" content="La vision de DPS : vivre des expériences, découvrir ce qui nous entoure et partager de bons moments. Une communauté bienveillante qui se construit avec ses membres.">
-  <meta name="theme-color" content="#f8f7fc" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#08080f" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#fdf8f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#14100e" media="(prefers-color-scheme: dark)">
 
   <meta property="og:title" content="Le projet — DPS Collective">
   <meta property="og:description" content="Découvrir. Partager. Simplement. La vision, le concept et l'ambition de DPS.">
@@ -21,8 +21,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 
-  <!-- Posé avant le premier rendu : évite que la page s'affiche en clair
-       avant de basculer. La classe « js » conditionne les apparitions au
+  <!-- Posé avant le premier rendu : évite que la page change de thème sous
+       les yeux du visiteur. La classe « js » conditionne les apparitions au
        défilement — sans JavaScript, le contenu reste simplement visible. -->
   <script>
     (function () {
@@ -30,10 +30,10 @@
       racine.classList.add('js');
       var stocke = null;
       try { stocke = JSON.parse(localStorage.getItem('dps.theme')); } catch (erreur) {}
-      // Le monde de la marque est nocturne : on n'éclaircit que si le
-      // système le demande explicitement.
-      var clair = window.matchMedia('(prefers-color-scheme: light)').matches;
-      racine.setAttribute('data-theme', stocke || (clair ? 'light' : 'dark'));
+      // L'accueil se fait dans les tons chauds et clairs ; on ne passe au
+      // sombre que si le système le demande explicitement.
+      var sombre = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      racine.setAttribute('data-theme', stocke || (sombre ? 'dark' : 'light'));
     })();
   </script>
 </head>
