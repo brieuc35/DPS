@@ -64,8 +64,25 @@ python3 -m http.server 8000
 # puis ouvrir http://localhost:8000
 ```
 
-Le site peut être publié tel quel sur GitHub Pages, Netlify ou tout hébergeur
-de fichiers statiques.
+## Mise en ligne
+
+Le site est publié tel quel par GitHub Pages depuis la branche `main`, à la
+racine du dépôt : <https://brieuc35.github.io/DPS/>.
+
+À activer une fois, dans *Settings → Pages* du dépôt : **Source** = *Deploy
+from a branch*, **Branch** = `main`, **dossier** = `/ (root)`. Chaque push sur
+`main` republie ensuite le site en une minute environ.
+
+Deux détails liés à cet hébergement :
+
+- `.nojekyll` désactive le traitement Jekyll, inutile ici puisque les fichiers
+  sont déjà servables en l'état.
+- Les balises `og:url` / `og:image` pointent en absolu vers l'adresse Pages,
+  seule forme comprise par les aperçus de partage. Elles sont à mettre à jour
+  en cas de nom de domaine propre.
+
+Rien n'empêche par ailleurs de déposer les mêmes fichiers sur Netlify ou tout
+autre hébergeur statique.
 
 ## Direction artistique
 
