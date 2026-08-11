@@ -178,3 +178,96 @@ const PUBLICATIONS = [
     reponses: [],
   },
 ];
+
+/* ==========================================================================
+   Conversations d'exemple
+   --------------------------------------------------------------------------
+   « general » est le salon ouvert à tous les membres ; « groupe-<activité> »
+   réunit les inscrits d'une sortie. Ces messages sont le décor : ils tiennent
+   lieu d'historique pour que le salon n'accueille pas les nouveaux venus sur
+   une page vide. Les messages écrits depuis le site s'y ajoutent.
+   ========================================================================== */
+
+const CONVERSATIONS = [
+  {
+    id: 'general',
+    nom: 'Le salon',
+    emoji: '💬',
+    description: 'Tous les membres, toutes les sorties. On y dit bonjour, on y pose ses questions.',
+  },
+  ...ACTIVITES.map((activite) => ({
+    id: `groupe-${activite.id}`,
+    nom: activite.titre,
+    emoji: (THEMATIQUES.find((t) => t.id === activite.thematique) || {}).emoji || '📍',
+    description: `Le groupe des inscrits · ${activite.lieu.split(',')[0]}`,
+    activiteId: activite.id,
+  })),
+];
+
+const MESSAGES_EXEMPLE = {
+  general: [
+    {
+      id: 'm-g1', auteur: 'Camille R.', initiales: 'CR', couleur: 'avatar--terre',
+      date: '2026-08-09T18:12',
+      texte: 'Bonsoir tout le monde 👋 Pour celles et ceux qui viennent pour la première fois : on se retrouve toujours un quart d’heure avant, ça évite d’arriver en courant.',
+    },
+    {
+      id: 'm-g2', auteur: 'Théo N.', initiales: 'TN', couleur: 'avatar--prune',
+      date: '2026-08-09T18:31',
+      texte: 'Merci, c’est noté. Je suis inscrit au billard lundi et je ne connais personne, donc ça me rassure.',
+    },
+    {
+      id: 'm-g3', auteur: 'Sofia B.', initiales: 'SB', couleur: 'avatar--ambre',
+      date: '2026-08-10T09:05',
+      texte: 'Théo, on sera plusieurs dans ton cas 🙂 Viens simplement, le reste se fait tout seul.',
+    },
+  ],
+  'groupe-mine-bleue': [
+    {
+      id: 'm-mb1', auteur: 'Camille R.', initiales: 'CR', couleur: 'avatar--terre',
+      date: '2026-08-10T10:02',
+      texte: 'Bienvenue dans le groupe de La Mine Bleue ⛏️ Rendez-vous sur place à 13 h 45, la descente part à 14 h pile.',
+    },
+    {
+      id: 'm-mb2', auteur: 'Marc T.', initiales: 'MT', couleur: 'avatar--ciel',
+      date: '2026-08-10T10:20',
+      texte: 'Il fait quelle température au fond ? Je prévois une polaire ou ça suffit une chemise ?',
+    },
+    {
+      id: 'm-mb3', auteur: 'Camille R.', initiales: 'CR', couleur: 'avatar--terre',
+      date: '2026-08-10T10:24',
+      texte: 'Une polaire, sans hésiter : il fait 13 °C toute l’année là-dessous.',
+    },
+  ],
+  'groupe-initiation-billard': [
+    {
+      id: 'm-ib1', auteur: 'Étienne M.', initiales: 'EM', couleur: 'avatar--terre',
+      date: '2026-08-10T20:14',
+      texte: 'Salut le groupe 🎱 Personne n’a besoin de savoir jouer, c’est bien une initiation. On commence par la tenue de la queue.',
+    },
+    {
+      id: 'm-ib2', auteur: 'Leïla F.', initiales: 'LF', couleur: 'avatar--prune',
+      date: '2026-08-10T20:40',
+      texte: 'Parfait, parce que mon niveau est proche de zéro. À lundi !',
+    },
+  ],
+  'groupe-cidrerie-loic-raison': [
+    {
+      id: 'm-cr1', auteur: 'Nadia K.', initiales: 'NK', couleur: 'avatar--prune',
+      date: '2026-08-09T14:30',
+      texte: 'Petit rappel pour la cidrerie : chaussures fermées obligatoires, c’est une vraie usine 🍏',
+    },
+  ],
+  'groupe-brasserie-athanor': [
+    {
+      id: 'm-ba1', auteur: 'Sofia B.', initiales: 'SB', couleur: 'avatar--ambre',
+      date: '2026-08-10T19:02',
+      texte: 'On est presque complets pour Athanor 🍺 Pensez à venir avec un moyen de rentrer : la dégustation, même petite, ça reste de la bière.',
+    },
+    {
+      id: 'm-ba2', auteur: 'Amine Z.', initiales: 'AZ', couleur: 'avatar--ciel',
+      date: '2026-08-10T19:15',
+      texte: 'Je viens en train depuis Vitré, il y a de la place dans ma voiture au retour si quelqu’un est coincé.',
+    },
+  ],
+};

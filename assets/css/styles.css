@@ -17,6 +17,7 @@
    6.  Sections : hero, thématiques, activités, étapes, communauté
    7.  Modale de réservation
    8.  Fil social
+   8 bis. Espace membre & discussions
    9.  Pied de page
    10. Animations & préférences de mouvement
    ========================================================================== */
@@ -215,6 +216,13 @@ a:hover { color: var(--primaire-fort); }
 img {
   max-width: 100%;
   display: block;
+}
+
+/* `hidden` doit gagner contre nos propres `display`. Sans cette règle, tout
+   composant à qui l'on donne un `display: flex` ou `grid` reste affiché quand
+   JavaScript le masque — un encart vide, mais bien visible. */
+[hidden] {
+  display: none !important;
 }
 
 ul, ol { margin: 0 0 var(--e-4); padding-left: 1.2em; }
@@ -1697,6 +1705,311 @@ select {
 .toast.est-visible { transform: translate(-50%, 0); opacity: 1; }
 
 [data-theme="dark"] .toast { background: var(--surface-2); border: 1px solid var(--bordure); }
+
+/* ==========================================================================
+   8 bis. Espace membre & discussions
+   ========================================================================== */
+
+/* --- Entrées « compte » de la navigation --- */
+.nav__compte {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-1);
+  padding-left: var(--e-3);
+  margin-left: var(--e-2);
+  border-left: 1px solid var(--bordure);
+}
+
+.nav__lien--compte {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--e-2);
+}
+
+/* En mode replié la navigation est une colonne : le filet vertical n'a plus
+   de sens, il devient une séparation horizontale. */
+@media (max-width: 899px) {
+  .nav__compte {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--e-1);
+    padding: var(--e-3) 0 0;
+    margin: var(--e-2) 0 0;
+    border-left: 0;
+    border-top: 1px solid var(--bordure);
+  }
+}
+
+.conteneur--etroit { max-width: 760px; }
+
+.btn--petit {
+  padding: 0.5em 0.9em;
+  font-size: var(--t-sm);
+}
+
+/* --- Onglets connexion / inscription --- */
+.onglets {
+  display: flex;
+  gap: var(--e-1);
+  padding: var(--e-1);
+  margin-bottom: calc(var(--e-4) * -1);
+  background: var(--surface-2);
+  border: 1px solid var(--bordure);
+  border-radius: var(--r-full);
+  width: fit-content;
+  max-width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.onglet {
+  padding: 0.6em 1.3em;
+  border: 0;
+  border-radius: var(--r-full);
+  background: transparent;
+  color: var(--texte-doux);
+  font-family: inherit;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+
+.onglet:hover { color: var(--texte); }
+
+.onglet.est-actif {
+  background: var(--surface);
+  color: var(--texte);
+  box-shadow: var(--ombre-sm);
+}
+
+.carte--formulaire {
+  padding: var(--e-6);
+  margin-top: var(--e-5);
+}
+
+@media (max-width: 599px) {
+  .carte--formulaire { padding: var(--e-5); }
+}
+
+/* Mention de démonstration : visible sans crier, elle doit être lue avant
+   qu'on saisisse un mot de passe. */
+.avertissement {
+  margin-top: var(--e-5);
+  padding: var(--e-4);
+  border: 1px dashed var(--bordure-forte);
+  border-radius: var(--r-md);
+  background: var(--fond-alt);
+  color: var(--texte-doux);
+  font-size: var(--t-sm);
+}
+
+.liste-sorties {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--e-3);
+}
+
+.liste-sorties li {
+  display: flex;
+  gap: var(--e-3);
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: var(--t-sm);
+}
+
+/* --- Messagerie --- */
+.messagerie {
+  display: grid;
+  gap: var(--e-4);
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .messagerie { grid-template-columns: 300px 1fr; }
+}
+
+.messagerie__cote,
+.messagerie__principal {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--r-lg);
+  box-shadow: var(--ombre-sm);
+}
+
+.messagerie__cote { padding: var(--e-5); }
+
+.messagerie__principal {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.messagerie__entete {
+  padding: var(--e-4) var(--e-5);
+  border-bottom: 1px solid var(--bordure);
+}
+
+.fils {
+  display: grid;
+  gap: var(--e-1);
+}
+
+.fil-onglet {
+  display: flex;
+  align-items: center;
+  gap: var(--e-3);
+  width: 100%;
+  padding: var(--e-3);
+  border: 0;
+  border-radius: var(--r-md);
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.fil-onglet:hover { background: var(--surface-2); }
+
+.fil-onglet.est-actif {
+  background: var(--primaire-doux);
+  color: var(--primaire);
+}
+
+.fil-onglet__emoji { font-size: 1.2rem; flex-shrink: 0; }
+
+.fil-onglet__texte {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.fil-onglet__nom {
+  font-weight: 600;
+  font-size: var(--t-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fil-onglet__meta {
+  font-size: var(--t-xs);
+  color: var(--texte-doux);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fil-onglet.est-actif .fil-onglet__meta { color: inherit; opacity: 0.8; }
+
+.fil-onglet__compte {
+  flex-shrink: 0;
+  font-size: var(--t-xs);
+  font-weight: 700;
+  color: var(--texte-doux);
+}
+
+/* Hauteur bornée : le composeur doit rester visible sans faire défiler la
+   page entière, comme dans une messagerie. */
+.fil-messages {
+  display: grid;
+  /* `start` est indispensable : sans lui les lignes s'étirent pour remplir la
+     hauteur fixe, et deux messages se retrouvent aux deux bouts du cadre. */
+  align-content: start;
+  gap: var(--e-4);
+  padding: var(--e-5);
+  height: min(52vh, 460px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.message {
+  display: flex;
+  gap: var(--e-3);
+  align-items: flex-start;
+}
+
+.message__bulle {
+  padding: var(--e-3) var(--e-4);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  max-width: min(46ch, 100%);
+}
+
+/* Ses propres messages, alignés à droite et teintés : on repère d'un coup
+   d'œil ce qu'on a écrit soi-même. */
+.message--moi { flex-direction: row-reverse; }
+
+.message--moi .message__bulle {
+  background: var(--primaire-doux);
+  color: var(--texte);
+}
+
+.message--moi .message__entete { justify-content: flex-end; }
+
+.message__entete {
+  display: flex;
+  gap: var(--e-2);
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin: 0 0 var(--e-1);
+}
+
+.message__auteur { font-weight: 600; font-size: var(--t-sm); }
+.message__heure { font-size: var(--t-xs); color: var(--texte-doux); }
+.message--moi .message__heure { opacity: 0.75; }
+
+.message__texte {
+  margin: 0;
+  font-size: var(--t-sm);
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.composeur-chat {
+  padding: var(--e-4) var(--e-5) var(--e-5);
+  border-top: 1px solid var(--bordure);
+}
+
+.composeur-chat__pied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-3);
+  margin-top: var(--e-3);
+}
+
+/* Bandeau posé en haut du fil au retour d'une réservation. */
+.bandeau-arrivee {
+  display: flex;
+  align-items: center;
+  gap: var(--e-3);
+  padding: var(--e-4);
+  margin-bottom: var(--e-5);
+  border: 1px solid color-mix(in srgb, var(--primaire) 35%, var(--bordure));
+  border-radius: var(--r-md);
+  background: var(--primaire-doux);
+  font-size: var(--t-sm);
+}
+
+.bandeau-arrivee__pastille {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-full);
+  background: var(--primaire);
+  color: var(--texte-inverse);
+  font-weight: 700;
+}
 
 /* ==========================================================================
    9. Pied de page

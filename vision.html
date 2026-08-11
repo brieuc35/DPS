@@ -52,6 +52,14 @@
         <a class="nav__lien" href="index.html">Accueil</a>
         <a class="nav__lien" href="vision.html">Le projet</a>
         <a class="nav__lien" href="communaute.html">Communauté</a>
+
+        <!-- État déconnecté écrit en dur : sans JavaScript, les deux entrées
+             restent utilisables. `comptes.js` y met l'identité du membre une
+             fois la session ouverte. -->
+        <span class="nav__compte" data-zone-compte>
+          <a class="nav__lien nav__lien--compte" href="compte.html#connexion">Se connecter</a>
+          <a class="nav__lien nav__lien--compte" href="compte.html#inscription">Créer un compte</a>
+        </span>
       </nav>
 
       <div class="entete__actions">
@@ -329,6 +337,7 @@
           <p class="pied__titre">Communauté</p>
           <ul class="pied__liste">
             <li><a href="communaute.html">Le fil</a></li>
+            <li><a href="chat.html">Discussions</a></li>
             <li><a href="communaute.html#charte">Charte de bienveillance</a></li>
             <li><a href="communaute.html#cercles">Les cercles</a></li>
             <li><a href="index.html#comment">Comment ça marche</a></li>
@@ -355,5 +364,6 @@
 
   <script src="assets/js/donnees.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/comptes.js"></script>
 </body>
 </html>

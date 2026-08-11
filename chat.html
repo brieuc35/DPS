@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activités — DPS Collective</title>
-  <meta name="description" content="Randonnées, visites d'usine, brasseries, ateliers : trouvez une activité près de chez vous et réservez votre place dans un petit groupe.">
+  <title>Discussions — DPS Collective</title>
+  <meta name="description" content="Le salon général des membres DPS et le fil de discussion de chaque sortie réservée.">
   <meta name="theme-color" content="#fdf8f2" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#14100e" media="(prefers-color-scheme: dark)">
 
@@ -78,101 +78,67 @@
   </header>
 
   <main id="contenu">
-    <section class="section" style="padding-block:var(--e-8) var(--e-6)">
+    <section class="section" data-page-chat style="padding-block:var(--e-7) var(--e-8)">
       <div class="conteneur">
-        <div class="section__entete" style="margin-bottom:var(--e-6)">
-          <p class="sur-titre">Le catalogue</p>
-          <h1>Une case, une envie, un groupe</h1>
+
+        <!-- Sans compte : on explique et on propose les deux entrées -->
+        <div class="portail" data-portail-chat hidden>
+          <p class="sur-titre">Discussions</p>
+          <h1>Les fils sont réservés aux membres</h1>
           <p class="plomb">
-            <span data-total-activites>12</span> activités ouvertes en ce moment. Les groupes
-            sont volontairement petits : douze personnes au maximum, encadrées par un hôte
-            qui connaît son sujet.
+            Le salon général réunit tous les membres ; chaque sortie réservée ouvre en plus
+            son propre fil, visible de ses seuls inscrits. C’est ce qui permet d’écrire
+            tranquillement : rien ne sort du groupe.
           </p>
-        </div>
-
-        <!-- Filtres -->
-        <div class="barre-filtres">
-          <div class="recherche">
-            <span class="recherche__icone" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
-              </svg>
-            </span>
-            <label class="sr-only" for="recherche">Rechercher une activité</label>
-            <input class="saisie" id="recherche" type="search" data-recherche
-                   placeholder="Rechercher : brasserie, Lyon, poterie…">
-          </div>
-
-          <label class="sr-only" for="tri">Trier les activités</label>
-          <select class="selection" id="tri" data-tri style="width:auto;flex:0 1 220px">
-            <option value="date">Trier par date</option>
-            <option value="prix">Trier par prix</option>
-            <option value="places">Trier par places libres</option>
-          </select>
-        </div>
-
-
-        <p class="plomb" style="font-size:var(--t-sm);margin-bottom:var(--e-5)"
-           data-compteur-activites role="status" aria-live="polite"></p>
-
-        <div class="grille grille--activites" data-grille-activites></div>
-      </div>
-    </section>
-
-    <!-- Réassurance -->
-    <section class="section section--alt">
-      <div class="conteneur">
-        <div class="section__entete section__entete--centre">
-          <p class="sur-titre">Bon à savoir</p>
-          <h2>Ce qui est vrai pour toutes les sorties</h2>
-        </div>
-
-        <div class="grille grille--4">
-          <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true">👤</span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Venir seul·e est la norme</h3>
-            <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Aucune activité n’exige de venir accompagné. L’hôte fait les présentations au départ.
-            </p>
-          </div>
-          <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true">🗓️</span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Annulation libre</h3>
-            <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Jusqu’à 48 h avant le départ, sans justification et sans frais.
-            </p>
-          </div>
-          <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true">💬</span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Le groupe avant le jour J</h3>
-            <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Un fil de discussion s’ouvre cinq jours avant pour briser la glace.
-            </p>
-          </div>
-          <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true">♿</span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Accessibilité indiquée</h3>
-            <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Niveau, durée et contraintes sont annoncés sur chaque fiche, sans surprise.
-            </p>
+          <div style="display:flex;gap:var(--e-3);flex-wrap:wrap;margin-top:var(--e-5)">
+            <a class="btn btn--primaire btn--large" href="compte.html#inscription">Créer un compte</a>
+            <a class="btn btn--fantome btn--large" href="compte.html#connexion">Se connecter</a>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="section">
-      <div class="conteneur">
-        <div class="cta-final apparait">
-          <p class="sur-titre" style="justify-content:center">Une envie qui manque ?</p>
-          <h2>Proposez votre propre activité</h2>
-          <p class="plomb" style="max-width:52ch;margin:0 auto var(--e-6)">
-            Vous connaissez un atelier, une usine qui ouvre ses portes, un sentier oublié ?
-            Devenez hôte : DPS s’occupe des inscriptions et de l’accueil du groupe.
+        <!-- Avec compte : la messagerie -->
+        <div data-espace-chat hidden>
+          <p class="bandeau-arrivee" data-bandeau-reservation hidden></p>
+
+          <div class="section__entete" style="margin-bottom:var(--e-5)">
+            <p class="sur-titre">Discussions</p>
+            <h1 style="margin-bottom:var(--e-2)">Parlez-vous avant de vous rencontrer</h1>
+          </div>
+
+          <div class="messagerie">
+            <aside class="messagerie__cote" aria-label="Vos fils de discussion">
+              <p class="pied__titre" style="margin-top:0">Vos fils</p>
+              <div class="fils" data-liste-conversations></div>
+              <p class="champ__aide" style="margin-top:var(--e-4)">
+                Le fil d’une sortie apparaît ici dès que vous y avez réservé une place.
+              </p>
+            </aside>
+
+            <div class="messagerie__principal">
+              <header class="messagerie__entete">
+                <h2 data-fil-titre style="font-size:1.15rem;margin:0">Le salon</h2>
+                <p data-fil-meta style="margin:0;font-size:var(--t-sm);color:var(--texte-doux)"></p>
+              </header>
+
+              <div class="fil-messages" data-fil-messages role="log" aria-live="polite"></div>
+
+              <form class="composeur-chat" data-composeur-chat>
+                <label class="sr-only" for="chat-message">Votre message</label>
+                <textarea class="zone-texte" id="chat-message" rows="2" maxlength="600"
+                          data-message-texte placeholder="Écrivez au groupe…"></textarea>
+                <div class="composeur-chat__pied">
+                  <span class="compteur" data-compteur-message>600 caractères</span>
+                  <button type="submit" class="btn btn--primaire">Envoyer</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <p class="avertissement">
+            <strong>Démonstration.</strong> Sans serveur, les messages restent dans ce
+            navigateur : les autres participants ne les reçoivent pas, et vous ne recevez
+            pas les leurs. Les échanges affichés servent de décor.
           </p>
-          <div class="cta-final__actions">
-            <a class="btn btn--accent btn--large" href="communaute.html">Proposer une idée</a>
-            <a class="btn btn--fantome btn--large" href="index.html#comment">Comment ça marche</a>
-          </div>
         </div>
       </div>
     </section>
@@ -235,6 +201,6 @@
   <script src="assets/js/donnees.js"></script>
   <script src="assets/js/app.js"></script>
   <script src="assets/js/comptes.js"></script>
-  <script src="assets/js/activites.js"></script>
+  <script src="assets/js/chat.js"></script>
 </body>
 </html>

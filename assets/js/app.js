@@ -93,6 +93,23 @@ function formaterDepuis(iso) {
 }
 
 /* ==========================================================================
+   Navigation programmatique
+   --------------------------------------------------------------------------
+   Le JavaScript a besoin d'envoyer l'utilisateur sur une autre page (fin de
+   réservation, connexion réussie). Passer par ces deux fonctions plutôt que
+   d'écrire l'URL en dur permet à la version fichier unique — où les pages sont
+   des vues derrière une ancre — de les remplacer par sa propre logique.
+   ========================================================================== */
+
+function lienInterne(page, ancre) {
+  return ancre ? `${page}.html#${ancre}` : `${page}.html`;
+}
+
+function allerVers(page, ancre) {
+  window.location.href = lienInterne(page, ancre);
+}
+
+/* ==========================================================================
    Thème clair / sombre
    ========================================================================== */
 

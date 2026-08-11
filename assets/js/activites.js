@@ -422,6 +422,7 @@ function ouvrirModale(activiteId, declencheur) {
   $('[data-modale-corps]', modale).innerHTML = gabaritFormulaire(activite);
 
   brancherFormulaire(modale, activite);
+  preremplirDepuisCompte(modale);
 
   modale.classList.add('est-ouverte');
   document.body.style.overflow = 'hidden';
@@ -431,6 +432,21 @@ function ouvrirModale(activiteId, declencheur) {
     const premierChamp = $('#res-prenom', modale);
     if (premierChamp) premierChamp.focus();
   });
+}
+
+/** Un membre connecté ne redonne pas son identité à chaque réservation. */
+function preremplirDepuisCompte(modale) {
+  const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
+  if (!compte) return;
+
+  const remplir = (selecteur, valeur) => {
+    const champ = $(selecteur, modale);
+    if (champ) champ.value = valeur;
+  };
+
+  remplir('#res-prenom', compte.prenom);
+  remplir('#res-nom', compte.nom);
+  remplir('#res-email', compte.email);
 }
 
 function fermerModale() {
@@ -533,9 +549,32 @@ function enregistrerReservation(activite, participant) {
   ];
   Stockage.ecrire(CLE_RESERVATIONS, reservations);
 
+  // Le fil du groupe affiche un bandeau de confirmation à l'arrivée : c'est
+  // lui qui porte la nouvelle, puisqu'on y est emmené directement.
+  Stockage.ecrire('dps.derniereReservation', {
+    activiteId: activite.id,
+    titre: activite.titre,
+    creeLe: new Date().toISOString(),
+  });
+
   const restantes = placesRestantes(activite);
   const modale = $('#modale-reservation');
+  const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
 
+  rendreGrille();
+  notifier(`Réservation confirmée : ${activite.titre}`, '🎉');
+
+  // Membre connecté : direction le groupe, sans étape intermédiaire. La modale
+  // est refermée d'abord — dans la version fichier unique, rien ne recharge la
+  // page et elle resterait posée par-dessus le fil, défilement bloqué.
+  if (compte) {
+    fermerModale();
+    allerVers('chat', `groupe-${activite.id}`);
+    return;
+  }
+
+  // Sans compte, le fil n'est pas accessible : on confirme ici et on explique
+  // ce qui manque pour y entrer.
   $('[data-modale-corps]', modale).innerHTML = `
     <div class="confirmation">
       <div class="confirmation__pastille" aria-hidden="true">✓</div>
@@ -558,19 +597,16 @@ function enregistrerReservation(activite, participant) {
       </div>
 
       <p style="font-size:var(--t-sm);color:var(--texte-doux)">
-        Le fil de discussion du groupe s’ouvre 5 jours avant : vous saurez qui vient,
-        et vous ne débarquerez pas devant des inconnus complets.
+        Le groupe a son fil de discussion : vous saurez qui vient, et vous ne
+        débarquerez pas devant des inconnus complets. Il faut un compte pour y entrer.
       </p>
 
       <div style="display:flex;gap:var(--e-3);flex-wrap:wrap;justify-content:center">
-        <a class="btn btn--primaire" href="communaute.html">Rejoindre la conversation</a>
-        <button type="button" class="btn btn--fantome" data-fermer-modale>Continuer à explorer</button>
+        <a class="btn btn--primaire" href="compte.html#inscription">Créer mon compte</a>
+        <button type="button" class="btn btn--fantome" data-fermer-modale>Plus tard</button>
       </div>
     </div>
   `;
-
-  rendreGrille();
-  notifier(`Réservation confirmée : ${activite.titre}`, '🎉');
 }
 
 /* ==========================================================================

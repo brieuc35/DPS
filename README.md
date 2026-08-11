@@ -13,6 +13,8 @@ aux participants d’échanger avant et après la sortie.
 | `activites.html` | Catalogue complet avec recherche, filtres par thématique et tri |
 | `communaute.html` | Fil social : cercles de discussion, composeur, réactions et réponses |
 | `vision.html` | Le projet : la vision, le concept, la vie de la communauté, l'ambition et la promesse |
+| `compte.html` | Espace membre : onglets « Se connecter » / « Créer un compte », puis profil et sorties réservées |
+| `chat.html` | Discussions : le salon général et le fil de chaque sortie réservée |
 
 ## Fonctionnalités
 
@@ -34,7 +36,8 @@ aux participants d’échanger avant et après la sortie.
 **Communauté**
 - Portail d'entrée : le fil ne s'ouvre qu'après avoir répondu à « Pourquoi
   souhaitez-vous rentrer dans la communauté ? ». La réponse est conservée
-  localement, la question n'est donc posée qu'une fois.
+  localement, la question n'est donc posée qu'une fois — et pas du tout à un
+  membre, qui a déjà adhéré à la charte en s'inscrivant.
 - Fil filtrable par cercle, avec compteur de messages par cercle.
 - Publication de messages, réactions (« soutiens ») et réponses.
 - Garde-fou de bienveillance : si un message contient un terme susceptible de
@@ -42,18 +45,56 @@ aux participants d’échanger avant et après la sortie.
   l’outil accompagne, il ne censure pas.
 - Signalement d’un message vers la modération.
 
+**Comptes & discussions**
+- Deux entrées dans la navigation : « Se connecter » et « Créer un compte ».
+  Une fois la session ouverte, elles laissent place au prénom du membre et à un
+  accès direct aux discussions.
+- Inscription validée champ par champ : prénom, nom, adresse, mot de passe de
+  huit caractères confirmé, adhésion à la charte. Le mot de passe n'est jamais
+  conservé en clair (empreinte SHA-256 salée).
+- Deux niveaux de fils : **le salon**, ouvert à tous les membres, et **le
+  groupe d'une sortie**, visible de ses seuls inscrits.
+- Réserver une place emmène directement dans le groupe de la sortie, où un
+  bandeau confirme la réservation. Sans compte, la réservation aboutit quand
+  même : l'écran de confirmation propose alors d'en créer un pour entrer dans
+  le fil.
+- Le formulaire de réservation est prérempli pour un membre connecté, et le
+  portail d'entrée de la communauté n'est plus posé à quelqu'un qui a déjà
+  adhéré à la charte en s'inscrivant.
+
 **Transversal**
 - Thème clair chaud par défaut, sauf si le système demande explicitement le
   thème sombre — lui aussi réchauffé. Le choix de l'utilisateur est mémorisé et
   appliqué avant le premier rendu, sans clignotement.
-- Navigation : Accueil, Le projet, Communauté. Le catalogue s'atteint par le
-  bouton « Trouver une activité », identique sur les quatre pages, et par les
-  liens du pied de page. Menu replié en burger sous 900 px.
+- Navigation : Accueil, Le projet, Communauté, puis les deux entrées de compte.
+  Le catalogue s'atteint par le bouton « Trouver une activité », identique sur
+  les six pages, et par les liens du pied de page. Menu replié en burger sous
+  900 px.
 - Apparitions au défilement, désactivées si l’utilisateur a demandé de réduire
   les animations (`prefers-reduced-motion`) et sans effet si JavaScript est absent.
 - Accessibilité : lien d’évitement, focus visible, piège à focus et fermeture
   par `Échap` dans la modale, libellés `aria` sur les contrôles dynamiques.
 - Tout contenu saisi par l’utilisateur est échappé avant insertion dans le DOM.
+
+## Ce que la démonstration ne fait pas
+
+Le site est **entièrement statique** : il n'a pas de serveur. Deux
+fonctionnalités en portent la marque et doivent être comprises comme des
+maquettes de parcours, pas comme des services :
+
+- **Les comptes** ne sont pas authentifiés. Ils vivent dans le `localStorage`
+  du navigateur qui les a créés. L'empreinte du mot de passe évite de le
+  stocker en clair, mais ne protège de rien : qui a la main sur le navigateur a
+  la main sur les comptes. Un avertissement le dit sur la page d'inscription.
+- **Les messages ne circulent pas.** Chaque visiteur écrit dans sa propre copie
+  du site ; personne ne reçoit ce que les autres écrivent. Les échanges
+  affichés sont un décor, pour que le salon n'accueille pas les nouveaux venus
+  sur une page vide.
+
+Passer à un vrai service demande un back-end (authentification, base de
+données, temps réel). Côté code, l'essentiel est isolé : `assets/js/comptes.js`
+pour les comptes, et les fonctions de lecture et d'écriture en tête de
+`assets/js/chat.js` pour les messages.
 
 ## Lancer le site
 
@@ -120,14 +161,17 @@ mettre à l'aise quelqu'un qui hésite à réserver seul, pas l'impressionner.
 ## Organisation
 
 ```
-index.html, activites.html, communaute.html
+index.html, activites.html, communaute.html, vision.html, compte.html, chat.html
 assets/
   css/styles.css        Feuille de styles unique (jetons de design + composants)
-  js/donnees.js         Thématiques, activités, cercles et publications d’exemple
+  js/donnees.js         Thématiques, activités, cercles, publications et messages d’exemple
   js/app.js             Thème, navigation, apparitions, notifications, utilitaires
+  js/comptes.js         Inscription, connexion, session, état de l’en-tête
   js/activites.js       Grille, filtres et parcours de réservation
   js/communaute.js      Fil social
-  img/favicon.svg
+  js/page-compte.js     Onglets et formulaires de l’espace membre
+  js/chat.js            Salon général et fils de groupe
+  img/
 ```
 
 ## Notes techniques

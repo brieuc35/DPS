@@ -34,6 +34,17 @@ const MOTS_SENSIBLES = [
 
 /** Profil affiché pour les contributions de l'utilisateur. */
 function profilCourant() {
+  // Le compte fait foi quand il existe ; sinon on retombe sur le prénom donné
+  // à la dernière réservation, qui reste possible sans inscription.
+  const membre = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
+  if (membre) {
+    return {
+      nom: Comptes.nomAffiche(membre),
+      initiales: Comptes.initiales(membre),
+      couleur: membre.couleur,
+    };
+  }
+
   const derniereReservation = Stockage.lire('dps.reservations', []).slice(-1)[0];
   const prenom = derniereReservation?.prenom || 'Vous';
   const mots = prenom.trim().split(/\s+/).filter(Boolean);
@@ -418,10 +429,22 @@ function initPortail() {
     initApparitions();
   };
 
-  if (Stockage.lire(CLE_ADHESION, null)) {
+  // Un membre a déjà dit qui il était et adhéré à la charte en s'inscrivant :
+  // lui reposer la question du portail serait un doublon.
+  const estAdmis = () =>
+    (typeof Comptes !== 'undefined' && Comptes.courant()) ||
+    Stockage.lire(CLE_ADHESION, null);
+
+  if (estAdmis()) {
     ouvrir();
     return;
   }
+
+  // Version fichier unique : l'inscription peut avoir lieu sur une autre vue,
+  // sans rechargement. Le portail doit s'effacer au retour sur le fil.
+  window.addEventListener('hashchange', () => {
+    if (espace.hidden && estAdmis()) ouvrir();
+  });
 
   const formulaire = $('[data-formulaire-portail]', portail);
   const champ = $('#motivation', formulaire);
