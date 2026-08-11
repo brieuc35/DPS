@@ -791,33 +791,13 @@ select {
   color: var(--texte-doux);
 }
 
+/* Dernier élément du hero : la marge basse dégage les boutons du bandeau de
+   valeurs, qui remonte volontairement par-dessus le bas de la section. */
 .hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--e-3);
   margin-bottom: var(--e-6);
-}
-
-.hero__preuves {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--e-6);
-  padding-top: var(--e-5);
-  border-top: 1px solid var(--bordure);
-}
-
-.preuve__valeur {
-  display: block;
-  font-family: var(--police-titre);
-  font-size: 1.7rem;
-  font-weight: 700;
-  color: var(--primaire);
-  line-height: 1.1;
-}
-
-.preuve__libelle {
-  font-size: var(--t-xs);
-  color: var(--texte-doux);
 }
 
 /* --- Bandeau valeurs --- */
