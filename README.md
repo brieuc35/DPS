@@ -137,11 +137,13 @@ mettre à l'aise quelqu'un qui hésite à réserver seul, pas l'impressionner.
 - **Spectre** — ambre `#f5a65a` → magenta `#ec4899` → violet `#7c4df0` →
   cyan `#5fd3e0`, dans l'ordre de lecture du sigle (D chaud, P médian, S froid).
   Il habille le sigle, les jauges, les vignettes thématiques et la signature.
-- **Sable** — les fonds clairs vont vers l'ivoire (`#fdf8f2`) et le papier, pas
-  vers le gris ni le blanc pur ; même les ombres sont teintées de brun, une
-  ombre grise suffisant à éteindre un fond crème.
-- **Braise** — les fonds sombres sont des bruns profonds (`#14100e`) et non un
-  noir bleuté : une pièce éclairée le soir plutôt qu'un écran de terminal.
+- **Sable** — les fonds clairs vont franchement vers l'abricot (`#fcf0e2`), pas
+  vers le gris ni le blanc pur ; les surfaces restent plus claires que la page
+  (`#fffaf4`) pour que les cartes s'en détachent, et les ombres sont teintées de
+  brun, une ombre grise suffisant à éteindre un fond crème.
+- **Braise** — les fonds sombres sont des bruns chauds, presque terre cuite
+  (`#1a120c`), et non un noir bleuté : une pièce éclairée le soir plutôt qu'un
+  écran de terminal.
 - **Le halo** du haut de page reprend l'ambre du sigle. Il s'éteint sur la
   couleur de fond avant la fin de la section, pour qu'aucune couture n'apparaisse
   au raccord.

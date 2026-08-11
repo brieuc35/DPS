@@ -46,21 +46,22 @@
     var(--cyan) 100%
   );
 
-  /* Braise — les fonds sombres. Des bruns profonds plutôt qu'un noir bleuté :
-     une pièce éclairée le soir, pas un écran de terminal. */
-  --braise-900: #14100e;
-  --braise-800: #1a1512;
-  --braise-700: #241d18;
+  /* Braise — les fonds sombres. Des bruns chauds, presque terre cuite, plutôt
+     qu'un noir bleuté : une pièce éclairée le soir, pas un écran de terminal. */
+  --braise-900: #1a120c;
+  --braise-800: #211710;
+  --braise-700: #2c1f16;
 
-  /* Sable — les fonds clairs, tirés vers l'ivoire et le papier plutôt que
-     vers le gris. C'est là que se joue l'essentiel de la chaleur. */
-  --blanc: #fffdfa;
-  --sable-50: #fdf8f2;
-  --sable-100: #f8efe4;
-  --sable-200: #ecdfd0;
-  --sable-300: #dbc7b0;
-  --sable-600: #6f6055;
-  --encre: #2b211b;
+  /* Sable — les fonds clairs, franchement tirés vers l'abricot et le pain :
+     c'est là que se joue l'essentiel de la chaleur. Les surfaces restent plus
+     claires que la page, sinon les cartes cesseraient de s'en détacher. */
+  --blanc: #fffaf4;
+  --sable-50: #fcf0e2;
+  --sable-100: #f7e5d1;
+  --sable-200: #ebd3ba;
+  --sable-300: #d9b992;
+  --sable-600: #75604f;
+  --encre: #2e211a;
 
   /* Rôles sémantiques — surchargés en thème sombre */
   --fond: var(--sable-50);
@@ -80,8 +81,8 @@
   --accent-doux: #fbe4ee;
   --sur-accent: #ffffff;
 
-  /* Lueur chaude du haut de page — l'ambre du sigle, en très dilué. */
-  --halo: #f8dcc0;
+  /* Lueur chaude du haut de page — l'ambre du sigle, à peine dilué. */
+  --halo: #f7cfa4;
 
   /* Typographie — géométrique, comme les lettres du sigle */
   --police-titre: "Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
@@ -116,12 +117,12 @@
   --r-full: 999px;
 
   /* Ombres teintées de brun : une ombre grise sur un fond crème le grise. */
-  --ombre-sm: 0 1px 2px rgba(61, 42, 28, 0.07),
-    0 2px 6px rgba(61, 42, 28, 0.06);
-  --ombre-md: 0 4px 12px rgba(61, 42, 28, 0.08),
-    0 12px 28px rgba(61, 42, 28, 0.09);
-  --ombre-lg: 0 10px 24px rgba(61, 42, 28, 0.11),
-    0 24px 60px rgba(61, 42, 28, 0.15);
+  --ombre-sm: 0 1px 2px rgba(88, 54, 26, 0.08),
+    0 2px 6px rgba(88, 54, 26, 0.07);
+  --ombre-md: 0 4px 12px rgba(88, 54, 26, 0.09),
+    0 12px 28px rgba(88, 54, 26, 0.1);
+  --ombre-lg: 0 10px 24px rgba(88, 54, 26, 0.12),
+    0 24px 60px rgba(88, 54, 26, 0.16);
 
   --largeur-max: 1180px;
   --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -135,12 +136,12 @@
 [data-theme="dark"] {
   --fond: var(--braise-900);
   --fond-alt: var(--braise-800);
-  --surface: #1e1815;
+  --surface: #251a12;
   --surface-2: var(--braise-700);
-  --bordure: #362c24;
-  --bordure-forte: #4a3c31;
-  --texte: #f6ede4;
-  --texte-doux: #b9a696;
+  --bordure: #3d2c1f;
+  --bordure-forte: #533d2b;
+  --texte: #f8ece0;
+  --texte-doux: #c0a892;
   --texte-inverse: var(--braise-900);
   --primaire: #a78bff;
   --primaire-fort: #bda7ff;
@@ -149,7 +150,7 @@
   --accent-fort: #f892c8;
   --accent-doux: #3a1c2a;
   --sur-accent: #1a0a13;
-  --halo: #40291c;
+  --halo: #4a2d18;
 
   /* Sur fond sombre, la profondeur vient d'une lueur colorée plus que d'une
      ombre — ambre plutôt que violette, pour rester dans la même chaleur. */
@@ -1278,7 +1279,7 @@ select {
 .modale__voile {
   position: absolute;
   inset: 0;
-  background: rgba(20, 16, 14, 0.7);
+  background: rgba(26, 18, 12, 0.72);
   backdrop-filter: blur(4px);
 }
 
