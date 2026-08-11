@@ -63,13 +63,16 @@ aux participants d’échanger avant et après la sortie.
   adhéré à la charte en s'inscrivant.
 
 **Transversal**
-- Thème clair chaud par défaut, sauf si le système demande explicitement le
-  thème sombre — lui aussi réchauffé. Le choix de l'utilisateur est mémorisé et
-  appliqué avant le premier rendu, sans clignotement.
-- Navigation : Accueil, Le projet, Communauté, puis les deux entrées de compte.
-  Le catalogue s'atteint par le bouton « Trouver une activité », identique sur
-  les six pages, et par les liens du pied de page. Menu replié en burger sous
-  900 px.
+- Thème clair chaud par défaut, sombre — lui aussi réchauffé — si le système
+  le demande. Il n'y a pas de bascule dans l'interface, et rien n'est mémorisé :
+  une préférence conservée sans moyen d'en changer enfermerait le visiteur dans
+  un choix fait une fois. Le thème est appliqué avant le premier rendu, sans
+  clignotement, et suit le système s'il change en cours de visite.
+- Navigation : Accueil, Le projet, Communauté, puis le bouton « Trouver une
+  activité » et les deux entrées de compte, à sa droite. Le pied de page reprend
+  les mêmes accès. Sous 900 px le menu se replie en burger et les entrées de
+  compte l'y rejoignent : elles existent en deux exemplaires dans le document,
+  dont un seul est affiché.
 - Apparitions au défilement, désactivées si l’utilisateur a demandé de réduire
   les animations (`prefers-reduced-motion`) et sans effet si JavaScript est absent.
 - Accessibilité : lien d’évitement, focus visible, piège à focus et fermeture

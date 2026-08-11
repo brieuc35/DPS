@@ -149,12 +149,12 @@ const Comptes = {
  * session peut s'ouvrir ou se fermer pendant la vie de la page.
  */
 function initEnteteCompte() {
-  const zone = $('[data-zone-compte]');
-  if (!zone) return;
+  const zones = $$('[data-zone-compte]');
+  if (!zones.length) return;
 
   const compte = Comptes.courant();
 
-  zone.innerHTML = compte
+  const contenu = compte
     ? `
       <a class="nav__lien nav__lien--compte" href="compte.html">
         <span class="avatar avatar--sm ${compte.couleur}" aria-hidden="true">${echapper(
@@ -168,6 +168,12 @@ function initEnteteCompte() {
       <a class="nav__lien nav__lien--compte" href="compte.html#connexion">Se connecter</a>
       <a class="nav__lien nav__lien--compte" href="compte.html#inscription">Créer un compte</a>
     `;
+
+  // Deux exemplaires dans le document — barre d'actions et menu replié — dont
+  // un seul est affiché : les deux doivent porter le même état.
+  zones.forEach((zone) => {
+    zone.innerHTML = contenu;
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -641,31 +641,6 @@ select {
   gap: var(--e-2);
 }
 
-/* Bouton thème clair/sombre */
-.bascule-theme {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: 1px solid var(--bordure);
-  border-radius: var(--r-full);
-  background: var(--surface);
-  color: var(--texte-doux);
-  cursor: pointer;
-  transition: color var(--transition), border-color var(--transition),
-    background-color var(--transition);
-}
-
-.bascule-theme:hover {
-  color: var(--primaire);
-  border-color: var(--primaire);
-}
-
-.bascule-theme .icone-lune { display: none; }
-[data-theme="dark"] .bascule-theme .icone-soleil { display: none; }
-[data-theme="dark"] .bascule-theme .icone-lune { display: block; }
-
 /* Burger mobile */
 .burger {
   display: none;
@@ -1710,32 +1685,42 @@ select {
    8 bis. Espace membre & discussions
    ========================================================================== */
 
-/* --- Entrées « compte » de la navigation --- */
-.nav__compte {
+/* --- Entrées « compte » ---
+   Elles vivent en deux exemplaires dans le document : à droite du bouton
+   « Trouver une activité » quand la barre est déployée, dans le menu replié
+   quand la place manque. Un seul est affiché à la fois. */
+.entete__compte {
   display: inline-flex;
   align-items: center;
-  gap: var(--e-1);
+  gap: var(--e-3);
   padding-left: var(--e-3);
-  margin-left: var(--e-2);
+  margin-left: var(--e-1);
   border-left: 1px solid var(--bordure);
 }
+
+.nav__compte { display: none; }
 
 .nav__lien--compte {
   display: inline-flex;
   align-items: center;
   gap: var(--e-2);
+  white-space: nowrap;
 }
 
-/* En mode replié la navigation est une colonne : le filet vertical n'a plus
-   de sens, il devient une séparation horizontale. */
-@media (max-width: 899px) {
+/* Même seuil que le repli du menu, sinon 900 px exactement afficherait le
+   burger et les entrées de compte en même temps. */
+@media (max-width: 900px) {
+  .entete__compte { display: none; }
+
+  /* Dans le menu replié la navigation est une colonne : le filet vertical
+     n'aurait pas de sens, il devient une séparation horizontale. */
   .nav__compte {
+    display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: var(--e-1);
     padding: var(--e-3) 0 0;
     margin: var(--e-2) 0 0;
-    border-left: 0;
     border-top: 1px solid var(--bordure);
   }
 }

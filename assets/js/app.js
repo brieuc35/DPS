@@ -113,36 +113,24 @@ function allerVers(page, ancre) {
    Thème clair / sombre
    ========================================================================== */
 
-const CLE_THEME = 'dps.theme';
-
 function appliquerTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
-  const bouton = $('.bascule-theme');
-  if (bouton) {
-    bouton.setAttribute(
-      'aria-label',
-      theme === 'dark' ? 'Passer au thème clair' : 'Passer au thème sombre'
-    );
-  }
 }
 
+/**
+ * Le site n'expose plus de bascule : le thème suit le réglage du système, et
+ * rien n'est mémorisé. Une préférence conservée sans moyen d'en changer
+ * enfermerait le visiteur dans un choix fait une fois.
+ */
 function initTheme() {
+  const systeme = window.matchMedia('(prefers-color-scheme: dark)');
+
   // Même résolution que le script inline du <head>, qui pose déjà le thème
-  // avant le premier rendu : ici on ne fait que la confirmer et brancher
-  // le bouton. On accueille dans les tons chauds et clairs ; seul un système
-  // réglé en sombre l'emporte.
-  const stocke = Stockage.lire(CLE_THEME, null);
-  const sombreDemande = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  appliquerTheme(stocke || (sombreDemande ? 'dark' : 'light'));
-
-  const bouton = $('.bascule-theme');
-  if (!bouton) return;
-
-  bouton.addEventListener('click', () => {
-    const actuel = document.documentElement.getAttribute('data-theme');
-    const suivant = actuel === 'dark' ? 'light' : 'dark';
-    appliquerTheme(suivant);
-    Stockage.ecrire(CLE_THEME, suivant);
+  // avant le premier rendu : on la confirme, puis on suit le système s'il
+  // change en cours de route.
+  appliquerTheme(systeme.matches ? 'dark' : 'light');
+  systeme.addEventListener('change', (evenement) => {
+    appliquerTheme(evenement.matches ? 'dark' : 'light');
   });
 }
 
