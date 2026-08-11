@@ -2001,8 +2001,10 @@ select {
    9. Pied de page
    ========================================================================== */
 
+/* Pas de marge haute : les sections finissent déjà sur un rembourrage
+   généreux, et la marge s'ajoutant au leur laissait une bande vide sous les
+   sections teintées. */
 .pied {
-  margin-top: var(--e-9);
   padding-block: var(--e-8) var(--e-5);
   background: var(--braise-900);
   color: rgba(255, 255, 255, 0.72);
