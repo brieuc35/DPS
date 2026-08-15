@@ -109,8 +109,8 @@ function afficherProfil(compte) {
   if (profilBranche) return;
   profilBranche = true;
 
-  $('[data-deconnexion]').addEventListener('click', () => {
-    Comptes.deconnecter();
+  $('[data-deconnexion]').addEventListener('click', async () => {
+    await Comptes.deconnecter();
     notifier('Vous êtes déconnecté·e', '👋');
     window.setTimeout(() => window.location.reload(), 600);
   });
@@ -119,6 +119,23 @@ function afficherProfil(compte) {
 /* ==========================================================================
    Formulaires
    ========================================================================== */
+
+/**
+ * Les pannes qui ne visent aucun champ en particulier : elles passent par une
+ * notification plutôt que par un message sous une saisie.
+ * @returns {boolean} true si l'incident a été signalé et traité.
+ */
+function signalerIncident(motif) {
+  if (motif === 'reseau') {
+    notifier('Connexion au serveur impossible. Vérifiez votre réseau.', '📡');
+    return true;
+  }
+  if (motif === 'trop') {
+    notifier('Trop de tentatives. Réessayez dans quelques minutes.', '⏳');
+    return true;
+  }
+  return false;
+}
 
 function marquer(controle, valide) {
   const champ = controle.closest('.champ');
@@ -156,11 +173,20 @@ function initConnexion() {
       return;
     }
 
-    if (!resultat.ok) {
+    if (!resultat.ok && !signalerIncident(resultat.motif)) {
+      // Firebase ne dit pas si c'est l'adresse ou le mot de passe qui cloche —
+      // c'est délibéré, cela évite de révéler qui a un compte. Le message le
+      // reflète.
+      $('[data-erreur-motdepasse]').textContent =
+        Comptes.mode === 'firebase'
+          ? 'Adresse e-mail ou mot de passe incorrect.'
+          : 'Mot de passe incorrect.';
       marquer(motDePasse, false);
       motDePasse.focus();
       return;
     }
+
+    if (!resultat.ok) return;
 
     notifier(`Content de vous revoir, ${resultat.compte.prenom}`, '👋');
     window.setTimeout(() => allerVers('chat'), 500);
@@ -210,13 +236,23 @@ function initInscription() {
       motDePasse: champs.motDePasse.value,
     });
 
-    if (!resultat.ok) {
+    if (!resultat.ok && resultat.motif === 'faible') {
+      marquer(champs.motDePasse, false);
+      champs.motDePasse.focus();
+      return;
+    }
+
+    if (!resultat.ok && !signalerIncident(resultat.motif)) {
       $('[data-erreur-inscription]').textContent =
-        'Un compte existe déjà pour cette adresse. Connectez-vous.';
+        resultat.motif === 'email'
+          ? 'Cette adresse e-mail ne semble pas valide.'
+          : 'Un compte existe déjà pour cette adresse. Connectez-vous.';
       marquer(champs.email, false);
       champs.email.focus();
       return;
     }
+
+    if (!resultat.ok) return;
 
     notifier(`Bienvenue, ${resultat.compte.prenom} !`, '🎉');
     window.setTimeout(() => allerVers('chat'), 600);
@@ -230,20 +266,22 @@ function initInscription() {
 document.addEventListener('DOMContentLoaded', () => {
   if (!$('[data-espace-visiteur]')) return;
 
-  const compte = Comptes.courant();
-  if (compte) {
-    afficherProfil(compte);
-  } else {
-    initOnglets();
-    initConnexion();
-    initInscription();
-  }
+  // Les formulaires sont branchés dans tous les cas : au premier rendu, avec
+  // Firebase, la session n'est pas encore connue. Ils restent simplement
+  // masqués sous le profil si un membre finit par apparaître.
+  initOnglets();
+  initConnexion();
+  initInscription();
 
-  // Version fichier unique : on revient sur cette vue sans rechargement, après
-  // s'être inscrit ou avoir réservé ailleurs. Le profil remplace alors les
-  // formulaires, et sa liste de sorties est refaite.
-  window.addEventListener('hashchange', () => {
+  const rafraichir = () => {
     const membre = Comptes.courant();
     if (membre) afficherProfil(membre);
-  });
+  };
+
+  rafraichir();
+
+  // Deux raisons de repasser ici sans rechargement : la version fichier unique
+  // change de vue, et Firebase annonce la session après coup.
+  window.addEventListener('hashchange', rafraichir);
+  window.addEventListener('dps:session', rafraichir);
 });

@@ -254,7 +254,9 @@ function preparerChat() {
 document.addEventListener('DOMContentLoaded', () => {
   preparerChat();
 
-  // Le lien d'un groupe depuis une autre vue ne recharge pas la page dans la
-  // version fichier unique : on suit l'ancre.
+  // Deux raisons de recalculer sans rechargement : le lien d'un groupe depuis
+  // une autre vue (version fichier unique), et Firebase qui annonce la session
+  // après le premier rendu.
   window.addEventListener('hashchange', preparerChat);
+  window.addEventListener('dps:session', preparerChat);
 });

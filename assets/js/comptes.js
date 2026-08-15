@@ -1,14 +1,19 @@
 /**
  * DPS — Comptes
  * ---------------------------------------------------------------------------
- * Inscription, connexion et session, plus l'état « connecté » de l'en-tête.
+ * Une seule surface d'API — `Comptes` — pour deux implémentations possibles :
  *
- * ATTENTION — le site est statique : il n'y a pas de serveur, donc pas
- * d'authentification réelle. Les comptes vivent dans le localStorage du
- * navigateur qui les a créés. Le mot de passe n'est jamais conservé en clair
- * (empreinte SHA-256 salée), mais cela ne protège personne : quiconque a la
- * main sur le navigateur a la main sur les comptes. C'est une maquette du
- * parcours, à remplacer par un vrai back-end avant toute mise en service.
+ * - **mode Firebase**, quand `firebase-init.js` a réussi à ouvrir la session.
+ *   Les comptes sont alors de vrais comptes : même identité d'un appareil à
+ *   l'autre, mot de passe géré par Google, jamais stocké ici.
+ *
+ * - **mode local**, sinon. Les comptes vivent dans le `localStorage` du
+ *   navigateur qui les a créés. C'est une maquette du parcours : le mot de passe
+ *   n'est pas conservé en clair (empreinte SHA-256 salée), mais cela ne protège
+ *   personne — qui a la main sur le navigateur a la main sur les comptes.
+ *
+ * Le repli n'est pas un ornement : l'aperçu hors ligne du site, lui, n'a accès à
+ * aucun serveur. C'est ce mode qui l'y fait fonctionner.
  */
 
 const CLE_COMPTES = 'dps.comptes';
@@ -16,16 +21,23 @@ const CLE_SESSION = 'dps.session';
 
 const COULEURS_AVATAR = ['avatar--ciel', 'avatar--prune', 'avatar--terre', 'avatar--ambre'];
 
+/** Le pont Firebase, ou null tant qu'il n'a pas démarré (ou s'il a échoué). */
+function pont() {
+  return window.DPS_AUTH && window.DPS_AUTH.disponible ? window.DPS_AUTH : null;
+}
+
 /* ==========================================================================
-   Empreinte du mot de passe
+   Mode local — empreinte du mot de passe
    ========================================================================== */
 
 /** Sel aléatoire en hexadécimal, propre à chaque compte. */
 function nouveauSel() {
   const octets = new Uint8Array(16);
-  (window.crypto || {}).getRandomValues
-    ? window.crypto.getRandomValues(octets)
-    : octets.forEach((_, i) => (octets[i] = Math.floor(Math.random() * 256)));
+  if (window.crypto && window.crypto.getRandomValues) {
+    window.crypto.getRandomValues(octets);
+  } else {
+    for (let i = 0; i < octets.length; i += 1) octets[i] = Math.floor(Math.random() * 256);
+  }
   return Array.from(octets, (octet) => octet.toString(16).padStart(2, '0')).join('');
 }
 
@@ -55,16 +67,11 @@ async function empreinte(motDePasse, sel) {
   return 'faible-' + a.toString(16);
 }
 
-/* ==========================================================================
-   Modèle
-   ========================================================================== */
-
-const Comptes = {
+const Local = {
   liste() {
     return Stockage.lire(CLE_COMPTES, []);
   },
 
-  /** Le compte connecté, ou null. */
   courant() {
     const id = Stockage.lire(CLE_SESSION, null);
     if (!id) return null;
@@ -76,13 +83,8 @@ const Comptes = {
     return this.liste().find((compte) => compte.email === cible) || null;
   },
 
-  /**
-   * @returns {Promise<{ok: boolean, motif?: string, compte?: object}>}
-   */
   async creer({ prenom, nom, email, motDePasse }) {
-    if (this.parEmail(email)) {
-      return { ok: false, motif: 'existe' };
-    }
+    if (this.parEmail(email)) return { ok: false, motif: 'existe' };
 
     const sel = nouveauSel();
     const comptes = this.liste();
@@ -113,8 +115,48 @@ const Comptes = {
     return { ok: true, compte };
   },
 
-  deconnecter() {
+  async deconnecter() {
     Stockage.ecrire(CLE_SESSION, null);
+  },
+};
+
+/* ==========================================================================
+   Surface commune
+   ========================================================================== */
+
+const Comptes = {
+  /** 'firebase' ou 'local' — utile pour l'affichage et le diagnostic. */
+  get mode() {
+    return pont() ? 'firebase' : 'local';
+  },
+
+  /**
+   * Le mode local répond tout de suite ; Firebase demande un aller-retour.
+   * Tant que ce n'est pas vrai, l'absence de compte ne veut rien dire.
+   */
+  get pret() {
+    const distant = pont();
+    return distant ? distant.resolu : true;
+  },
+
+  courant() {
+    const distant = pont();
+    return distant ? distant.profil : Local.courant();
+  },
+
+  async creer(donnees) {
+    const distant = pont();
+    return distant ? distant.creer(donnees) : Local.creer(donnees);
+  },
+
+  async connecter(email, motDePasse) {
+    const distant = pont();
+    return distant ? distant.connecter(email, motDePasse) : Local.connecter(email, motDePasse);
+  },
+
+  async deconnecter() {
+    const distant = pont();
+    return distant ? distant.deconnecter() : Local.deconnecter();
   },
 
   /** Deux initiales, jamais une seule : « B » ferait un avatar bancal. */
@@ -145,8 +187,8 @@ const Comptes = {
  * fois la session ouverte. Le HTML porte l'état déconnecté : sans JavaScript,
  * les deux liens restent utilisables.
  *
- * Rejouable, car la version fichier unique change de vue sans recharger : la
- * session peut s'ouvrir ou se fermer pendant la vie de la page.
+ * Rejouable, et il le faut : la version fichier unique change de vue sans
+ * recharger, et Firebase répond après le premier rendu.
  */
 function initEnteteCompte() {
   const zones = $$('[data-zone-compte]');
@@ -180,3 +222,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initEnteteCompte();
   window.addEventListener('hashchange', initEnteteCompte);
 });
+
+// Firebase répond après coup : chaque changement de session redessine l'en-tête.
+window.addEventListener('dps:session', initEnteteCompte);

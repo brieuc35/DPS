@@ -79,25 +79,40 @@ aux participants d’échanger avant et après la sortie.
   par `Échap` dans la modale, libellés `aria` sur les contrôles dynamiques.
 - Tout contenu saisi par l’utilisateur est échappé avant insertion dans le DOM.
 
-## Ce que la démonstration ne fait pas
+## Firebase
 
-Le site est **entièrement statique** : il n'a pas de serveur. Deux
-fonctionnalités en portent la marque et doivent être comprises comme des
-maquettes de parcours, pas comme des services :
+Les comptes passent par **Firebase Authentication** (projet `dps-collective`).
+Ce sont de vrais comptes : même identité d'un appareil à l'autre, mot de passe
+géré par Google et jamais stocké par le site.
 
-- **Les comptes** ne sont pas authentifiés. Ils vivent dans le `localStorage`
-  du navigateur qui les a créés. L'empreinte du mot de passe évite de le
-  stocker en clair, mais ne protège de rien : qui a la main sur le navigateur a
-  la main sur les comptes. Un avertissement le dit sur la page d'inscription.
-- **Les messages ne circulent pas.** Chaque visiteur écrit dans sa propre copie
-  du site ; personne ne reçoit ce que les autres écrivent. Les échanges
-  affichés sont un décor, pour que le salon n'accueille pas les nouveaux venus
-  sur une page vide.
+- `assets/js/firebase-config.js` — la configuration du projet. Ces valeurs sont
+  **publiques par construction** : elles identifient le projet, elles
+  n'autorisent rien. Ce qui protège les données, ce sont les règles de sécurité.
+- `assets/js/firebase-init.js` — module ES qui charge le SDK et expose
+  `window.DPS_AUTH`. Le reste du site est en scripts classiques : ce fichier
+  fait la jonction, et maintient un instantané synchrone de la session pour que
+  l'en-tête, le portail du chat et le préremplissage n'aient pas à l'attendre.
+- `assets/vendor/firebase/` — copie locale du SDK, version figée. Voir le
+  `LISEZMOI.md` du dossier pour la provenance et la mise à jour.
 
-Passer à un vrai service demande un back-end (authentification, base de
-données, temps réel). Côté code, l'essentiel est isolé : `assets/js/comptes.js`
-pour les comptes, et les fonctions de lecture et d'écriture en tête de
-`assets/js/chat.js` pour les messages.
+**Mode local.** Si le SDK ne démarre pas — ou si l'on pose
+`localStorage.setItem('dps.modeLocal', 'true')` — `comptes.js` retombe sur une
+implémentation `localStorage` : comptes cantonnés au navigateur, mot de passe
+réduit à une empreinte SHA-256 salée. C'est ce mode qui fait vivre l'aperçu
+hors ligne du site et les tests automatisés. Ce n'est pas une authentification :
+qui a la main sur le navigateur a la main sur ces comptes-là.
+
+## Ce qui reste à faire
+
+- **Les messages ne circulent toujours pas.** Le chat est encore en
+  `localStorage` : chaque visiteur écrit dans sa propre copie du site. Les
+  échanges affichés sont un décor. Le passage à Firestore ne touchera que les
+  fonctions de lecture et d'écriture en tête de `assets/js/chat.js`.
+- **Les réservations non plus.** Tant qu'elles ne sont pas partagées, deux
+  personnes peuvent prendre la même dernière place — et aucun paiement n'a de
+  sens avant que ce soit réglé.
+- **Les règles de sécurité Firestore** restent à écrire : ce sont elles, et non
+  la clé d'API, qui décideront qui peut lire quel fil.
 
 ## Lancer le site
 
@@ -172,11 +187,14 @@ assets/
   js/donnees.js         Thématiques, activités, cercles, publications et messages d’exemple
   js/app.js             Thème, navigation, apparitions, notifications, utilitaires
   js/comptes.js         Inscription, connexion, session, état de l’en-tête
+  js/firebase-config.js Configuration du projet Firebase (publique)
+  js/firebase-init.js   Module ES : charge le SDK et ouvre la session
   js/activites.js       Grille, filtres et parcours de réservation
   js/communaute.js      Fil social
   js/page-compte.js     Onglets et formulaires de l’espace membre
   js/chat.js            Salon général et fils de groupe
   img/
+  vendor/firebase/      Copie locale du SDK Firebase (app + auth)
 ```
 
 ## Notes techniques
