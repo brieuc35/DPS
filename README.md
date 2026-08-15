@@ -1,16 +1,16 @@
 # DPS Collective — Découvrir, Partager, Simplement
 
-Site vitrine d’une plateforme d’activités à taille humaine : on réserve une place
-seul·e (randonnée, visite d’usine, brasserie, atelier…) et on rejoint un petit
-groupe. Un réseau social interne, volontairement calme et bienveillant, permet
-aux participants d’échanger avant et après la sortie.
+Site de DPS Collective, qui propose des activités à faire autour de Vitré : on
+choisit celle qui donne envie, et on la vit aux côtés d’autres personnes qui ont
+fait le même choix. Un fil interne, volontairement calme, permet d’échanger avant
+et après la sortie.
 
 ## Contenu
 
 | Page | Rôle |
 | --- | --- |
-| `index.html` | Accueil : proposition de valeur, les activités à la une, fonctionnement, charte, témoignages |
-| `activites.html` | Catalogue complet avec recherche, filtres par thématique et tri |
+| `index.html` | Accueil : le concept, les prochaines expériences, le fonctionnement, la communauté |
+| `activites.html` | Le programme complet, avec recherche et tri |
 | `communaute.html` | Fil social : cercles de discussion, composeur, réactions et réponses |
 | `vision.html` | Le projet : la vision, le concept, la vie de la communauté, l'ambition et la promesse |
 | `compte.html` | Espace membre : onglets « Se connecter » / « Créer un compte », puis profil et sorties réservées |
@@ -18,15 +18,17 @@ aux participants d’échanger avant et après la sortie.
 
 ## Fonctionnalités
 
-**Activités**
-- Grille de cases thématiques compactes (4 thématiques, 4 activités) : visuel,
-  ville, date, titre et jauge de groupe. Le nombre de colonnes s'adapte à la
-  largeur disponible. Le détail complet est dans la fiche de réservation.
+**Expériences**
+- Grille de cartes compactes (4 thématiques, 4 activités) : vignette, ville,
+  date, titre et jauge. Le nombre de colonnes s'adapte à la largeur disponible.
+- Les vignettes portent un **pictogramme tracé**, pas un émoji : un émoji change
+  de dessin selon le système, jure avec les lettres géométriques du sigle, et
+  fait basculer la page du côté de la conversation alors qu'elle est une
+  proposition.
 - Recherche plein texte (titre, ville, description, thématique) et tri par
   date / prix / places disponibles.
-- Jauge de remplissage du groupe — douze places pour toutes les activités,
-  conformément à la promesse affichée sur l'accueil — et étiquette
-  « Plus que N places » / « Complet ».
+- Jauge de remplissage — douze places pour chaque activité — et étiquette
+  « Plus que N places » / « Complet » quand la sortie se remplit.
 - Réservation en modale : récapitulatif de prix en direct, validation des champs,
   adhésion à la charte obligatoire, écran de confirmation.
 - Une ancre du type `activites.html#brasserie` pré-remplit la recherche avec le
@@ -78,6 +80,29 @@ aux participants d’échanger avant et après la sortie.
 - Accessibilité : lien d’évitement, focus visible, piège à focus et fermeture
   par `Échap` dans la modale, libellés `aria` sur les contrôles dynamiques.
 - Tout contenu saisi par l’utilisateur est échappé avant insertion dans le DOM.
+
+## Ligne éditoriale
+
+Le site suit une progression : **comprendre → avoir envie → participer**.
+L'activité est le point de départ, l'expérience est le cœur, le collectif lui
+donne sa dimension. Trois règles en découlent, et elles expliquent la plupart
+des choix de texte :
+
+- **La rencontre n'est pas le produit.** Elle arrive parce qu'on a choisi la
+  même sortie, pas parce qu'on est venu la chercher. Aucune page ne promet de
+  « faire de belles rencontres ».
+- **Le collectif ne doit pas intimider.** On ne met en avant ni le nombre de
+  participants, ni le fait qu'on ne connaît personne. Les formulations qui
+  faisaient peser le groupe — « rejoignez un groupe », « venir seul·e est la
+  norme », « briser la glace » — ont été retirées.
+- **On n'invente rien.** Ni témoignages, ni participants, ni partenaires, ni
+  statistiques, ni déroulé d'activité non validé avec le lieu. C'est ce qui a
+  fait disparaître la section « ils y sont allés », les messages de décor du
+  fil, le nombre de modérateurs et le programme détaillé des sorties.
+
+Les jauges partent donc de zéro et le fil démarre vide. Moins flatteur, mais
+c'est l'état réel du projet — et la première vraie question posée n'y sera pas
+noyée.
 
 ## Firebase
 

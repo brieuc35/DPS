@@ -6,12 +6,16 @@
  * à un back-end, ces tableaux seraient remplacés par des appels API.
  */
 
-/* Thématiques : servent aux couleurs, aux pictogrammes et à la recherche. */
+/* Thématiques : couleurs, pictogrammes et recherche.
+
+   Les pictogrammes sont des tracés, pas des émojis : un émoji change de dessin
+   selon le système, jure avec les lettres géométriques du sigle, et donne au
+   site un air de conversation plutôt que de proposition. */
 const THEMATIQUES = [
-  { id: 'patrimoine', nom: 'Patrimoine',            emoji: '⛏️', degrade: 'linear-gradient(150deg, #5fd3e0, #2f6fe0)' },
-  { id: 'loisir',     nom: 'Jeux & loisirs',        emoji: '🎱', degrade: 'linear-gradient(150deg, #7c4df0, #3b39c4)' },
-  { id: 'entreprise', nom: 'Visites d’entreprise',  emoji: '🍏', degrade: 'linear-gradient(150deg, #f7b267, #e8556d)' },
-  { id: 'brasserie',  nom: 'Brasseries',            emoji: '🍺', degrade: 'linear-gradient(150deg, #f2718c, #b03fd0)' },
+  { id: 'patrimoine', nom: 'Patrimoine',            icone: '<path d="M3 21l7-7"/><path d="M13 11a9 9 0 0 1 8-5 14 14 0 0 0-8 5Z"/><path d="M13 11a9 9 0 0 0-5 8 14 14 0 0 1 5-8Z"/><path d="M13 11l3 3"/>', degrade: 'linear-gradient(150deg, #5fd3e0, #2f6fe0)' },
+  { id: 'loisir',     nom: 'Jeux & loisirs',        icone: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/>', degrade: 'linear-gradient(150deg, #7c4df0, #3b39c4)' },
+  { id: 'entreprise', nom: 'Visites d’entreprise',  icone: '<path d="M3 21h18"/><path d="M4 21V10l6 3.5V10l6 3.5V6h4v15"/><path d="M7 21v-3.5"/>', degrade: 'linear-gradient(150deg, #f7b267, #e8556d)' },
+  { id: 'brasserie',  nom: 'Brasseries',            icone: '<path d="M6 8h9v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z"/><path d="M15 11h2.5a2.5 2.5 0 0 1 0 5H15"/><path d="M6 8c0-2 1.4-3 3-3 .4-1.2 1.5-2 2.8-2 1.4 0 2.6 1 2.9 2.3"/>', degrade: 'linear-gradient(150deg, #f2718c, #b03fd0)' },
 ];
 
 /* Activités proposées.
@@ -113,77 +117,22 @@ const ACTIVITES = [
 
 /* Cercles de discussion du réseau social. */
 const CERCLES = [
-  { id: 'tous',        nom: 'Tout le fil',          emoji: '🌍' },
-  { id: 'patrimoine',  nom: 'Patrimoine',           emoji: '⛏️' },
-  { id: 'entreprise',  nom: 'Visites d’entreprise', emoji: '🍏' },
-  { id: 'brasserie',   nom: 'Brasseries',           emoji: '🍺' },
-  { id: 'loisir',      nom: 'Jeux & loisirs',       emoji: '🎱' },
-  { id: 'premierpas',  nom: 'Premiers pas',         emoji: '🌱' },
+  { id: 'tous',        nom: 'Tout le fil',          icone: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/>' },
+  { id: 'patrimoine',  nom: 'Patrimoine',           icone: '<path d="M3 21l7-7"/><path d="M13 11a9 9 0 0 1 8-5 14 14 0 0 0-8 5Z"/><path d="M13 11a9 9 0 0 0-5 8 14 14 0 0 1 5-8Z"/><path d="M13 11l3 3"/>' },
+  { id: 'entreprise',  nom: 'Visites d’entreprise', icone: '<path d="M3 21h18"/><path d="M4 21V10l6 3.5V10l6 3.5V6h4v15"/><path d="M7 21v-3.5"/>' },
+  { id: 'brasserie',   nom: 'Brasseries',           icone: '<path d="M6 8h9v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z"/><path d="M15 11h2.5a2.5 2.5 0 0 1 0 5H15"/><path d="M6 8c0-2 1.4-3 3-3 .4-1.2 1.5-2 2.8-2 1.4 0 2.6 1 2.9 2.3"/>' },
+  { id: 'loisir',      nom: 'Jeux & loisirs',       icone: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/>' },
+  { id: 'premierpas',  nom: 'Premiers pas',         icone: '<path d="M12 21v-7"/><path d="M12 14c0-3.3 2.7-6 6-6 0 3.3-2.7 6-6 6Z"/><path d="M12 16c0-2.8-2.2-5-5-5 0 2.8 2.2 5 5 5Z"/>' },
 ];
 
 /* Publications d'exemple pour amorcer le fil. */
-const PUBLICATIONS = [
-  {
-    id: 'pub-1',
-    auteur: 'Camille R.',
-    initiales: 'CR',
-    couleur: 'avatar',
-    cercle: 'patrimoine',
-    badge: 'Hôte',
-    date: '2026-07-30T09:12',
-    contenu:
-      'Les inscriptions sont ouvertes pour la Mine Bleue du 15 ⛏️\nPensez à prévoir une petite laine : il fait 13 °C au fond, toute l’année.',
-    jaimes: 24,
-    reponses: [
-      { auteur: 'Sonia L.', initiales: 'SL', couleur: 'avatar--ambre', texte: 'Noté pour la laine, merci ! J’ai hâte.' },
-      { auteur: 'Marc T.', initiales: 'MT', couleur: 'avatar--ciel', texte: 'Il reste de la place ? Je peux me libérer ce jour-là.' },
-    ],
-  },
-  {
-    id: 'pub-2',
-    auteur: 'Théo N.',
-    initiales: 'TN',
-    couleur: 'avatar--prune',
-    cercle: 'premierpas',
-    badge: 'Nouveau',
-    date: '2026-07-30T07:40',
-    contenu:
-      'Je viens d’arriver du côté de Vitré et je ne connais personne. J’avoue que réserver une activité seul m’intimide un peu… Est-ce que ça se passe bien quand on vient sans connaître qui que ce soit ?',
-    jaimes: 41,
-    reponses: [
-      { auteur: 'Nadia K.', initiales: 'NK', couleur: 'avatar--prune', texte: 'La moitié des participants viennent seuls ! On commence toujours par un tour de table.' },
-      { auteur: 'Étienne M.', initiales: 'EM', couleur: 'avatar--terre', texte: 'Viens à l’initiation billard dimanche, je te présenterai le groupe 🙂' },
-    ],
-  },
-  {
-    id: 'pub-3',
-    auteur: 'Sofia B.',
-    initiales: 'SB',
-    couleur: 'avatar--ambre',
-    cercle: 'brasserie',
-    badge: 'Hôte',
-    date: '2026-07-29T18:05',
-    contenu:
-      'Les places pour la brasserie Athanor du 18 sont ouvertes 🍺 Si quelqu’un hésite : non, il ne faut rien connaître à la bière, et oui, il y a une option sans alcool pour la dégustation.',
-    jaimes: 15,
-    reponses: [
-      { auteur: 'Amine Z.', initiales: 'AZ', couleur: 'avatar--ciel', texte: 'Je prends la place, merci pour la précision sur le sans alcool !' },
-    ],
-  },
-  {
-    id: 'pub-4',
-    auteur: 'Leïla F.',
-    initiales: 'LF',
-    couleur: 'avatar--prune',
-    cercle: 'loisir',
-    badge: null,
-    date: '2026-07-29T12:22',
-    contenu:
-      'Première fois que je touchais une queue de billard hier soir 🎱 J’ai raté à peu près tout, et j’ai passé un excellent moment. Personne ne s’est moqué, c’est tout ce que je demandais.',
-    jaimes: 33,
-    reponses: [],
-  },
-];
+/* Le fil démarre vide.
+
+   Les publications d'exemple ont été retirées : elles mettaient en scène des
+   personnes qui n'existent pas, avec des sorties qui n'ont pas eu lieu. Un fil
+   qui commence à zéro est moins flatteur, mais c'est le vrai état du projet —
+   et la première vraie question posée n'en sera pas noyée. */
+const PUBLICATIONS = [];
 
 /* ==========================================================================
    Conversations d'exemple
@@ -198,82 +147,18 @@ const CONVERSATIONS = [
   {
     id: 'general',
     nom: 'Le salon',
-    emoji: '💬',
+    icone: '<path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2Z"/>',
     description: 'Tous les membres, toutes les sorties. On y dit bonjour, on y pose ses questions.',
   },
   ...ACTIVITES.map((activite) => ({
     id: `groupe-${activite.id}`,
     nom: activite.titre,
-    emoji: (THEMATIQUES.find((t) => t.id === activite.thematique) || {}).emoji || '📍',
+    icone: (THEMATIQUES.find((t) => t.id === activite.thematique) || {}).icone || '',
     description: `Le groupe des inscrits · ${activite.lieu.split(',')[0]}`,
     activiteId: activite.id,
   })),
 ];
 
-const MESSAGES_EXEMPLE = {
-  general: [
-    {
-      id: 'm-g1', auteur: 'Camille R.', initiales: 'CR', couleur: 'avatar--terre',
-      date: '2026-08-09T18:12',
-      texte: 'Bonsoir tout le monde 👋 Pour celles et ceux qui viennent pour la première fois : on se retrouve toujours un quart d’heure avant, ça évite d’arriver en courant.',
-    },
-    {
-      id: 'm-g2', auteur: 'Théo N.', initiales: 'TN', couleur: 'avatar--prune',
-      date: '2026-08-09T18:31',
-      texte: 'Merci, c’est noté. Je suis inscrit au billard lundi et je ne connais personne, donc ça me rassure.',
-    },
-    {
-      id: 'm-g3', auteur: 'Sofia B.', initiales: 'SB', couleur: 'avatar--ambre',
-      date: '2026-08-10T09:05',
-      texte: 'Théo, on sera plusieurs dans ton cas 🙂 Viens simplement, le reste se fait tout seul.',
-    },
-  ],
-  'groupe-mine-bleue': [
-    {
-      id: 'm-mb1', auteur: 'Camille R.', initiales: 'CR', couleur: 'avatar--terre',
-      date: '2026-08-10T10:02',
-      texte: 'Bienvenue dans le groupe de La Mine Bleue ⛏️ Rendez-vous sur place à 13 h 45, la descente part à 14 h pile.',
-    },
-    {
-      id: 'm-mb2', auteur: 'Marc T.', initiales: 'MT', couleur: 'avatar--ciel',
-      date: '2026-08-10T10:20',
-      texte: 'Il fait quelle température au fond ? Je prévois une polaire ou ça suffit une chemise ?',
-    },
-    {
-      id: 'm-mb3', auteur: 'Camille R.', initiales: 'CR', couleur: 'avatar--terre',
-      date: '2026-08-10T10:24',
-      texte: 'Une polaire, sans hésiter : il fait 13 °C toute l’année là-dessous.',
-    },
-  ],
-  'groupe-initiation-billard': [
-    {
-      id: 'm-ib1', auteur: 'Étienne M.', initiales: 'EM', couleur: 'avatar--terre',
-      date: '2026-08-10T20:14',
-      texte: 'Salut le groupe 🎱 Personne n’a besoin de savoir jouer, c’est bien une initiation. On commence par la tenue de la queue.',
-    },
-    {
-      id: 'm-ib2', auteur: 'Leïla F.', initiales: 'LF', couleur: 'avatar--prune',
-      date: '2026-08-10T20:40',
-      texte: 'Parfait, parce que mon niveau est proche de zéro. À lundi !',
-    },
-  ],
-  'groupe-cidrerie-loic-raison': [
-    {
-      id: 'm-cr1', auteur: 'Nadia K.', initiales: 'NK', couleur: 'avatar--prune',
-      date: '2026-08-09T14:30',
-      texte: 'Petit rappel pour la cidrerie : chaussures fermées obligatoires, c’est une vraie usine 🍏',
-    },
-  ],
-  'groupe-brasserie-athanor': [
-    {
-      id: 'm-ba1', auteur: 'Sofia B.', initiales: 'SB', couleur: 'avatar--ambre',
-      date: '2026-08-10T19:02',
-      texte: 'Rendez-vous devant la brasserie Athanor 🍺 Pensez à venir avec un moyen de rentrer : la dégustation, même petite, ça reste de la bière.',
-    },
-    {
-      id: 'm-ba2', auteur: 'Amine Z.', initiales: 'AZ', couleur: 'avatar--ciel',
-      date: '2026-08-10T19:15',
-      texte: 'Je viens en train depuis Vitré, il y a de la place dans ma voiture au retour si quelqu’un est coincé.',
-    },
-  ],
-};
+/* Aucun message de décor, pour la même raison que le fil : personne ne doit
+   répondre à quelqu'un qui n'existe pas. */
+const MESSAGES_EXEMPLE = {};

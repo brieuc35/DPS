@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activités — DPS Collective</title>
-  <meta name="description" content="Randonnées, visites d'usine, brasseries, ateliers : trouvez une activité près de chez vous et réservez votre place dans un petit groupe.">
+  <title>Les prochaines expériences — DPS Collective</title>
+  <meta name="description" content="Les activités ouvertes en ce moment autour de Vitré : lieux à visiter, savoir-faire locaux, moments à partager. Tarif, date et lieu indiqués sur chaque fiche.">
   <meta name="theme-color" content="#fcf0e2" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
 
@@ -75,12 +75,11 @@
     <section class="section" style="padding-block:var(--e-8) var(--e-6)">
       <div class="conteneur">
         <div class="section__entete" style="margin-bottom:var(--e-6)">
-          <p class="sur-titre">Le catalogue</p>
-          <h1>Une case, une envie, un groupe</h1>
+          <p class="sur-titre">Le programme</p>
+          <h1>Les prochaines expériences</h1>
           <p class="plomb">
-            <span data-total-activites>12</span> activités ouvertes en ce moment. Les groupes
-            sont volontairement petits : douze personnes au maximum, encadrées par un hôte
-            qui connaît son sujet.
+            <span data-total-activites>4</span> activités ouvertes autour de Vitré. Le
+            programme s’étoffera au fil des lieux et des savoir-faire que nous rencontrons.
           </p>
         </div>
 
@@ -109,6 +108,7 @@
         <p class="plomb" style="font-size:var(--t-sm);margin-bottom:var(--e-5)"
            data-compteur-activites role="status" aria-live="polite"></p>
 
+        <h2 class="sr-only">Les activités ouvertes</h2>
         <div class="grille grille--activites" data-grille-activites></div>
       </div>
     </section>
@@ -118,36 +118,38 @@
       <div class="conteneur">
         <div class="section__entete section__entete--centre">
           <p class="sur-titre">Bon à savoir</p>
-          <h2>Ce qui est vrai pour toutes les sorties</h2>
+          <h2>Ce qui vaut pour toutes les expériences</h2>
         </div>
 
         <div class="grille grille--4">
           <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true">👤</span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Venir seul·e est la norme</h3>
+            <span class="valeur__icone" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <h3 style="font-size:1rem;margin-top:var(--e-3)">Rien à organiser</h3>
             <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Aucune activité n’exige de venir accompagné. L’hôte fait les présentations au départ.
+              Vous choisissez une date, le reste est déjà prévu. Venez comme vous voulez,
+              seul·e ou à plusieurs.
             </p>
           </div>
           <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true">🗓️</span>
+            <span class="valeur__icone" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></span>
             <h3 style="font-size:1rem;margin-top:var(--e-3)">Annulation libre</h3>
             <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
               Jusqu’à 48 h avant le départ, sans justification et sans frais.
             </p>
           </div>
           <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true">💬</span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Le groupe avant le jour J</h3>
+            <span class="valeur__icone" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2Z"/></svg></span>
+            <h3 style="font-size:1rem;margin-top:var(--e-3)">Un fil pour chaque sortie</h3>
             <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Un fil de discussion s’ouvre cinq jours avant pour briser la glace.
+              Il s’ouvre dès l’inscription, pour les questions pratiques comme pour le reste.
             </p>
           </div>
           <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true">♿</span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Accessibilité indiquée</h3>
+            <span class="valeur__icone" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></span>
+            <h3 style="font-size:1rem;margin-top:var(--e-3)">Tout est dit à l’avance</h3>
             <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Niveau, durée et contraintes sont annoncés sur chaque fiche, sans surprise.
+              Lieu, horaire et tarif figurent sur la fiche. Le déroulé arrive par e-mail
+              après l’inscription.
             </p>
           </div>
         </div>
@@ -158,10 +160,11 @@
       <div class="conteneur">
         <div class="cta-final apparait">
           <p class="sur-titre" style="justify-content:center">Une envie qui manque ?</p>
-          <h2>Proposez votre propre activité</h2>
-          <p class="plomb" style="max-width:52ch;margin:0 auto var(--e-6)">
-            Vous connaissez un atelier, une usine qui ouvre ses portes, un sentier oublié ?
-            Devenez hôte : DPS s’occupe des inscriptions et de l’accueil du groupe.
+          <h2>Vous connaissez un lieu à faire découvrir&nbsp;?</h2>
+          <p class="plomb" style="max-width:54ch;margin:0 auto var(--e-6)">
+            Un atelier, une entreprise qui ouvre ses portes, un savoir-faire près de chez
+            vous : les prochaines expériences naissent souvent d’une idée envoyée par
+            quelqu’un.
           </p>
           <div class="cta-final__actions">
             <a class="btn btn--accent btn--large" href="communaute.html">Proposer une idée</a>
@@ -182,15 +185,15 @@
             <span class="logo__collective">Collective</span>
           </a>
           <p class="pied__texte">
-            Des activités à taille humaine et une communauté qui prend soin
-            de ceux qui arrivent seuls.
+            Des activités à faire autour de Vitré, et une communauté qui se construit
+            avec celles et ceux qui les vivent.
           </p>
         </div>
 
         <div>
           <p class="pied__titre">Explorer</p>
           <ul class="pied__liste">
-            <li><a href="activites.html">Toutes les activités</a></li>
+            <li><a href="activites.html">Toutes les expériences</a></li>
             <li><a href="activites.html#patrimoine">Patrimoine</a></li>
             <li><a href="activites.html#entreprise">Visites d’entreprise</a></li>
             <li><a href="activites.html#brasserie">Brasseries</a></li>
@@ -221,7 +224,7 @@
 
       <div class="pied__bas">
         <p style="margin:0">© <span id="annee">2026</span> DPS Collective — Découvrir, Partager, Simplement.</p>
-        <p style="margin:0">Fait avec attention, pour se rencontrer pour de vrai.</p>
+        <p style="margin:0">Vitré et alentours · Ille-et-Vilaine</p>
       </div>
     </div>
   </footer>

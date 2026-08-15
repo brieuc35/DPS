@@ -134,7 +134,7 @@ function afficherProfil(compte) {
 
   $('[data-deconnexion]').addEventListener('click', async () => {
     await Comptes.deconnecter();
-    notifier('Vous êtes déconnecté·e', '👋');
+    notifier('Vous êtes déconnecté·e');
     window.setTimeout(() => window.location.reload(), 600);
   });
 }
@@ -150,11 +150,11 @@ function afficherProfil(compte) {
  */
 function signalerIncident(motif) {
   if (motif === 'reseau') {
-    notifier('Connexion au serveur impossible. Vérifiez votre réseau.', '📡');
+    notifier('Connexion au serveur impossible. Vérifiez votre réseau.');
     return true;
   }
   if (motif === 'trop') {
-    notifier('Trop de tentatives. Réessayez dans quelques minutes.', '⏳');
+    notifier('Trop de tentatives. Réessayez dans quelques minutes.');
     return true;
   }
   return false;
@@ -211,7 +211,7 @@ function initConnexion() {
 
     if (!resultat.ok) return;
 
-    notifier(`Content de vous revoir, ${resultat.compte.prenom}`, '👋');
+    notifier(`Content de vous revoir, ${resultat.compte.prenom}`);
     window.setTimeout(() => allerVers('chat'), 500);
   });
 }
@@ -277,7 +277,7 @@ function initInscription() {
 
     if (!resultat.ok) return;
 
-    notifier(`Bienvenue, ${resultat.compte.prenom} !`, '🎉');
+    notifier(`Bienvenue, ${resultat.compte.prenom} !`);
     window.setTimeout(() => allerVers('chat'), 600);
   });
 }

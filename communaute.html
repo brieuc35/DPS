@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Communauté — DPS Collective</title>
-  <meta name="description" content="Le fil bienveillant de DPS : posez vos questions, racontez vos sorties, rencontrez les autres participants avant le jour J.">
+  <title>La communauté — DPS Collective</title>
+  <meta name="description" content="Le fil de DPS Collective : questions sur une sortie à venir, idées de lieux à découvrir, nouvelles après une expérience.">
   <meta name="theme-color" content="#fcf0e2" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
 
@@ -84,7 +84,7 @@
           <h1 class="portail__titre">Une question avant d’entrer</h1>
           <p class="plomb portail__intro">
             Le fil de DPS Collective n’est pas une place publique : c’est un endroit où
-            l’on se parle. Dites-nous ce qui vous amène, et la porte s’ouvre.
+            l’on se parle. Dites-nous ce qui vous amène.
           </p>
 
           <form data-formulaire-portail novalidate>
@@ -125,10 +125,10 @@
       <div class="conteneur">
         <div class="section__entete" style="margin-bottom:var(--e-6)">
           <p class="sur-titre">La communauté</p>
-          <h1>On se parle avant, et longtemps après</h1>
+          <h1>Ce qui se dit entre deux sorties</h1>
           <p class="plomb">
             Un fil sans compteur d’abonnés ni mise en scène. On y pose des questions,
-            on donne des nouvelles, on rassure celles et ceux qui hésitent à faire le premier pas.
+            on donne des nouvelles, on répond aux questions de celles et ceux qui s’apprêtent à venir.
           </p>
         </div>
 
@@ -154,7 +154,7 @@
                 <label class="sr-only" for="message">Votre message</label>
                 <textarea class="composeur__zone" id="message" data-composeur-texte
                           maxlength="600"
-                          placeholder="Une question, un retour de sortie, une envie de rencontrer du monde…"></textarea>
+                          placeholder="Une question sur une sortie, un lieu à faire découvrir, des nouvelles…"></textarea>
               </div>
 
               <div class="composeur__pied">
@@ -165,7 +165,6 @@
               </div>
 
               <div class="rappel-doux" data-rappel role="status">
-                <span aria-hidden="true">🌿</span>
                 <div>
                   <strong>Un instant avant d’envoyer</strong><br>
                   Votre message contient un mot qui peut être reçu durement. Ici, on critique
@@ -176,6 +175,7 @@
             </form>
 
             <!-- Fil -->
+            <h2 class="sr-only">Le fil des messages</h2>
             <div data-fil aria-live="polite"></div>
           </div>
 
@@ -185,11 +185,11 @@
               <div class="panneau" id="charte">
                 <p class="panneau__titre">Charte de bienveillance</p>
                 <ul class="liste-nette" style="font-size:var(--t-sm);color:var(--texte-doux)">
-                  <li>👋 <strong style="color:var(--texte)">Accueillir</strong> — un message dans « Premiers pas » ne reste jamais sans réponse.</li>
-                  <li>💬 <strong style="color:var(--texte)">Nuancer</strong> — on critique une idée, jamais une personne.</li>
-                  <li>🤫 <strong style="color:var(--texte)">Respecter</strong> — ce qui se dit dans le groupe reste dans le groupe.</li>
-                  <li>🛡️ <strong style="color:var(--texte)">Signaler</strong> — un modérateur bénévole relit sous 24 h.</li>
-                  <li>🌱 <strong style="color:var(--texte)">Encourager</strong> — la maladresse est permise, la moquerie non.</li>
+                  <li><strong style="color:var(--texte)">Accueillir</strong> — une question posée dans « Premiers pas » trouve une réponse.</li>
+                  <li><strong style="color:var(--texte)">Nuancer</strong> — on critique une idée, jamais une personne.</li>
+                  <li><strong style="color:var(--texte)">Respecter</strong> — ce qui se dit dans le fil y reste.</li>
+                  <li><strong style="color:var(--texte)">Signaler</strong> — un message signalé est relu par une personne.</li>
+                  <li><strong style="color:var(--texte)">Encourager</strong> — la maladresse est permise, la moquerie non.</li>
                 </ul>
               </div>
 
@@ -197,38 +197,34 @@
                 <p class="panneau__titre">Prochaines sorties</p>
                 <ul class="liste-nette" style="font-size:var(--t-sm)">
                   <li style="display:flex;gap:var(--e-3);align-items:center">
-                    <span aria-hidden="true">🍺</span>
                     <span>
                       <a href="activites.html">Brasserie Athanor</a>
-                      <span class="identite__meta" style="display:block">Argentré-du-Plessis · 1 place restante</span>
+                      <span class="identite__meta" style="display:block">Argentré-du-Plessis</span>
                     </span>
                   </li>
                   <li style="display:flex;gap:var(--e-3);align-items:center">
-                    <span aria-hidden="true">⛏️</span>
                     <span>
                       <a href="activites.html">La Mine Bleue</a>
-                      <span class="identite__meta" style="display:block">Segré-en-Anjou · 3 places</span>
+                      <span class="identite__meta" style="display:block">Segré-en-Anjou</span>
                     </span>
                   </li>
                   <li style="display:flex;gap:var(--e-3);align-items:center">
-                    <span aria-hidden="true">🍏</span>
                     <span>
                       <a href="activites.html">Cidrerie Loïc Raison</a>
-                      <span class="identite__meta" style="display:block">Domagné · 5 places</span>
+                      <span class="identite__meta" style="display:block">Domagné</span>
                     </span>
                   </li>
                 </ul>
                 <a class="btn btn--fantome btn--bloc" href="activites.html" style="margin-top:var(--e-4)">
-                  Voir toutes les activités
+                  Voir toutes les expériences
                 </a>
               </div>
 
               <div class="panneau">
                 <p class="panneau__titre">Modération</p>
                 <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-                  Sept bénévoles se relaient sur le fil. Un signalement est relu par une
-                  personne, jamais par un automate seul. En cas de doute, écrivez-leur :
-                  ils répondent toujours.
+                  Un signalement est relu par une personne, jamais par un automate seul.
+                  En cas de doute, écrivez : la réponse arrive.
                 </p>
               </div>
             </div>
@@ -248,15 +244,15 @@
             <span class="logo__collective">Collective</span>
           </a>
           <p class="pied__texte">
-            Des activités à taille humaine et une communauté qui prend soin
-            de ceux qui arrivent seuls.
+            Des activités à faire autour de Vitré, et une communauté qui se construit
+            avec celles et ceux qui les vivent.
           </p>
         </div>
 
         <div>
           <p class="pied__titre">Explorer</p>
           <ul class="pied__liste">
-            <li><a href="activites.html">Toutes les activités</a></li>
+            <li><a href="activites.html">Toutes les expériences</a></li>
             <li><a href="activites.html#patrimoine">Patrimoine</a></li>
             <li><a href="activites.html#entreprise">Visites d’entreprise</a></li>
             <li><a href="activites.html#brasserie">Brasseries</a></li>
@@ -287,7 +283,7 @@
 
       <div class="pied__bas">
         <p style="margin:0">© <span id="annee">2026</span> DPS Collective — Découvrir, Partager, Simplement.</p>
-        <p style="margin:0">Fait avec attention, pour se rencontrer pour de vrai.</p>
+        <p style="margin:0">Vitré et alentours · Ille-et-Vilaine</p>
       </div>
     </div>
   </footer>

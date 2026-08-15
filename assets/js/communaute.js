@@ -106,7 +106,7 @@ function gabaritPublication(publication) {
         <div class="identite">
           <p class="identite__nom" style="margin:0">${echapper(publication.auteur)}</p>
           <p class="identite__meta" style="margin:0">
-            ${cercle ? `${cercle.emoji} ${echapper(cercle.nom)} · ` : ''}${formaterDepuis(publication.date)}
+            ${cercle ? `${echapper(cercle.nom)} · ` : ''}${formaterDepuis(publication.date)}
           </p>
         </div>
         ${publication.badge ? `<span class="badge badge--primaire">${echapper(publication.badge)}</span>` : ''}
@@ -115,15 +115,15 @@ function gabaritPublication(publication) {
       <div class="publication__contenu">${echapper(publication.contenu)}</div>
 
       <div class="publication__actions">
-        <button type="button" class="action-pub" data-jaime="${publication.id}" aria-pressed="${aime}">
-          <span aria-hidden="true">${aime ? '💚' : '🤍'}</span>
+        <button type="button" class="action-pub ${aime ? 'est-actif' : ''}" data-jaime="${publication.id}" aria-pressed="${aime}">
+          ${picto('<path d="M12 20s-7-4.4-7-9.2A3.8 3.8 0 0 1 12 8a3.8 3.8 0 0 1 7-2.8c0 4.8-7 9.2-7 9.2Z"/>', 16)}
           <span data-compte-jaimes>${libelleSoutiens(compteJaimes)}</span>
         </button>
         <button type="button" class="action-pub" data-repondre="${publication.id}" aria-expanded="false">
-          <span aria-hidden="true">💬</span> ${listeReponses.length} réponse${listeReponses.length > 1 ? 's' : ''}
+          ${picto('<path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2Z"/>', 16)} ${listeReponses.length} réponse${listeReponses.length > 1 ? 's' : ''}
         </button>
         <button type="button" class="action-pub" data-signaler="${publication.id}">
-          <span aria-hidden="true">🛡️</span> Signaler
+          ${picto('<path d="M12 3l7 3v5c0 4.4-3 8.3-7 10-4-1.7-7-5.6-7-10V6Z"/>', 16)} Signaler
         </button>
       </div>
 
@@ -151,9 +151,9 @@ function rendreFil() {
   if (!liste.length) {
     fil.innerHTML = `
       <div class="message-vide">
-        <span class="message-vide__emoji" aria-hidden="true">🌱</span>
-        <h3>Ce cercle est encore silencieux</h3>
-        <p>Lancez la conversation : une question, un retour d’expérience, une envie de sortie.</p>
+        <span class="message-vide__picto" aria-hidden="true">${picto(CERCLES[0] && CERCLES[0].icone, 34)}</span>
+        <h3>Le fil vient d’ouvrir</h3>
+        <p>Rien n’a encore été écrit ici. Une question sur une sortie à venir fera très bien l’affaire.</p>
       </div>
     `;
     return;
@@ -180,7 +180,7 @@ function rendreCercles() {
       <li>
         <button type="button" class="lien-cercle" data-cercle="${cercle.id}"
                 aria-pressed="${cercle.id === cercleActif}">
-          <span class="lien-cercle__pastille" aria-hidden="true">${cercle.emoji}</span>
+          <span class="lien-cercle__pastille" aria-hidden="true">${picto(cercle.icone, 16)}</span>
           <span>${echapper(cercle.nom)}</span>
           <span class="lien-cercle__compte">${compte}</span>
         </button>
@@ -222,7 +222,7 @@ function initComposeur() {
   // Les cercles proposés à la publication (« Tout le fil » n'en est pas un).
   if (selecteurCercle) {
     selecteurCercle.innerHTML = CERCLES.filter((cercle) => cercle.id !== 'tous')
-      .map((cercle) => `<option value="${cercle.id}">${cercle.emoji} ${echapper(cercle.nom)}</option>`)
+      .map((cercle) => `<option value="${cercle.id}">${echapper(cercle.nom)}</option>`)
       .join('');
   }
 
@@ -251,13 +251,13 @@ function initComposeur() {
     const contenu = zone.value.trim();
 
     if (contenu.length < 5) {
-      notifier('Votre message est un peu court pour être partagé.', '✍️');
+      notifier('Votre message est un peu court pour être partagé.');
       zone.focus();
       return;
     }
 
     if (contenu.length > LIMITE_CARACTERES) {
-      notifier(`Message trop long de ${contenu.length - LIMITE_CARACTERES} caractères.`, '✂️');
+      notifier(`Message trop long de ${contenu.length - LIMITE_CARACTERES} caractères.`);
       zone.focus();
       return;
     }
@@ -299,7 +299,7 @@ function initComposeur() {
 
     rendreCercles();
     rendreFil();
-    notifier('Message partagé avec la communauté', '💚');
+    notifier('Message partagé avec la communauté');
   });
 }
 
@@ -324,7 +324,7 @@ function initInteractions() {
       const compte = publication.jaimes + (aimeMaintenant ? 1 : 0);
 
       boutonJaime.setAttribute('aria-pressed', String(aimeMaintenant));
-      $('span[aria-hidden]', boutonJaime).textContent = aimeMaintenant ? '💚' : '🤍';
+      boutonJaime.classList.toggle('est-actif', aimeMaintenant);
       $('[data-compte-jaimes]', boutonJaime).textContent = libelleSoutiens(compte);
       return;
     }
@@ -343,7 +343,7 @@ function initInteractions() {
 
     const boutonSignaler = evenement.target.closest('[data-signaler]');
     if (boutonSignaler) {
-      notifier('Merci, un modérateur bénévole va relire ce message.', '🛡️');
+      notifier('Merci, un modérateur bénévole va relire ce message.');
     }
   });
 
@@ -358,7 +358,7 @@ function initInteractions() {
     if (texte.length < 2) return;
 
     if (motsSensiblesDetectes(texte).length) {
-      notifier('Une formulation plus douce serait la bienvenue ici.', '🌿');
+      notifier('Une formulation plus douce serait la bienvenue ici.');
       return;
     }
 
@@ -389,7 +389,7 @@ function initInteractions() {
       $('.saisie', article).focus();
     }
 
-    notifier('Réponse publiée', '💬');
+    notifier('Réponse publiée');
   });
 }
 
@@ -466,7 +466,7 @@ function initPortail() {
     Stockage.ecrire(CLE_ADHESION, { motivation: reponse, creeLe: new Date().toISOString() });
     ouvrir();
     espace.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    notifier('Bienvenue — le fil est à vous', '👋');
+    notifier('Bienvenue — le fil est à vous');
   });
 }
 

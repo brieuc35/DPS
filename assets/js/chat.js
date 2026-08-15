@@ -146,7 +146,7 @@ function rendreListe() {
           conversation.id === conversationActive ? 'est-actif' : ''
         }" data-conversation="${conversation.id}"
                 aria-current="${conversation.id === conversationActive ? 'true' : 'false'}">
-          <span class="fil-onglet__emoji" aria-hidden="true">${conversation.emoji}</span>
+          <span class="fil-onglet__picto" aria-hidden="true">${picto(conversation.icone, 18)}</span>
           <span class="fil-onglet__texte">
             <span class="fil-onglet__nom">${echapper(conversation.nom)}</span>
             <span class="fil-onglet__meta">${echapper(conversation.description)}</span>
@@ -250,7 +250,7 @@ function brancherComposeur() {
         // Pas de rendu ici : l'écouteur du fil s'en charge à la confirmation.
         await distant.envoyerMessage(conversationActive, message);
       } catch (erreur) {
-        notifier('Message non envoyé. Vérifiez votre connexion.', '📡');
+        notifier('Message non envoyé. Vérifiez votre connexion.');
         champ.value = message.texte;
       }
       return;

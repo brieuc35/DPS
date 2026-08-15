@@ -228,6 +228,14 @@ img {
 
 ul, ol { margin: 0 0 var(--e-4); padding-left: 1.2em; }
 
+/* Pictogrammes tracés : ils accompagnent un texte, donc ils s'alignent sur lui
+   plutôt que sur la ligne de base. */
+.picto {
+  display: inline-block;
+  vertical-align: -0.15em;
+  flex-shrink: 0;
+}
+
 button,
 input,
 textarea,
@@ -763,26 +771,6 @@ select {
   margin-bottom: var(--e-4);
 }
 
-.hero__titre em {
-  font-style: normal;
-  color: var(--primaire);
-  position: relative;
-  white-space: nowrap;
-}
-
-/* Trait de spectre sous le mot mis en avant — assez fin pour ne pas être
-   confondu avec un soulignement de lien. */
-.hero__titre em::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.02em;
-  height: 0.09em;
-  border-radius: var(--r-full);
-  background: var(--spectre);
-}
-
 /* Le texte d'ouverture occupe toute la largeur du conteneur. Un cran de corps
    en plus compense la longueur de ligne. */
 .hero__texte {
@@ -918,7 +906,15 @@ select {
   opacity: 0.6;
 }
 
-.carte-activite__emoji { position: relative; z-index: 1; }
+/* Pictogramme de la vignette : un trait blanc sur le dégradé, assez discret
+   pour que le titre reste le point d'entrée de la carte. */
+.carte-activite__picto {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.9);
+}
 
 .carte-activite__etiquettes {
   position: absolute;
@@ -1047,7 +1043,7 @@ select {
   color: var(--texte-doux);
 }
 
-.message-vide__emoji {
+.message-vide__picto {
   font-size: 2.5rem;
   display: block;
   margin-bottom: var(--e-3);
@@ -1075,7 +1071,8 @@ select {
 
 .etape::before {
   counter-increment: etape;
-  content: counter(etape);
+  /* 01, 02, 03 plutôt que 1, 2, 3 : le pas est marqué, la lecture ralentit. */
+  content: counter(etape, decimal-leading-zero);
   position: absolute;
   top: calc(var(--e-5) * -1);
   left: var(--e-5);
@@ -1087,8 +1084,9 @@ select {
   background: var(--accent);
   color: var(--sur-accent);
   font-family: var(--police-titre);
-  font-size: 1.3rem;
+  font-size: 1.05rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
   box-shadow: var(--ombre-md);
 }
 
@@ -1144,11 +1142,6 @@ select {
   color: rgba(255, 255, 255, 0.82);
 }
 
-.charte__puce {
-  flex-shrink: 0;
-  font-size: 1.2rem;
-  line-height: 1.4;
-}
 
 /* --- Témoignages --- */
 .temoignage {
@@ -1623,6 +1616,8 @@ select {
 
 .action-pub:hover { background: var(--surface-2); color: var(--texte); }
 
+.action-pub.est-actif .picto { fill: currentColor; }
+
 .action-pub[aria-pressed="true"] {
   background: var(--accent-doux);
   color: var(--accent-fort);
@@ -1867,7 +1862,14 @@ select {
   color: var(--primaire);
 }
 
-.fil-onglet__emoji { font-size: 1.2rem; flex-shrink: 0; }
+.fil-onglet__picto {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  color: var(--texte-doux);
+}
+
+.fil-onglet.est-actif .fil-onglet__picto { color: inherit; }
 
 .fil-onglet__texte {
   display: grid;

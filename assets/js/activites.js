@@ -29,7 +29,7 @@ function trouverThematique(id) {
     THEMATIQUES.find((theme) => theme.id === id) || {
       id,
       nom: 'Activité',
-      emoji: '📍',
+      icone: '',
       degrade: 'linear-gradient(150deg, #6b7f8c, #2f3f4a)',
     }
   );
@@ -96,14 +96,14 @@ function gabaritCarte(activite) {
           <span class="etiquette-flottante">${echapper(theme.nom)}</span>
           <span class="etiquette-flottante etiquette-flottante--prix">${activite.prix} € <small>/ pers.</small></span>
         </div>
-        <span class="carte-activite__emoji" aria-hidden="true">${theme.emoji}</span>
+        <span class="carte-activite__picto" aria-hidden="true">${picto(theme.icone, 44)}</span>
         ${etiquetteDispo}
       </div>
 
       <div class="carte-activite__corps">
         <div class="carte-activite__meta">
-          <span><span aria-hidden="true">📍</span> ${echapper(ville(activite.lieu))}</span>
-          <span><span aria-hidden="true">🗓️</span> ${formaterDateCourte(activite.date)}</span>
+          <span>${picto('<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>', 14)} ${echapper(ville(activite.lieu))}</span>
+          <span>${picto('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>', 14)} ${formaterDateCourte(activite.date)}</span>
         </div>
 
         <h3 class="carte-activite__titre">${echapper(activite.titre)}</h3>
@@ -185,7 +185,7 @@ function rendreGrille() {
     if (!liste.length) {
       grille.innerHTML = `
         <div class="message-vide">
-          <span class="message-vide__emoji" aria-hidden="true">🧭</span>
+          <span class="message-vide__picto" aria-hidden="true">${picto('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>', 34)}</span>
           <h3>Rien ne correspond à votre recherche</h3>
           <p>Essayez d’autres mots-clés : une ville, une envie, un type de sortie.</p>
           <button type="button" class="btn btn--fantome" data-reinitialiser>Effacer la recherche</button>
@@ -351,17 +351,10 @@ function gabaritFormulaire(activite) {
       <p class="recap__total" data-recap-total>${activite.prix} €</p>
     </div>
 
-    <details style="margin-bottom:var(--e-5)">
-      <summary style="cursor:pointer;font-weight:600;font-size:var(--t-sm)">
-        Au programme <span aria-hidden="true">${theme.emoji}</span>
-      </summary>
-      <ul style="font-size:var(--t-sm);color:var(--texte-doux);margin-top:var(--e-3)">
-        ${activite.programme.map((etape) => `<li>${echapper(etape)}</li>`).join('')}
-      </ul>
-      <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-        <strong>Inclus :</strong> ${activite.inclus.map(echapper).join(' · ')}
-      </p>
-    </details>
+    <p class="champ__aide" style="margin-bottom:var(--e-5)">
+      Le déroulé et le point de rendez-vous sont envoyés par e-mail après
+      l’inscription.
+    </p>
 
     <form data-formulaire-reservation novalidate>
       <div class="duo-champs">
@@ -389,13 +382,13 @@ function gabaritFormulaire(activite) {
         <select class="selection" id="res-places" name="places" data-champ-places>
           ${optionsPlaces}
         </select>
-        <span class="champ__aide">Vous venez seul·e ? C’est le cas d’un participant sur deux.</span>
+        <span class="champ__aide">Vous pouvez réserver pour vous seul·e ou pour plusieurs personnes.</span>
       </div>
 
       <div class="champ">
-        <label class="champ__label" for="res-mot">Un mot pour le groupe <span style="font-weight:400;color:var(--texte-doux)">(facultatif)</span></label>
+        <label class="champ__label" for="res-mot">Un mot avant la sortie <span style="font-weight:400;color:var(--texte-doux)">(facultatif)</span></label>
         <textarea class="zone-texte" id="res-mot" name="mot" rows="3"
-                  placeholder="Ex. : première sortie avec DPS, je viens seule et j’ai hâte de rencontrer du monde !"></textarea>
+                  placeholder="Une question sur le déroulé, une précision utile, un simple bonjour."></textarea>
       </div>
 
       <div class="champ">
@@ -435,10 +428,9 @@ function ouvrirModale(activiteId, declencheur) {
   $('[data-modale-thematique]', modale).textContent = theme.nom;
   $('#modale-titre', modale).textContent = activite.titre;
   $('[data-modale-resume]', modale).innerHTML = `
-    <span>📍 ${echapper(activite.lieu)}</span>
-    <span>🗓️ ${formaterDate(activite.date)}</span>
-    <span>⏱️ ${echapper(activite.duree)}</span>
-    <span>👥 ${libellePlaces(placesRestantes(activite))}</span>
+    <span>${picto('<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>', 14)} ${echapper(activite.lieu)}</span>
+    <span>${picto('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>', 14)} ${formaterDate(activite.date)}</span>
+    <span>${picto('<path d="M16 20v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V20"/><circle cx="9.5" cy="7.5" r="3.2"/><path d="M21 20v-1.5a4 4 0 0 0-3-3.8"/><path d="M16 4.3a3.2 3.2 0 0 1 0 6.2"/>', 14)} ${libellePlaces(placesRestantes(activite))}</span>
   `;
   $('[data-modale-corps]', modale).innerHTML = gabaritFormulaire(activite);
 
@@ -551,7 +543,7 @@ async function enregistrerReservation(activite, participant) {
   // Garde-fou : une place a pu être prise pendant que la modale était ouverte.
   const disponibles = placesRestantes(activite);
   if (participant.places > disponibles) {
-    notifier('Il ne reste plus assez de places pour ce groupe.', '⚠️');
+    notifier('Il ne reste plus assez de places pour ce groupe.');
     rendreGrille();
     fermerModale();
     return;
@@ -577,7 +569,7 @@ async function enregistrerReservation(activite, participant) {
         'deja-inscrit': 'Vous êtes déjà inscrit·e à cette sortie.',
         echec: 'Réservation impossible. Vérifiez votre connexion.',
       };
-      notifier(messages[resultat.motif] || messages.echec, '⚠️');
+      notifier(messages[resultat.motif] || messages.echec);
       rendreGrille();
       return;
     }
@@ -609,7 +601,7 @@ async function enregistrerReservation(activite, participant) {
   const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
 
   rendreGrille();
-  notifier(`Réservation confirmée : ${activite.titre}`, '🎉');
+  notifier(`Réservation confirmée : ${activite.titre}`);
 
   // Membre connecté : direction le groupe, sans étape intermédiaire. La modale
   // est refermée d'abord — dans la version fichier unique, rien ne recharge la

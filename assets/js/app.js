@@ -36,6 +36,19 @@ const Stockage = {
   },
 };
 
+/**
+ * Pictogramme tracé, à partir du contenu SVG porté par une thématique ou un
+ * cercle. On préfère un trait à un émoji : l'émoji change de dessin selon le
+ * système, jure avec les lettres géométriques du sigle, et fait basculer la
+ * page du côté de la conversation alors qu'elle est une proposition.
+ */
+function picto(contenu, taille = 20) {
+  if (!contenu) return '';
+  return `<svg class="picto" width="${taille}" height="${taille}" viewBox="0 0 24 24"
+    fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+    stroke-linejoin="round" aria-hidden="true" focusable="false">${contenu}</svg>`;
+}
+
 /** Échappe le texte saisi par l'utilisateur avant toute insertion en HTML. */
 function echapper(texte) {
   return String(texte)
@@ -258,7 +271,7 @@ function echelonnerApparitions(conteneur, pas = 60) {
 
 let minuteurToast;
 
-function notifier(message, emoji = '✅') {
+function notifier(message) {
   let toast = $('.toast');
 
   if (!toast) {
@@ -269,7 +282,7 @@ function notifier(message, emoji = '✅') {
     document.body.appendChild(toast);
   }
 
-  toast.innerHTML = `<span aria-hidden="true">${emoji}</span><span>${echapper(message)}</span>`;
+  toast.textContent = message;
   // Force un reflow pour que la transition rejoue si le toast est déjà affiché.
   void toast.offsetWidth;
   toast.classList.add('est-visible');
