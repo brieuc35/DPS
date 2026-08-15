@@ -1281,6 +1281,60 @@ select {
   justify-content: center;
 }
 
+/* --- Instagram --- */
+.instagram {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--e-5);
+  padding: var(--e-5) var(--e-6);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  box-shadow: var(--ombre-sm);
+}
+
+.instagram__glyphe {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-md);
+  color: #fff;
+  /* Le dégradé d'Instagram, pas celui du site : c'est à cette couleur-là qu'on
+     reconnaît le service sans avoir à lire. */
+  background: linear-gradient(135deg, #f9ce34 0%, #ee2a7b 55%, #6228d7 100%);
+}
+
+.instagram__glyphe svg {
+  width: 30px;
+  height: 30px;
+}
+
+.instagram__texte {
+  flex: 1 1 220px;
+}
+
+.instagram__titre {
+  font-size: var(--t-lg);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.instagram__pseudo {
+  margin: var(--e-1) 0 0;
+  color: var(--texte-doux);
+  font-size: var(--t-sm);
+}
+
+/* Sur un écran étroit, le bouton passe sous le texte : autant qu'il occupe
+   toute la largeur plutôt que de flotter à gauche. */
+@media (max-width: 520px) {
+  .instagram { padding: var(--e-5); }
+  .instagram .btn { width: 100%; justify-content: center; }
+}
+
 /* ==========================================================================
    7. Modale de réservation
    ========================================================================== */
