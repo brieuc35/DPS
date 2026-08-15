@@ -3,7 +3,10 @@
  * ---------------------------------------------------------------------------
  * Alimente toute grille portant l'attribut [data-grille-activites] et gère la
  * modale de réservation (créée à la volée, donc disponible sur chaque page qui
- * charge ce script). Les réservations sont conservées dans localStorage.
+ * charge ce script). Les réservations passent par Firestore quand un membre est
+ * connecté — la place est alors prise dans une transaction, seule façon
+ * d'empêcher deux personnes d'emporter la même dernière place. Sinon elles
+ * restent dans localStorage.
  */
 
 const CLE_RESERVATIONS = 'dps.reservations';
@@ -32,6 +35,12 @@ function trouverThematique(id) {
   );
 }
 
+/**
+ * Jauges venues de Firestore, par identifiant d'activité. Elles font autorité
+ * quand elles existent : c'est le seul compteur que tout le monde partage.
+ */
+let jaugesPartagees = null;
+
 /** Places déjà réservées localement pour une activité donnée. */
 function placesReserveesLocalement(activiteId) {
   return reservations
@@ -39,14 +48,26 @@ function placesReserveesLocalement(activiteId) {
     .reduce((total, reservation) => total + reservation.places, 0);
 }
 
+/** Le pont Firestore, ou null quand on tourne en local. */
+function baseActivites() {
+  return window.DPS_DB && window.DPS_DB.disponible ? window.DPS_DB : null;
+}
+
 /** « Marseille, Bouches-du-Rhône » → « Marseille ». Le détail est dans la fiche. */
 function ville(lieu) {
   return lieu.split(',')[0].trim();
 }
 
-/** Places encore disponibles, en tenant compte des réservations locales. */
+/**
+ * Places encore disponibles. Le compteur partagé l'emporte dès qu'il existe :
+ * une place prise depuis un autre appareil doit se voir ici aussi.
+ */
 function placesRestantes(activite) {
-  const prises = activite.placesPrises + placesReserveesLocalement(activite.id);
+  const partagee = jaugesPartagees && jaugesPartagees[activite.id];
+  const prises =
+    partagee !== undefined && partagee !== null
+      ? partagee
+      : activite.placesPrises + placesReserveesLocalement(activite.id);
   return Math.max(0, activite.placesTotal - prises);
 }
 
@@ -516,7 +537,7 @@ function brancherFormulaire(modale, activite) {
       return;
     }
 
-    enregistrerReservation(activite, {
+    void enregistrerReservation(activite, {
       prenom: donnees.get('prenom').trim(),
       nom: donnees.get('nom').trim(),
       email: donnees.get('email').trim(),
@@ -526,7 +547,7 @@ function brancherFormulaire(modale, activite) {
   });
 }
 
-function enregistrerReservation(activite, participant) {
+async function enregistrerReservation(activite, participant) {
   // Garde-fou : une place a pu être prise pendant que la modale était ouverte.
   const disponibles = placesRestantes(activite);
   if (participant.places > disponibles) {
@@ -536,18 +557,44 @@ function enregistrerReservation(activite, participant) {
     return;
   }
 
-  reservations = [
-    ...reservations,
-    {
+  const distant = baseActivites();
+  const membre = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
+
+  // Membre connecté et base partagée : la place est prise dans une transaction,
+  // seule façon d'empêcher deux personnes d'emporter la même dernière place.
+  if (distant && membre) {
+    const resultat = await distant.reserver({
       activiteId: activite.id,
-      titre: activite.titre,
-      places: participant.places,
-      prenom: participant.prenom,
-      email: participant.email,
-      creeLe: new Date().toISOString(),
-    },
-  ];
-  Stockage.ecrire(CLE_RESERVATIONS, reservations);
+      placesTotal: activite.placesTotal,
+      placesInitiales: activite.placesPrises,
+      membreId: membre.id,
+      participant: { ...participant, titre: activite.titre },
+    });
+
+    if (!resultat.ok) {
+      const messages = {
+        complet: 'Quelqu’un vient de prendre la dernière place.',
+        'deja-inscrit': 'Vous êtes déjà inscrit·e à cette sortie.',
+        echec: 'Réservation impossible. Vérifiez votre connexion.',
+      };
+      notifier(messages[resultat.motif] || messages.echec, '⚠️');
+      rendreGrille();
+      return;
+    }
+  } else {
+    reservations = [
+      ...reservations,
+      {
+        activiteId: activite.id,
+        titre: activite.titre,
+        places: participant.places,
+        prenom: participant.prenom,
+        email: participant.email,
+        creeLe: new Date().toISOString(),
+      },
+    ];
+    Stockage.ecrire(CLE_RESERVATIONS, reservations);
+  }
 
   // Le fil du groupe affiche un bandeau de confirmation à l'arrivée : c'est
   // lui qui porte la nouvelle, puisqu'on y est emmené directement.
@@ -626,6 +673,22 @@ document.addEventListener('DOMContentLoaded', () => {
   initFiltres();
   rendreGrille();
   creerModale();
+
+  // Les jauges partagées arrivent après le premier rendu : Firestore démarre
+  // en module, donc après les scripts classiques.
+  let jaugesBranchees = false;
+  const suivreJauges = () => {
+    const distant = baseActivites();
+    if (!distant || jaugesBranchees) return;
+    jaugesBranchees = true;
+    distant.ecouterJauges((jauges) => {
+      jaugesPartagees = jauges;
+      rendreGrille();
+    });
+  };
+
+  suivreJauges();
+  window.addEventListener('dps:donnees-pretes', suivreJauges);
 
   // Le lien d'une thématique depuis le pied de page ne recharge pas la page :
   // on réagit au changement d'ancre pour que le filtre suive quand même.

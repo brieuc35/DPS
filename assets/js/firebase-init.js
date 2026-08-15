@@ -94,10 +94,13 @@ function modeLocalDemande() {
   }
 }
 
+/** L'application Firebase, transmise ensuite au module de données. */
+let application = null;
+
 try {
   if (modeLocalDemande()) throw new Error('mode local demandé');
 
-  const application = initializeApp(window.CONFIG_FIREBASE);
+  application = initializeApp(window.CONFIG_FIREBASE);
   const auth = getAuth(application);
 
   // La session survit à la fermeture de l'onglet : on ne redemande pas le mot
@@ -155,6 +158,19 @@ try {
   // Aucun cri : le site sait fonctionner sans, et l'utilisateur n'a rien à
   // faire de ce message. La console suffit pour diagnostiquer.
   console.warn('Firebase indisponible, les comptes restent locaux à ce navigateur.', erreur);
+}
+
+// Firestore n'a de sens qu'une fois l'application créée. On lui passe cette
+// application plutôt que de la lui faire importer : un import en retour vers
+// ce fichier-ci formerait un cycle, et deux modules qui s'attendent avec un
+// `await` au sommet ne s'évaluent jamais.
+if (application) {
+  try {
+    const { demarrerDonnees } = await import('./firebase-donnees.js');
+    demarrerDonnees(application);
+  } catch (erreur) {
+    console.warn('Firestore indisponible, les données restent locales.', erreur);
+  }
 }
 
 // Que Firebase ait démarré ou non, le reste du site doit pouvoir arrêter

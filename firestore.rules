@@ -1,0 +1,122 @@
+rules_version = '2';
+
+// =============================================================================
+// DPS Collective — règles de sécurité Firestore
+// -----------------------------------------------------------------------------
+// Ce fichier est la vraie serrure du site. La clé d'API publiée dans les pages
+// n'autorise rien : c'est ici, et seulement ici, que se décide qui peut lire et
+// écrire quoi. Tout ce qui n'est pas explicitement permis est refusé.
+//
+// À déployer depuis la racine du dépôt :
+//     firebase deploy --only firestore:rules
+// ou en collant ce contenu dans la console : Firestore → Règles.
+// =============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function connecte() {
+      return request.auth != null;
+    }
+
+    function moi() {
+      return request.auth.uid;
+    }
+
+    // Un membre est inscrit à une sortie si le document de réservation dont
+    // l'identifiant est « <activité>_<uid> » existe. L'identifiant est composé
+    // exprès pour que cette vérification tienne en une lecture directe, sans
+    // requête — une règle ne peut pas faire de recherche.
+    function inscritA(activiteId) {
+      return exists(/databases/$(database)/documents/reservations/$(activiteId + '_' + moi()));
+    }
+
+    // « groupe-mine-bleue » → « mine-bleue ».
+    function activiteDuFil(conversation) {
+      return conversation.split('groupe-')[1];
+    }
+
+    function texteAcceptable(donnees) {
+      return donnees.texte is string
+          && donnees.texte.size() > 0
+          && donnees.texte.size() <= 600;
+    }
+
+    // -------------------------------------------------------------- messages
+    match /messages/{messageId} {
+
+      // Le salon est ouvert à tous les membres ; le fil d'une sortie ne l'est
+      // qu'à ses inscrits. C'est la traduction technique de la promesse « ce
+      // qui se dit dans le groupe y reste ».
+      function peutVoir(conversation) {
+        return conversation == 'general'
+            || (conversation.matches('groupe-.*') && inscritA(activiteDuFil(conversation)));
+      }
+
+      allow read: if connecte() && peutVoir(resource.data.conversation);
+
+      // On n'écrit que sous sa propre identité : `auteurId` doit être l'uid de
+      // la session. Sans cela, n'importe qui pourrait publier sous le nom d'un
+      // autre. `date` doit venir du serveur, sinon un navigateur mal réglé — ou
+      // malveillant — placerait ses messages en tête de fil.
+      allow create: if connecte()
+                    && peutVoir(request.resource.data.conversation)
+                    && request.resource.data.auteurId == moi()
+                    && request.resource.data.date == request.time
+                    && texteAcceptable(request.resource.data);
+
+      // Un message ne se modifie pas. Le supprimer reste possible pour son
+      // auteur : on peut vouloir retirer ce qu'on a écrit.
+      allow update: if false;
+      allow delete: if connecte() && resource.data.auteurId == moi();
+    }
+
+    // ---------------------------------------------------------- réservations
+    match /reservations/{reservationId} {
+
+      // Chacun voit les siennes. Personne ne consulte la liste des inscrits
+      // d'une sortie : ce serait publier qui va où.
+      allow read: if connecte() && resource.data.membreId == moi();
+
+      // L'identifiant est imposé : il vaut « <activité>_<uid> ». C'est ce qui
+      // rend la double réservation impossible et permet aux règles des messages
+      // de vérifier une inscription sans requête.
+      allow create: if connecte()
+                    && request.resource.data.membreId == moi()
+                    && reservationId == request.resource.data.activiteId + '_' + moi()
+                    && request.resource.data.places is int
+                    && request.resource.data.places >= 1
+                    && request.resource.data.places <= 4;
+
+      // Se désinscrire reste possible ; modifier sa réservation, non — il
+      // faudrait alors retoucher le compteur dans le même mouvement.
+      allow update: if false;
+      allow delete: if connecte() && resource.data.membreId == moi();
+    }
+
+    // ---------------------------------------------------- compteurs de places
+    match /activites/{activiteId} {
+
+      // Les jauges sont publiques : elles s'affichent avant toute connexion.
+      allow read: if true;
+
+      // Le compteur ne bouge que dans le même mouvement qu'une réservation, et
+      // seulement vers le haut. Ces règles ne peuvent pas vérifier que la
+      // transaction est cohérente de bout en bout — un membre déterminé peut
+      // encore fausser le compteur. Le jour où une place vaudra de l'argent,
+      // ce calcul devra passer dans une Cloud Function, seule à pouvoir écrire
+      // ici.
+      allow create: if connecte() && request.resource.data.placesPrises is int;
+      allow update: if connecte()
+                    && request.resource.data.placesPrises is int
+                    && request.resource.data.placesPrises > resource.data.placesPrises
+                    && request.resource.data.placesPrises <= resource.data.placesPrises + 4;
+      allow delete: if false;
+    }
+
+    // Tout le reste est fermé.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

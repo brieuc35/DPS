@@ -102,17 +102,48 @@ réduit à une empreinte SHA-256 salée. C'est ce mode qui fait vivre l'aperçu
 hors ligne du site et les tests automatisés. Ce n'est pas une authentification :
 qui a la main sur le navigateur a la main sur ces comptes-là.
 
-## Ce qui reste à faire
+### Firestore
 
-- **Les messages ne circulent toujours pas.** Le chat est encore en
-  `localStorage` : chaque visiteur écrit dans sa propre copie du site. Les
-  échanges affichés sont un décor. Le passage à Firestore ne touchera que les
-  fonctions de lecture et d'écriture en tête de `assets/js/chat.js`.
-- **Les réservations non plus.** Tant qu'elles ne sont pas partagées, deux
-  personnes peuvent prendre la même dernière place — et aucun paiement n'a de
-  sens avant que ce soit réglé.
-- **Les règles de sécurité Firestore** restent à écrire : ce sont elles, et non
-  la clé d'API, qui décideront qui peut lire quel fil.
+Messages et réservations sont partagés par **Firestore**
+(`assets/js/firebase-donnees.js`) :
+
+- **Le salon et les fils de groupe** sont en temps réel — un message envoyé
+  apparaît chez les autres sans rechargement. En mode partagé, les échanges
+  d'exemple ne s'affichent plus : ce sont des décors de démonstration, et
+  répondre à quelqu'un qui n'existe pas serait une mauvaise surprise.
+- **Les réservations** passent par une transaction. La relecture du compteur et
+  son écriture sont atomiques, donc deux personnes ne peuvent pas emporter la
+  même dernière place. Les jauges affichées viennent alors du compteur partagé,
+  et se mettent à jour d'un appareil à l'autre.
+
+### Deux choses à faire avant que ça fonctionne
+
+**1. Déployer les règles de sécurité.** Le fichier `firestore.rules` est la
+serrure du site ; tant qu'il n'est pas déployé, la base refuse tout et le chat
+reste vide.
+
+```bash
+firebase login
+firebase deploy --only firestore:rules
+```
+
+Ou, sans la CLI : console Firebase → *Firestore Database* → *Règles*, coller le
+contenu de `firestore.rules`, publier.
+
+**2. Créer l'index composite.** La lecture d'un fil trie par date en filtrant
+sur la conversation, ce que Firestore refuse sans index dédié. Au premier
+chargement, la console du navigateur affiche une erreur **contenant un lien
+direct** : l'ouvrir crée l'index en un clic. Comptez une minute de
+construction.
+
+### Ce qui reste ensuite
+
+- **Le compteur de places n'est pas inviolable.** Les règles vérifient qu'il ne
+  progresse que par petits pas, mais elles ne peuvent pas contrôler qu'une
+  transaction est cohérente de bout en bout. Le jour où une place vaudra de
+  l'argent, ce calcul devra passer dans une Cloud Function, seule autorisée à
+  écrire le compteur.
+- **Aucun paiement.** Voir plus bas.
 
 ## Lancer le site
 
@@ -182,6 +213,7 @@ mettre à l'aise quelqu'un qui hésite à réserver seul, pas l'impressionner.
 
 ```
 index.html, activites.html, communaute.html, vision.html, compte.html, chat.html
+firestore.rules         Règles de sécurité de la base — à déployer
 assets/
   css/styles.css        Feuille de styles unique (jetons de design + composants)
   js/donnees.js         Thématiques, activités, cercles, publications et messages d’exemple
@@ -189,6 +221,7 @@ assets/
   js/comptes.js         Inscription, connexion, session, état de l’en-tête
   js/firebase-config.js Configuration du projet Firebase (publique)
   js/firebase-init.js   Module ES : charge le SDK et ouvre la session
+  js/firebase-donnees.js Module ES : messages et réservations dans Firestore
   js/activites.js       Grille, filtres et parcours de réservation
   js/communaute.js      Fil social
   js/page-compte.js     Onglets et formulaires de l’espace membre
