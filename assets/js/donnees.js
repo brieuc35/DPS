@@ -14,10 +14,16 @@ const THEMATIQUES = [
   { id: 'brasserie',  nom: 'Brasseries',            emoji: '🍺', degrade: 'linear-gradient(150deg, #f2718c, #b03fd0)' },
 ];
 
-/* Activités proposées. `placesPrises` évolue avec les réservations locales.
-   Les programmes et prestations ci-dessous sont des textes d'attente : ils
-   restent volontairement génériques tant qu'ils n'ont pas été validés avec
-   chaque partenaire. */
+/* Activités proposées.
+
+   `placesPrises` est le point de départ des jauges : zéro, parce que les
+   inscriptions sont désormais réelles. C'est aussi la valeur qui amorce le
+   compteur partagé de Firestore au tout premier passage — la faire mentir
+   ferait mentir les vraies jauges.
+
+   Les programmes et prestations ci-dessous sont en revanche des textes
+   d'attente : ils restent volontairement génériques tant qu'ils n'ont pas été
+   validés avec chaque partenaire. */
 const ACTIVITES = [
   {
     id: 'mine-bleue',
@@ -28,7 +34,7 @@ const ACTIVITES = [
     duree: '2 h',
     prix: 15,
     placesTotal: 12,
-    placesPrises: 9,
+    placesPrises: 0,
     niveau: 'Accessible à tous',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar' },
     resume: 'Descente dans une ardoisière et visite guidée du fond.',
@@ -49,7 +55,7 @@ const ACTIVITES = [
     duree: '2 h',
     prix: 8,
     placesTotal: 12,
-    placesPrises: 4,
+    placesPrises: 0,
     niveau: 'Débutant bienvenu',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar--prune' },
     resume: 'Les bases de la queue et du placement, sans aucun prérequis.',
@@ -70,7 +76,7 @@ const ACTIVITES = [
     duree: '2 h',
     prix: 10,
     placesTotal: 12,
-    placesPrises: 7,
+    placesPrises: 0,
     niveau: 'Accessible à tous',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar--terre' },
     resume: 'De la pomme à la bouteille, les coulisses de la cidrerie.',
@@ -91,7 +97,7 @@ const ACTIVITES = [
     duree: '2 h',
     prix: 10,
     placesTotal: 12,
-    placesPrises: 11,
+    placesPrises: 0,
     niveau: 'Accessible à tous',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar--ambre' },
     resume: 'Visite de la salle de brassage et dégustation commentée.',
@@ -126,7 +132,7 @@ const PUBLICATIONS = [
     badge: 'Hôte',
     date: '2026-07-30T09:12',
     contenu:
-      'On boucle le groupe pour la Mine Bleue du 15 : neuf inscrits qui ne se connaissaient pas la semaine dernière ⛏️\nPensez à prévoir une petite laine, il ne fait pas chaud au fond.',
+      'Les inscriptions sont ouvertes pour la Mine Bleue du 15 ⛏️\nPensez à prévoir une petite laine : il fait 13 °C au fond, toute l’année.',
     jaimes: 24,
     reponses: [
       { auteur: 'Sonia L.', initiales: 'SL', couleur: 'avatar--ambre', texte: 'Noté pour la laine, merci ! J’ai hâte.' },
@@ -158,7 +164,7 @@ const PUBLICATIONS = [
     badge: 'Hôte',
     date: '2026-07-29T18:05',
     contenu:
-      'Il reste une place pour la brasserie Athanor le 18 🍺 Si quelqu’un hésite : non, il ne faut rien connaître à la bière, et oui, il y a une option sans alcool pour la dégustation.',
+      'Les places pour la brasserie Athanor du 18 sont ouvertes 🍺 Si quelqu’un hésite : non, il ne faut rien connaître à la bière, et oui, il y a une option sans alcool pour la dégustation.',
     jaimes: 15,
     reponses: [
       { auteur: 'Amine Z.', initiales: 'AZ', couleur: 'avatar--ciel', texte: 'Je prends la place, merci pour la précision sur le sans alcool !' },
@@ -262,7 +268,7 @@ const MESSAGES_EXEMPLE = {
     {
       id: 'm-ba1', auteur: 'Sofia B.', initiales: 'SB', couleur: 'avatar--ambre',
       date: '2026-08-10T19:02',
-      texte: 'On est presque complets pour Athanor 🍺 Pensez à venir avec un moyen de rentrer : la dégustation, même petite, ça reste de la bière.',
+      texte: 'Rendez-vous devant la brasserie Athanor 🍺 Pensez à venir avec un moyen de rentrer : la dégustation, même petite, ça reste de la bière.',
     },
     {
       id: 'm-ba2', auteur: 'Amine Z.', initiales: 'AZ', couleur: 'avatar--ciel',
