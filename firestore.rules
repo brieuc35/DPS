@@ -53,7 +53,12 @@ service cloud.firestore {
             || (conversation.matches('groupe-.*') && inscritA(activiteDuFil(conversation)));
       }
 
-      allow read: if connecte() && peutVoir(resource.data.conversation);
+      // Deux cas de lecture : les messages d'un fil auquel on a accès, et les
+      // siens propres — nécessaires pour pouvoir les effacer en supprimant son
+      // compte, y compris dans un fil qu'on a depuis quitté.
+      allow read: if connecte()
+                  && (peutVoir(resource.data.conversation)
+                      || resource.data.auteurId == moi());
 
       // On n'écrit que sous sa propre identité : `auteurId` doit être l'uid de
       // la session. Sans cela, n'importe qui pourrait publier sous le nom d'un
@@ -107,10 +112,17 @@ service cloud.firestore {
       // ce calcul devra passer dans une Cloud Function, seule à pouvoir écrire
       // ici.
       allow create: if connecte() && request.resource.data.placesPrises is int;
+
+      // Le compteur monte quand une place est prise, redescend quand une
+      // inscription disparaît — sans quoi une sortie resterait affichée complète
+      // après une suppression de compte. Le pas est borné dans les deux sens :
+      // c'est le maximum de places qu'une seule inscription peut représenter.
       allow update: if connecte()
                     && request.resource.data.placesPrises is int
-                    && request.resource.data.placesPrises > resource.data.placesPrises
-                    && request.resource.data.placesPrises <= resource.data.placesPrises + 4;
+                    && request.resource.data.placesPrises >= 0
+                    && request.resource.data.placesPrises != resource.data.placesPrises
+                    && request.resource.data.placesPrises <= resource.data.placesPrises + 4
+                    && request.resource.data.placesPrises >= resource.data.placesPrises - 4;
       allow delete: if false;
     }
 

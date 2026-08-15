@@ -191,6 +191,45 @@ export function demarrerDonnees(application) {
       }
     },
 
+    /**
+     * Efface tout ce qui rattache un membre au site : ses messages, ses
+     * inscriptions, et les places qu'il occupait — rendues au compteur dans une
+     * transaction, sans quoi une sortie resterait affichée complète alors que
+     * la place est libre.
+     *
+     * Appelé avant la suppression du compte : après, le membre n'a plus le
+     * droit d'écrire ici et ses données resteraient orphelines.
+     */
+    async effacerDonneesMembre(membreId) {
+      // Les messages : lisibles par leur auteur quelle que soit la conversation,
+      // c'est ce que la règle `auteurId == moi()` autorise.
+      const messages = await getDocs(
+        query(collection(base, 'messages'), where('auteurId', '==', membreId))
+      );
+      await Promise.all(messages.docs.map((document) => deleteDoc(document.ref)));
+
+      // Les inscriptions, une par une : chacune rend ses places au compteur.
+      const reservations = await getDocs(
+        query(collection(base, 'reservations'), where('membreId', '==', membreId))
+      );
+
+      for (const inscription of reservations.docs) {
+        const donnees = inscription.data();
+        const compteur = doc(base, 'activites', donnees.activiteId);
+
+        await runTransaction(base, async (transaction) => {
+          const etat = await transaction.get(compteur);
+          const prises = etat.exists() ? etat.data().placesPrises || 0 : 0;
+          transaction.set(
+            compteur,
+            { placesPrises: Math.max(0, prises - (donnees.places || 0)) },
+            { merge: true }
+          );
+          transaction.delete(inscription.ref);
+        });
+      }
+    },
+
     /** Réservé aux tests : efface les messages d'un fil. */
     async _viderFil(conversationId) {
       const instantane = await getDocs(

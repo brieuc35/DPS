@@ -34,6 +34,20 @@ const Stockage = {
       return false;
     }
   },
+  /**
+   * Retire la clé, plutôt que d'y écrire `null`. La nuance compte : `lire` ne
+   * rend sa valeur par défaut que si la clé est absente. Un `null` stocké est
+   * une valeur comme une autre, et un appelant qui attendait un tableau
+   * s'écroulerait dessus.
+   */
+  effacer(cle) {
+    try {
+      localStorage.removeItem(cle);
+      return true;
+    } catch (erreur) {
+      return false;
+    }
+  },
 };
 
 /**

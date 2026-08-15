@@ -91,6 +91,45 @@
             <a class="btn btn--primaire" href="chat.html">Ouvrir les discussions</a>
             <a class="btn btn--fantome" href="activites.html">Trouver une activité</a>
             <button type="button" class="btn btn--fantome" data-deconnexion>Se déconnecter</button>
+            <button type="button" class="btn btn--danger" data-ouvrir-suppression
+                    aria-expanded="false" aria-controls="zone-suppression">
+              Supprimer mon compte
+            </button>
+          </div>
+
+          <!-- Action irréversible : elle demande le mot de passe, à la fois pour
+               confirmer l'intention et parce que Firebase exige une
+               authentification récente avant d'effacer un compte. -->
+          <div class="zone-danger" id="zone-suppression" data-suppression hidden>
+            <h3>Supprimer définitivement votre compte</h3>
+            <p style="font-size:var(--t-sm);margin-bottom:var(--e-3)">
+              Cette action est irréversible. Seront effacés :
+            </p>
+            <ul>
+              <li>votre compte, votre nom et votre adresse électronique ;</li>
+              <li>vos inscriptions aux sorties à venir — les places seront rendues ;</li>
+              <li>les messages que vous avez écrits sur les fils.</li>
+            </ul>
+
+            <form data-formulaire-suppression novalidate>
+              <div class="champ">
+                <label class="champ__label" for="sup-motdepasse">
+                  Confirmez avec votre mot de passe
+                </label>
+                <input class="saisie" id="sup-motdepasse" name="motDePasse" type="password"
+                       autocomplete="current-password" required>
+                <span class="champ__erreur" data-erreur-suppression>Mot de passe incorrect.</span>
+              </div>
+
+              <div class="zone-danger__actions">
+                <button type="submit" class="btn btn--danger-plein">
+                  Supprimer définitivement
+                </button>
+                <button type="button" class="btn btn--fantome" data-annuler-suppression>
+                  Annuler
+                </button>
+              </div>
+            </form>
           </div>
         </div>
 

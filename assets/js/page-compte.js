@@ -137,6 +137,73 @@ function afficherProfil(compte) {
     notifier('Vous êtes déconnecté·e');
     window.setTimeout(() => window.location.reload(), 600);
   });
+
+  brancherSuppression();
+}
+
+/**
+ * Suppression de compte. Le panneau reste replié tant qu'on ne l'a pas demandé :
+ * une action irréversible ne doit pas être à un seul clic.
+ */
+function brancherSuppression() {
+  const ouvrir = $('[data-ouvrir-suppression]');
+  const zone = $('[data-suppression]');
+  const formulaire = $('[data-formulaire-suppression]');
+  if (!ouvrir || !zone || !formulaire) return;
+
+  const basculer = (visible) => {
+    zone.hidden = !visible;
+    ouvrir.setAttribute('aria-expanded', String(visible));
+    if (visible) $('#sup-motdepasse').focus();
+  };
+
+  ouvrir.addEventListener('click', () => basculer(zone.hidden));
+
+  $('[data-annuler-suppression]').addEventListener('click', () => {
+    formulaire.reset();
+    marquer(formulaire.elements.motDePasse, true);
+    basculer(false);
+    ouvrir.focus();
+  });
+
+  formulaire.addEventListener('input', () => {
+    marquer(formulaire.elements.motDePasse, true);
+  });
+
+  formulaire.addEventListener('submit', async (evenement) => {
+    evenement.preventDefault();
+
+    const champ = formulaire.elements.motDePasse;
+    if (!champ.value) {
+      marquer(champ, false);
+      champ.focus();
+      return;
+    }
+
+    const bouton = $('button[type=submit]', formulaire);
+    bouton.disabled = true;
+    bouton.textContent = 'Suppression…';
+
+    const resultat = await Comptes.supprimer(champ.value);
+
+    if (!resultat.ok) {
+      bouton.disabled = false;
+      bouton.textContent = 'Supprimer définitivement';
+
+      if (signalerIncident(resultat.motif)) return;
+
+      $('[data-erreur-suppression]').textContent =
+        resultat.motif === 'motdepasse'
+          ? 'Mot de passe incorrect.'
+          : 'Suppression impossible pour le moment. Réessayez plus tard.';
+      marquer(champ, false);
+      champ.focus();
+      return;
+    }
+
+    notifier('Votre compte a été supprimé.');
+    window.setTimeout(() => allerVers('index'), 900);
+  });
 }
 
 /* ==========================================================================

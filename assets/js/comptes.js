@@ -116,7 +116,26 @@ const Local = {
   },
 
   async deconnecter() {
-    Stockage.ecrire(CLE_SESSION, null);
+    Stockage.effacer(CLE_SESSION);
+  },
+
+  /** Efface le compte et tout ce que ce navigateur garde de lui. */
+  async supprimer(motDePasse) {
+    const compte = this.courant();
+    if (!compte) return { ok: false, motif: 'inconnu' };
+
+    const essai = await empreinte(motDePasse, compte.sel);
+    if (essai !== compte.empreinte) return { ok: false, motif: 'motdepasse' };
+
+    Stockage.ecrire(CLE_COMPTES, this.liste().filter((autre) => autre.id !== compte.id));
+    Stockage.effacer(CLE_SESSION);
+
+    // Les traces laissées par ce compte dans le navigateur partent avec lui.
+    ['dps.reservations', 'dps.messages', 'dps.publications', 'dps.jaimes',
+     'dps.reponses', 'dps.adhesion', 'dps.derniereReservation']
+      .forEach((cle) => Stockage.effacer(cle));
+
+    return { ok: true };
   },
 };
 
@@ -157,6 +176,16 @@ const Comptes = {
   async deconnecter() {
     const distant = pont();
     return distant ? distant.deconnecter() : Local.deconnecter();
+  },
+
+  /**
+   * Supprime le compte définitivement. Le mot de passe est redemandé : il
+   * confirme l'intention, et Firebase exige de toute façon une authentification
+   * récente avant d'effacer un compte.
+   */
+  async supprimer(motDePasse) {
+    const distant = pont();
+    return distant ? distant.supprimer(motDePasse) : Local.supprimer(motDePasse);
   },
 
   /** Deux initiales, jamais une seule : « B » ferait un avatar bancal. */

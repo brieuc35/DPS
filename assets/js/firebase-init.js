@@ -22,6 +22,9 @@
 import { initializeApp } from '../vendor/firebase/firebase-app.js';
 import {
   getAuth,
+  deleteUser,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -140,6 +143,39 @@ try {
 
     async deconnecter() {
       await signOut(auth);
+    },
+
+    /**
+     * Efface le compte, après avoir effacé ce qui s'y rattache. L'ordre compte :
+     * une fois l'utilisateur supprimé, il n'a plus le droit d'écrire dans
+     * Firestore, et ses données resteraient orphelines à jamais.
+     *
+     * Firebase exige une authentification récente pour cette opération — d'où
+     * le mot de passe, qui sert aussi de confirmation d'intention.
+     */
+    async supprimer(motDePasse) {
+      const utilisateur = auth.currentUser;
+      if (!utilisateur) return { ok: false, motif: 'inconnu' };
+
+      try {
+        await reauthenticateWithCredential(
+          utilisateur,
+          EmailAuthProvider.credential(utilisateur.email, motDePasse)
+        );
+      } catch (erreur) {
+        return { ok: false, motif: motifDe(erreur) };
+      }
+
+      try {
+        if (window.DPS_DB && window.DPS_DB.disponible) {
+          await window.DPS_DB.effacerDonneesMembre(utilisateur.uid);
+        }
+        await deleteUser(utilisateur);
+        return { ok: true };
+      } catch (erreur) {
+        console.warn('Suppression du compte impossible.', erreur);
+        return { ok: false, motif: motifDe(erreur) };
+      }
     },
   };
 

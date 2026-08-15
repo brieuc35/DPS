@@ -111,6 +111,13 @@
   /* Lueur chaude du haut de page — l'ambre du sigle, à peine dilué. */
   --halo: #f7cfa4;
 
+  /* Terre brûlée pour les actions irréversibles. Volontairement dans la même
+     famille chaude que le reste : un rouge d'alerte pur jurerait avec le fond
+     crème et dramatiserait plus que nécessaire. */
+  --danger: #a63c24;
+  --danger-doux: #fbe6de;
+  --sur-danger: #ffffff;
+
   /* Typographie — géométrique, comme les lettres du sigle */
   --police-titre: "Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
   --police-texte: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -178,6 +185,9 @@
   --accent-doux: #3a1c2a;
   --sur-accent: #1a0a13;
   --halo: #4a2d18;
+  --danger: #f0a08a;
+  --danger-doux: #3d211b;
+  --sur-danger: #2a1109;
 
   /* Sur fond sombre, la profondeur vient d'une lueur colorée plus que d'une
      ombre — ambre plutôt que violette, pour rester dans la même chaleur. */
@@ -2024,6 +2034,60 @@ select {
   background: var(--primaire);
   color: var(--texte-inverse);
   font-weight: 700;
+}
+
+/* --- Action irréversible ---
+   Discrète au repos : elle ne doit pas attirer le clic. C'est l'écran de
+   confirmation qui porte le rouge, une fois l'intention exprimée. */
+.btn--danger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid color-mix(in srgb, var(--danger) 40%, var(--bordure));
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: var(--danger-doux);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.btn--danger-plein {
+  background: var(--danger);
+  color: var(--sur-danger);
+  border-color: var(--danger);
+}
+
+.btn--danger-plein:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--danger) 86%, var(--texte));
+  color: var(--sur-danger);
+}
+
+.zone-danger {
+  margin-top: var(--e-5);
+  padding: var(--e-5);
+  border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--bordure));
+  border-left: 3px solid var(--danger);
+  border-radius: var(--r-md);
+  background: var(--danger-doux);
+}
+
+.zone-danger h3 {
+  font-size: 1.05rem;
+  margin-top: 0;
+  color: var(--texte);
+}
+
+.zone-danger ul {
+  font-size: var(--t-sm);
+  color: var(--texte-doux);
+  margin-bottom: var(--e-4);
+}
+
+.zone-danger__actions {
+  display: flex;
+  gap: var(--e-3);
+  flex-wrap: wrap;
+  margin-top: var(--e-4);
 }
 
 /* ==========================================================================

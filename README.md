@@ -66,6 +66,14 @@ et après la sortie.
 - Le formulaire de réservation est prérempli pour un membre connecté, et le
   portail d'entrée de la communauté n'est plus posé à quelqu'un qui a déjà
   adhéré à la charte en s'inscrivant.
+- **Suppression du compte**, à côté de « Se déconnecter ». Le panneau reste
+  replié tant qu'on ne l'ouvre pas, et demande le mot de passe : il confirme
+  l'intention, et Firebase exige de toute façon une authentification récente
+  avant d'effacer un compte. Sont effacés le compte, ses inscriptions — les
+  places sont **rendues au compteur dans une transaction**, sans quoi une sortie
+  resterait affichée complète — et les messages écrits. L'ordre importe : après
+  la suppression du compte, le membre n'a plus le droit d'écrire dans Firestore
+  et ses données resteraient orphelines.
 
 **Transversal**
 - Thème clair chaud par défaut, sombre — lui aussi réchauffé — si le système
@@ -189,9 +197,9 @@ construction.
 
 ### Ce qui reste ensuite
 
-- **Le compteur de places n'est pas inviolable.** Les règles vérifient qu'il ne
-  progresse que par petits pas, mais elles ne peuvent pas contrôler qu'une
-  transaction est cohérente de bout en bout. Le jour où une place vaudra de
+- **Le compteur de places n'est pas inviolable.** Les règles bornent son pas
+  dans les deux sens, mais elles ne peuvent pas contrôler qu'une transaction est
+  cohérente de bout en bout. Le jour où une place vaudra de
   l'argent, ce calcul devra passer dans une Cloud Function, seule autorisée à
   écrire le compteur.
 - **Aucun paiement.** Voir plus bas.

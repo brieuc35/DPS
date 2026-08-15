@@ -281,7 +281,7 @@ function afficherBandeauArrivee() {
     </span>
   `;
   bandeau.hidden = false;
-  Stockage.ecrire('dps.derniereReservation', null);
+  Stockage.effacer('dps.derniereReservation');
 }
 
 /* ==========================================================================
