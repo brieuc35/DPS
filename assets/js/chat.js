@@ -331,9 +331,17 @@ function preparerChat() {
 document.addEventListener('DOMContentLoaded', () => {
   preparerChat();
 
-  // Deux raisons de recalculer sans rechargement : le lien d'un groupe depuis
-  // une autre vue (version fichier unique), et Firebase qui annonce la session
-  // après le premier rendu.
+  // Trois raisons de recalculer sans rechargement : le lien d'un groupe depuis
+  // une autre vue (version fichier unique), Firebase qui annonce la session
+  // après le premier rendu, et Firestore qui peut finir de démarrer après coup.
+  //
+  // Ce dernier cas est réel, pas théorique : l'authentification et Firestore
+  // s'initialisent l'une après l'autre dans firebase-init.js, et rien ne
+  // garantit leur ordre d'arrivée. Si `dps:session` arrive avant que Firestore
+  // soit prêt, `suivreFil()` s'exécute avec une base encore absente — elle
+  // renonce sans bruit, et sans ce troisième écouteur, plus rien ne la relance :
+  // les messages partent, mais ne s'affichent jamais.
   window.addEventListener('hashchange', preparerChat);
   window.addEventListener('dps:session', preparerChat);
+  window.addEventListener('dps:donnees-pretes', preparerChat);
 });

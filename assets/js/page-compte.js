@@ -57,9 +57,17 @@ function appliquerAncreOnglet() {
    Profil
    ========================================================================== */
 
-/** Les sorties réservées sur cet appareil, avec le lien vers leur fil. */
-function gabaritSorties() {
-  const reservations = Stockage.lire('dps.reservations', []);
+/** Le pont Firestore, ou null quand on tourne en local. */
+function baseSorties() {
+  return window.DPS_DB && window.DPS_DB.disponible ? window.DPS_DB : null;
+}
+
+/**
+ * Sorties réservées par le membre. En mode partagé elles viennent de
+ * Firestore : une réservation prise depuis un autre appareil doit apparaître
+ * ici aussi, ce qu'un simple `localStorage` ne peut pas offrir.
+ */
+function gabaritSorties(reservations) {
   if (!reservations.length) {
     return `
       <p style="color:var(--texte-doux);font-size:var(--t-sm);margin:0">
@@ -93,10 +101,13 @@ function gabaritSorties() {
 /** Les écouteurs ne se posent qu'une fois, même si le profil est réaffiché. */
 let profilBranche = false;
 
+/** Un seul abonnement aux sorties à la fois — un par membre connecté. */
+let desabonnerSorties = null;
+
 /**
- * Rejouable : la liste des sorties est reconstruite à chaque appel, faute de
- * quoi une réservation prise après le premier affichage n'y figurerait jamais
- * dans la version fichier unique, où la page ne se recharge pas.
+ * Rejouable : le profil est réaffiché chaque fois que la session ou le fil de
+ * données change, faute de quoi une reconnexion dans la version fichier unique
+ * n'y remettrait pas à jour la liste des sorties.
  */
 function afficherProfil(compte) {
   $('[data-espace-visiteur]').hidden = true;
@@ -104,7 +115,19 @@ function afficherProfil(compte) {
 
   $('[data-membre-bonjour]').textContent = `Bonjour ${compte.prenom}`;
   $('[data-membre-email]').textContent = compte.email;
-  $('[data-membre-sorties]').innerHTML = gabaritSorties();
+
+  const distant = baseSorties();
+
+  if (distant) {
+    // Un seul abonnement vivant : sans ce garde-fou, changer de vue et revenir
+    // dans la version fichier unique en accumulerait un par passage.
+    if (desabonnerSorties) desabonnerSorties();
+    desabonnerSorties = distant.ecouterMesReservations(compte.id, (reservations) => {
+      $('[data-membre-sorties]').innerHTML = gabaritSorties(reservations);
+    });
+  } else {
+    $('[data-membre-sorties]').innerHTML = gabaritSorties(Stockage.lire('dps.reservations', []));
+  }
 
   if (profilBranche) return;
   profilBranche = true;
@@ -280,8 +303,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   rafraichir();
 
-  // Deux raisons de repasser ici sans rechargement : la version fichier unique
-  // change de vue, et Firebase annonce la session après coup.
+  // Trois raisons de repasser ici sans rechargement : la version fichier
+  // unique change de vue, Firebase annonce la session après coup, et
+  // Firestore peut finir de démarrer après cette même session — sans ce
+  // troisième cas, la liste des sorties resterait vide si l'ordre d'arrivée
+  // des deux modules s'inversait.
   window.addEventListener('hashchange', rafraichir);
   window.addEventListener('dps:session', rafraichir);
+  window.addEventListener('dps:donnees-pretes', rafraichir);
 });
