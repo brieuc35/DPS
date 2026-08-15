@@ -9,6 +9,7 @@
    qu'impressionné.
    --------------------------------------------------------------------------
    Sommaire
+   0.  Polices
    1.  Jetons de design (couleurs, typo, espacements)
    2.  Base & réinitialisation
    3.  Utilitaires de mise en page
@@ -18,9 +19,35 @@
    7.  Modale de réservation
    8.  Fil social
    8 bis. Espace membre & discussions
+   8 ter. Pages légales
    9.  Pied de page
    10. Animations & préférences de mouvement
    ========================================================================== */
+
+/* ==========================================================================
+   0. Polices — servies par le site lui-même
+   --------------------------------------------------------------------------
+   Charger une police depuis Google transmettrait l'adresse IP de chaque
+   visiteur avant tout consentement. Les deux fichiers pèsent 56 Ko : rien ne
+   justifie de faire payer ce traitement au visiteur.
+   `swap` laisse le texte s'afficher tout de suite dans la police de repli.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Outfit";
+  src: url("../fonts/outfit.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("../fonts/manrope.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* ==========================================================================
    1. Jetons de design
@@ -1998,6 +2025,117 @@ select {
   color: var(--texte-inverse);
   font-weight: 700;
 }
+
+/* ==========================================================================
+   8 ter. Pages légales
+   --------------------------------------------------------------------------
+   Du texte long, lu par obligation plus que par envie : une colonne étroite,
+   des titres qui aèrent, et rien de décoratif.
+   ========================================================================== */
+
+.page-legale h1 { margin-bottom: var(--e-5); }
+
+.page-legale h2 {
+  font-size: var(--t-lg);
+  margin-top: var(--e-7);
+  padding-top: var(--e-5);
+  border-top: 1px solid var(--bordure);
+}
+
+.page-legale h3 {
+  font-size: 1.05rem;
+  margin-top: var(--e-5);
+}
+
+.page-legale p,
+.page-legale li { max-width: 68ch; }
+
+.page-legale ul { padding-left: 1.1em; }
+.page-legale li { margin-bottom: var(--e-2); }
+
+.page-legale code {
+  font-size: 0.86em;
+  padding: 0.15em 0.4em;
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  word-break: break-word;
+}
+
+.page-legale__note {
+  font-size: var(--t-sm);
+  color: var(--texte-doux);
+  padding-left: var(--e-4);
+  border-left: 2px solid var(--bordure-forte);
+}
+
+.page-legale__maj {
+  margin-top: var(--e-7);
+  padding-top: var(--e-4);
+  border-top: 1px solid var(--bordure);
+  font-size: var(--t-sm);
+  color: var(--texte-doux);
+}
+
+/* Ce qui manque doit se voir : une mention légale incomplète ne doit jamais
+   passer pour une mention légale valide. */
+.a-completer {
+  background: var(--accent-doux);
+  color: var(--accent-fort);
+  padding: 0.1em 0.45em;
+  border-radius: var(--r-sm);
+  font-size: 0.9em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.encart-info {
+  padding: var(--e-4) var(--e-5);
+  margin-bottom: var(--e-6);
+  border: 1px solid var(--bordure-forte);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--r-md);
+  background: var(--fond-alt);
+}
+
+.encart-info p { margin: 0; font-size: var(--t-sm); max-width: none; }
+
+/* Le tableau déborde sur mobile : il défile dans son propre cadre plutôt que
+   de pousser la page entière vers la droite. */
+.tableau-donnees {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--e-5);
+  font-size: var(--t-sm);
+}
+
+.tableau-donnees th,
+.tableau-donnees td {
+  padding: var(--e-3);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--bordure);
+}
+
+.tableau-donnees th {
+  font-family: var(--police-titre);
+  font-weight: 600;
+  color: var(--texte);
+  white-space: nowrap;
+}
+
+.tableau-donnees td { color: var(--texte-doux); }
+
+/* --- Rangée légale du pied de page --- */
+.pied__legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-2) var(--e-4);
+  align-items: center;
+}
+
+.pied__legal a { white-space: nowrap; }
 
 /* ==========================================================================
    9. Pied de page

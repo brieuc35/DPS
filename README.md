@@ -15,6 +15,9 @@ et après la sortie.
 | `vision.html` | Le projet : la vision, le concept, la vie de la communauté, l'ambition et la promesse |
 | `compte.html` | Espace membre : onglets « Se connecter » / « Créer un compte », puis profil et sorties réservées |
 | `chat.html` | Discussions : le salon général et le fil de chaque sortie réservée |
+| `mentions-legales.html` | Éditeur, hébergeur, propriété intellectuelle |
+| `confidentialite.html` | Données collectées, base légale, durées, droits RGPD |
+| `conditions.html` | Conditions d'utilisation : compte, inscription, annulation, comportement |
 
 ## Fonctionnalités
 
@@ -80,6 +83,29 @@ et après la sortie.
 - Accessibilité : lien d’évitement, focus visible, piège à focus et fermeture
   par `Échap` dans la modale, libellés `aria` sur les contrôles dynamiques.
 - Tout contenu saisi par l’utilisateur est échappé avant insertion dans le DOM.
+
+## Pages légales
+
+Trois pages, liées depuis le pied de page de tout le site :
+`mentions-legales.html`, `confidentialite.html` et `conditions.html`.
+
+Elles décrivent le comportement **réel** du code : la politique de
+confidentialité liste les champs effectivement écrits dans Firestore et les
+clés effectivement posées dans le `localStorage`. Toute évolution du modèle de
+données doit s'y répercuter.
+
+> **Il reste des champs à renseigner.** Identité de l'éditeur, statut juridique,
+> SIRET, adresse et adresse électronique de contact ne peuvent venir que du
+> porteur du projet. Ils apparaissent surlignés « à compléter » sur les pages :
+> tant qu'ils y sont, les mentions légales ne satisfont pas à l'article 6 de la
+> LCEN, et les droits RGPD ne sont pas exerçables faute de destinataire.
+
+**Les polices sont servies par le site** (`assets/fonts/`) et non par Google.
+Charger une police depuis `fonts.googleapis.com` transmet l'adresse IP du
+visiteur à un tiers avant tout consentement ; les deux fichiers pèsent 56 Ko, ce
+qui ne justifiait pas ce traitement. Le site ne fait donc plus **aucune requête
+vers un hôte tiers** pour s'afficher — ce que la page de confidentialité peut
+affirmer sans réserve.
 
 ## Ligne éditoriale
 
@@ -269,5 +295,6 @@ assets/
   réponse au portail d'entrée de la communauté. Les accès sont
   protégés : en navigation privée ou cookies bloqués, le site fonctionne sans
   mémoriser.
-- **Polices** : Outfit (titres) et Manrope (texte) sont chargées depuis Google
-  Fonts, avec des polices système en repli si le réseau les bloque.
+- **Polices** : Outfit (titres) et Manrope (texte) sont servies depuis
+  `assets/fonts/`, sous SIL Open Font License 1.1, avec des polices système en
+  repli. Voir le `LISEZMOI.md` du dossier.

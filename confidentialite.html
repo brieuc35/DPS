@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Politique de confidentialité — DPS Collective</title>
+  <meta name="description" content="Quelles données DPS Collective collecte, pourquoi, combien de temps, et comment exercer vos droits.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#fcf0e2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
+
+  <link rel="icon" href="assets/img/favicon.png" type="image/png">
+  <link rel="preload" href="assets/fonts/outfit.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <!-- Posé avant le premier rendu : évite que la page change de thème sous
+       les yeux du visiteur. La classe « js » conditionne les apparitions au
+       défilement — sans JavaScript, le contenu reste simplement visible. -->
+  <script>
+    (function () {
+      var racine = document.documentElement;
+      racine.classList.add('js');
+      // L'accueil se fait dans les tons chauds et clairs ; on ne passe au
+      // sombre que si le système le demande explicitement.
+      var sombre = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      racine.setAttribute('data-theme', sombre ? 'dark' : 'light');
+    })();
+  </script>
+</head>
+<body>
+  <a class="saut-contenu" href="#contenu">Aller au contenu principal</a>
+
+  <header class="entete">
+    <div class="conteneur entete__interieur">
+      <a class="logo" href="index.html" aria-label="DPS Collective, accueil">
+        <img class="logo__marque" src="assets/img/logo.png" alt=""
+             width="388" height="181" decoding="async">
+        <span class="logo__collective">Collective</span>
+      </a>
+
+      <nav class="nav" id="menu-principal" aria-label="Navigation principale">
+        <a class="nav__lien" href="index.html">Accueil</a>
+        <a class="nav__lien" href="vision.html">Le projet</a>
+        <a class="nav__lien" href="communaute.html">Communauté</a>
+
+        <!-- Repli du menu : sous 900 px la barre d'actions n'a plus la place
+             d'accueillir les entrées de compte, elles rejoignent le menu. -->
+        <span class="nav__compte" data-zone-compte>
+          <a class="nav__lien nav__lien--compte" href="compte.html#connexion">Se connecter</a>
+          <a class="nav__lien nav__lien--compte" href="compte.html#inscription">Créer un compte</a>
+        </span>
+      </nav>
+
+      <div class="entete__actions">
+        <a class="btn btn--primaire btn--cta" href="activites.html">Trouver une activité</a>
+
+        <!-- Même contenu que dans le menu, rendu par `comptes.js` : l'un des
+             deux exemplaires seulement est affiché, selon la largeur. -->
+        <span class="entete__compte" data-zone-compte>
+          <a class="nav__lien nav__lien--compte" href="compte.html#connexion">Se connecter</a>
+          <a class="nav__lien nav__lien--compte" href="compte.html#inscription">Créer un compte</a>
+        </span>
+
+        <button type="button" class="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-principal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <section class="section" style="padding-block:var(--e-8) var(--e-9)">
+      <div class="conteneur conteneur--etroit page-legale">
+        <p class="sur-titre">Vos données</p>
+        <h1>Politique de confidentialité</h1>
+        <p class="plomb">
+          Ce site collecte peu de choses, et rien qui ne serve directement à vous
+          inscrire à une sortie ou à échanger avec les autres participants. Cette page
+          décrit précisément lesquelles.
+        </p>
+
+        <div class="encart-info">
+          <p><strong>Le responsable de traitement reste à désigner.</strong> Il s’agit de
+          la personne ou de l’organisme qui décide de l’usage des données —
+          <mark class="a-completer">à compléter</mark>. Ses coordonnées doivent figurer ici pour que vos droits soient
+          exerçables.</p>
+        </div>
+
+        <h2>Ce que le site ne fait pas</h2>
+        <ul>
+          <li>Aucun cookie publicitaire, aucun traceur, aucune mesure d’audience.</li>
+          <li>Aucune revente ni partage de vos données à des fins commerciales.</li>
+          <li>Aucune requête vers un service tiers pour afficher la page : les polices
+              sont servies par le site lui-même, ce qui évite de transmettre votre
+              adresse IP à un tiers.</li>
+          <li>Aucun paiement en ligne à ce jour.</li>
+        </ul>
+
+        <h2>Données collectées</h2>
+
+        <h3>Si vous créez un compte</h3>
+        <table class="tableau-donnees">
+          <thead><tr><th>Donnée</th><th>Pourquoi</th></tr></thead>
+          <tbody>
+            <tr><td>Prénom et nom</td><td>Vous identifier auprès des autres participants d’une sortie</td></tr>
+            <tr><td>Adresse électronique</td><td>Sert d’identifiant de connexion</td></tr>
+            <tr><td>Mot de passe</td><td>Traité par Firebase Authentication. Le site ne le voit jamais et ne le conserve pas</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Si vous réservez une place</h3>
+        <table class="tableau-donnees">
+          <thead><tr><th>Donnée</th><th>Pourquoi</th></tr></thead>
+          <tbody>
+            <tr><td>Prénom, adresse électronique</td><td>Vous envoyer la confirmation et le point de rendez-vous</td></tr>
+            <tr><td>Activité et nombre de places</td><td>Tenir le compte des places disponibles</td></tr>
+            <tr><td>Date de réservation</td><td>Gérer les annulations</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Si vous écrivez sur le fil</h3>
+        <table class="tableau-donnees">
+          <thead><tr><th>Donnée</th><th>Pourquoi</th></tr></thead>
+          <tbody>
+            <tr><td>Contenu du message et date d’envoi</td><td>Afficher la discussion</td></tr>
+            <tr><td>Prénom et initiale du nom</td><td>Savoir qui écrit</td></tr>
+          </tbody>
+        </table>
+        <p class="page-legale__note">
+          Le fil d’une sortie n’est lisible que par les personnes inscrites à cette
+          sortie. Cette restriction est appliquée côté serveur, pas seulement à
+          l’affichage.
+        </p>
+
+        <h2>Stockage dans votre navigateur</h2>
+        <p>
+          Le site n’utilise pas de cookies. Il conserve en revanche quelques informations
+          dans le <em>stockage local</em> de votre navigateur, qui ne quittent pas votre
+          appareil et que vous pouvez effacer à tout moment en vidant les données du site :
+        </p>
+        <ul>
+          <li><code>dps.adhesion</code> — votre réponse à la question d’entrée du fil, pour ne pas la reposer</li>
+          <li><code>dps.derniereReservation</code> — le temps d’afficher le bandeau de confirmation, puis effacé</li>
+          <li><code>dps.jaimes</code>, <code>dps.reponses</code>, <code>dps.publications</code> — vos réactions et messages en mode hors ligne</li>
+          <li><code>firebase:authUser…</code> — le jeton qui vous garde connecté d’une visite à l’autre</li>
+        </ul>
+
+        <h2>Base légale</h2>
+        <ul>
+          <li><strong>Exécution d’une mesure précontractuelle</strong> — pour les réservations : sans ces données, la place ne peut pas être tenue.</li>
+          <li><strong>Consentement</strong> — pour la création d’un compte et la publication de messages, qui relèvent d’une démarche volontaire.</li>
+        </ul>
+
+        <h2>Destinataires et hébergement des données</h2>
+        <p>
+          Les données sont traitées par <strong>Google Ireland Limited</strong> en tant
+          que sous-traitant, via les services Firebase Authentication et Cloud Firestore.
+          La base de données est localisée en <strong>Union européenne</strong>. Le
+          service d’authentification peut impliquer des transferts hors UE, encadrés par
+          les clauses contractuelles types de la Commission européenne.
+        </p>
+        <p>Aucune autre personne ni entreprise n’a accès à ces données.</p>
+
+        <h2>Durée de conservation</h2>
+        <ul>
+          <li><strong>Compte</strong> : jusqu’à sa suppression à votre demande.</li>
+          <li><strong>Réservations</strong> : trois ans après la sortie, durée usuelle en matière de preuve.</li>
+          <li><strong>Messages</strong> : tant que le compte existe. Vous pouvez supprimer les vôtres.</li>
+        </ul>
+
+        <h2>Vos droits</h2>
+        <p>
+          Le règlement général sur la protection des données vous donne un droit d’accès,
+          de rectification, d’effacement, de limitation, de portabilité et d’opposition
+          sur vos données. Pour les exercer, écrivez à <mark class="a-completer">à compléter</mark> : une réponse vous
+          sera apportée sous un mois.
+        </p>
+        <p>
+          Si la réponse ne vous satisfait pas, vous pouvez saisir la
+          <a href="https://www.cnil.fr" rel="noreferrer noopener" target="_blank">CNIL</a>,
+          3 place de Fontenoy, 75007 Paris.
+        </p>
+
+        <h2>Mineurs</h2>
+        <p>
+          La création d’un compte est réservée aux personnes de quinze ans ou plus.
+          En deçà, l’accord d’un titulaire de l’autorité parentale est nécessaire.
+        </p>
+        <p class="page-legale__maj">Dernière mise à jour : 15 août 2026.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pied">
+    <div class="conteneur">
+      <div class="pied__grille">
+        <div>
+          <a class="logo" href="index.html">
+            <img class="logo__marque" src="assets/img/logo.png" alt=""
+                 width="388" height="181" decoding="async" loading="lazy">
+            <span class="logo__collective">Collective</span>
+          </a>
+          <p class="pied__texte">
+            Des activités à faire autour de Vitré, et une communauté qui se construit
+            avec celles et ceux qui les vivent.
+          </p>
+        </div>
+
+        <div>
+          <p class="pied__titre">Explorer</p>
+          <ul class="pied__liste">
+            <li><a href="activites.html">Toutes les expériences</a></li>
+            <li><a href="activites.html#patrimoine">Patrimoine</a></li>
+            <li><a href="activites.html#entreprise">Visites d’entreprise</a></li>
+            <li><a href="activites.html#brasserie">Brasseries</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="pied__titre">Communauté</p>
+          <ul class="pied__liste">
+            <li><a href="communaute.html">Le fil</a></li>
+            <li><a href="chat.html">Discussions</a></li>
+            <li><a href="communaute.html#charte">Charte de bienveillance</a></li>
+            <li><a href="communaute.html#cercles">Les cercles</a></li>
+            <li><a href="index.html#comment">Comment ça marche</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="pied__titre">Le projet</p>
+          <ul class="pied__liste">
+            <li><a href="vision.html">Notre vision</a></li>
+            <li><a href="vision.html#concept">Le concept</a></li>
+            <li><a href="vision.html#ambition">Notre ambition</a></li>
+            <li><a href="vision.html#promesse">Notre promesse</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pied__bas">
+        <p style="margin:0">© <span id="annee">2026</span> DPS Collective — Vitré et alentours, Ille-et-Vilaine</p>
+        <nav class="pied__legal" aria-label="Informations légales">
+          <a href="mentions-legales.html">Mentions légales</a>
+          <a href="confidentialite.html">Confidentialité</a>
+          <a href="conditions.html">Conditions d’utilisation</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/donnees.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/firebase-config.js"></script>
+  <script src="assets/js/comptes.js"></script>
+  <script type="module" src="assets/js/firebase-init.js"></script>
+</body>
+</html>

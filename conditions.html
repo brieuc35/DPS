@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Les prochaines expériences — DPS Collective</title>
-  <meta name="description" content="Les activités ouvertes en ce moment autour de Vitré : lieux à visiter, savoir-faire locaux, moments à partager. Tarif, date et lieu indiqués sur chaque fiche.">
+  <title>Conditions d’utilisation — DPS Collective</title>
+  <meta name="description" content="Les règles d’usage du site DPS Collective : compte, participation aux sorties, annulation, comportement sur le fil.">
+  <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#fcf0e2" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
 
@@ -71,105 +72,72 @@
   </header>
 
   <main id="contenu">
-    <section class="section" style="padding-block:var(--e-8) var(--e-6)">
-      <div class="conteneur">
-        <div class="section__entete" style="margin-bottom:var(--e-6)">
-          <p class="sur-titre">Le programme</p>
-          <h1>Les prochaines expériences</h1>
-          <p class="plomb">
-            <span data-total-activites>4</span> activités ouvertes autour de Vitré. Le
-            programme s’étoffera au fil des lieux et des savoir-faire que nous rencontrons.
-          </p>
-        </div>
+    <section class="section" style="padding-block:var(--e-8) var(--e-9)">
+      <div class="conteneur conteneur--etroit page-legale">
+        <p class="sur-titre">Le cadre</p>
+        <h1>Conditions d’utilisation</h1>
+        <p class="plomb">
+          Ce texte décrit ce que le site propose et ce que l’on attend de celles et ceux
+          qui l’utilisent. Il est volontairement court.
+        </p>
 
-        <!-- Filtres -->
-        <div class="barre-filtres">
-          <div class="recherche">
-            <span class="recherche__icone" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
-              </svg>
-            </span>
-            <label class="sr-only" for="recherche">Rechercher une activité</label>
-            <input class="saisie" id="recherche" type="search" data-recherche
-                   placeholder="Rechercher : brasserie, Lyon, poterie…">
-          </div>
+        <h2>Objet</h2>
+        <p>
+          DPS Collective propose des activités à faire autour de Vitré et permet de
+          s’y inscrire. Un fil de discussion accompagne chaque sortie et la communauté
+          dans son ensemble.
+        </p>
 
-          <label class="sr-only" for="tri">Trier les activités</label>
-          <select class="selection" id="tri" data-tri style="width:auto;flex:0 1 220px">
-            <option value="date">Trier par date</option>
-            <option value="prix">Trier par prix</option>
-            <option value="places">Trier par places libres</option>
-          </select>
-        </div>
+        <h2>Compte</h2>
+        <p>
+          La création d’un compte est libre et gratuite. Vous vous engagez à donner une
+          adresse électronique valide et un nom sous lequel les autres participants
+          pourront vous reconnaître. Vous êtes responsable de la confidentialité de votre
+          mot de passe.
+        </p>
+        <p>Vous pouvez demander la suppression de votre compte à tout moment.</p>
 
+        <h2>Inscription à une sortie</h2>
+        <ul>
+          <li>Le nombre de places est limité ; une inscription n’est acquise qu’une fois confirmée à l’écran.</li>
+          <li><strong>Aucun paiement n’est demandé sur le site à ce jour.</strong> Les tarifs affichés
+              correspondent au prix d’entrée pratiqué par le lieu, réglé sur place.</li>
+          <li><strong>Annulation libre jusqu’à 48 heures avant</strong> la sortie, sans justification
+              et sans frais. En deçà, prévenez tout de même : une place libérée peut profiter à quelqu’un d’autre.</li>
+          <li>Une sortie peut être annulée ou reportée, notamment faute de participants
+              ou en cas d’empêchement du lieu. Vous en êtes alors informé par courrier électronique.</li>
+        </ul>
 
-        <p class="plomb" style="font-size:var(--t-sm);margin-bottom:var(--e-5)"
-           data-compteur-activites role="status" aria-live="polite"></p>
+        <h2>Comportement</h2>
+        <p>
+          Le fil suit une charte simple : on accueille, on critique une idée sans viser
+          la personne, ce qui s’y dit y reste, et la maladresse est permise là où la
+          moquerie ne l’est pas. Un message signalé est relu par une personne.
+        </p>
+        <p>
+          Un compte peut être suspendu en cas de manquement répété, de propos illicites
+          ou de comportement mettant en cause la sécurité des participants.
+        </p>
 
-        <h2 class="sr-only">Les activités ouvertes</h2>
-        <div class="grille grille--activites" data-grille-activites></div>
-      </div>
-    </section>
+        <h2>Responsabilité</h2>
+        <p>
+          Les activités se déroulent chez des tiers — entreprises, sites de visite,
+          établissements — sous leur propre responsabilité et selon leurs règles de
+          sécurité. Il vous appartient de vérifier que votre assurance de responsabilité
+          civile vous couvre pour ce type de participation.
+        </p>
+        <p>
+          Le site est fourni en l’état. Une interruption ou une erreur d’affichage ne
+          saurait ouvrir droit à réparation.
+        </p>
 
-    <!-- Réassurance -->
-    <section class="section section--alt">
-      <div class="conteneur">
-        <div class="section__entete section__entete--centre">
-          <p class="sur-titre">Bon à savoir</p>
-          <h2>Ce qui vaut pour toutes les expériences</h2>
-        </div>
-
-        <div class="grille grille--4">
-          <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Rien à organiser</h3>
-            <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Vous choisissez une date, le reste est déjà prévu. Venez comme vous voulez,
-              seul·e ou à plusieurs.
-            </p>
-          </div>
-          <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Annulation libre</h3>
-            <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Jusqu’à 48 h avant le départ, sans justification et sans frais.
-            </p>
-          </div>
-          <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2Z"/></svg></span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Un fil pour chaque sortie</h3>
-            <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Il s’ouvre dès l’inscription, pour les questions pratiques comme pour le reste.
-            </p>
-          </div>
-          <div class="carte apparait" style="padding:var(--e-5)">
-            <span class="valeur__icone" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg></span>
-            <h3 style="font-size:1rem;margin-top:var(--e-3)">Tout est dit à l’avance</h3>
-            <p style="font-size:var(--t-sm);color:var(--texte-doux);margin:0">
-              Lieu, horaire et tarif figurent sur la fiche. Le déroulé arrive par e-mail
-              après l’inscription.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="conteneur">
-        <div class="cta-final apparait">
-          <p class="sur-titre" style="justify-content:center">Une envie qui manque ?</p>
-          <h2>Vous connaissez un lieu à faire découvrir&nbsp;?</h2>
-          <p class="plomb" style="max-width:54ch;margin:0 auto var(--e-6)">
-            Un atelier, une entreprise qui ouvre ses portes, un savoir-faire près de chez
-            vous : les prochaines expériences naissent souvent d’une idée envoyée par
-            quelqu’un.
-          </p>
-          <div class="cta-final__actions">
-            <a class="btn btn--accent btn--large" href="communaute.html">Proposer une idée</a>
-            <a class="btn btn--fantome btn--large" href="index.html#comment">Comment ça marche</a>
-          </div>
-        </div>
+        <h2>Évolution</h2>
+        <p>
+          Ces conditions peuvent être modifiées. La date de mise à jour figure en bas de
+          page ; les inscriptions en cours restent régies par la version acceptée au
+          moment de la réservation.
+        </p>
+        <p class="page-legale__maj">Dernière mise à jour : 15 août 2026.</p>
       </div>
     </section>
   </main>
@@ -236,7 +204,6 @@
   <script src="assets/js/app.js"></script>
   <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/comptes.js"></script>
-  <script src="assets/js/activites.js"></script>
   <script type="module" src="assets/js/firebase-init.js"></script>
 </body>
 </html>

@@ -9,9 +9,8 @@
   <meta name="theme-color" content="#1a120c" media="(prefers-color-scheme: dark)">
 
   <link rel="icon" href="assets/img/favicon.png" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/outfit.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/styles.css">
 
   <!-- Posé avant le premier rendu : évite que la page change de thème sous
@@ -247,8 +246,12 @@
       </div>
 
       <div class="pied__bas">
-        <p style="margin:0">© <span id="annee">2026</span> DPS Collective — Découvrir, Partager, Simplement.</p>
-        <p style="margin:0">Vitré et alentours · Ille-et-Vilaine</p>
+        <p style="margin:0">© <span id="annee">2026</span> DPS Collective — Vitré et alentours, Ille-et-Vilaine</p>
+        <nav class="pied__legal" aria-label="Informations légales">
+          <a href="mentions-legales.html">Mentions légales</a>
+          <a href="confidentialite.html">Confidentialité</a>
+          <a href="conditions.html">Conditions d’utilisation</a>
+        </nav>
       </div>
     </div>
   </footer>
