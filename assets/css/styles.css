@@ -482,6 +482,11 @@ select {
 .btn--large { padding: 1em 2em; font-size: var(--t-base); }
 .btn--bloc { width: 100%; }
 
+/* Le bouton d'en-tête, seul à voisiner avec les liens du menu : un peu plus
+   discret que la taille par défaut, pour ne pas écraser « Accueil » et
+   « Le projet » à côté de lui. */
+.btn--cta { padding: 0.6em 1.25em; font-size: var(--t-xs); }
+
 /* --- Badges & pastilles --- */
 .badge {
   display: inline-flex;
