@@ -335,6 +335,13 @@ select {
   background: var(--fond-alt);
 }
 
+/* Une section qui suit immédiatement le hero : celui-ci a déjà son propre
+   rembourrage bas, les cumuler repousse le contenu sous la ligne de
+   flottaison sur un écran de portable. */
+.section--suite {
+  padding-top: var(--e-5);
+}
+
 .section__entete {
   max-width: 640px;
   margin-bottom: var(--e-7);
@@ -1136,51 +1143,67 @@ select {
 .etape__texte { font-size: var(--t-sm); color: var(--texte-doux); margin: 0; }
 
 /* --- Bulles « c'est simple » ---
-   La variante de l'accueil : pas de numéros, une icône par temps, et trois
-   cartes centrées comme sur l'affiche du collectif. */
+   De vrais disques, pas des cartes arrondies : une icône, un titre, une
+   phrase, au centre de chacun.
+
+   Le cercle est obtenu par `aspect-ratio`, et le rembourrage est exprimé en
+   pourcentage — donc proportionnel au diamètre. C'est ce qui garde le texte
+   dans le carré inscrit quelle que soit la taille de la bulle ; un
+   rembourrage en pixels laisserait les lignes déborder sur les bords
+   arrondis dès que le disque rétrécit. */
 .bulles {
   display: grid;
   gap: var(--e-5);
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  justify-items: center;
 }
 
 .bulle {
   display: grid;
-  /* La rangée des icônes garde la même hauteur d'une bulle à l'autre, sinon
-     les titres se décalent quand un texte est plus court. */
-  grid-template-rows: auto auto 1fr;
+  align-content: center;
   justify-items: center;
   text-align: center;
-  padding: var(--e-6) var(--e-5);
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1;
+  padding: 14%;
+  border-radius: 50%;
   background: var(--surface);
   border: 1px solid var(--bordure);
-  border-radius: var(--r-xl);
-  box-shadow: var(--ombre-sm);
+  box-shadow: var(--ombre-md);
 }
 
 .bulle__icone {
   display: grid;
   place-items: center;
-  width: 64px;
-  height: 64px;
+  width: 46px;
+  height: 46px;
   border-radius: var(--r-full);
   background: var(--primaire-doux);
   color: var(--primaire);
 }
 
 .bulle__icone svg {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
 }
 
 .bulle__titre {
-  margin: var(--e-4) 0 var(--e-2);
-  font-size: 1.15rem;
+  margin: var(--e-2) 0 var(--e-1);
+  font-size: 1.05rem;
 }
 
+/* Un cran sous le corps courant : dans un disque, la place utile est celle du
+   carré inscrit — environ 70 % de la largeur.
+
+   La hauteur minimale vaut cinq lignes, celle du texte le plus long. Sans
+   elle, le contenu étant centré verticalement, chaque bulle placerait son
+   icône à une hauteur différente selon la longueur de sa phrase. */
 .bulle__texte {
   margin: 0;
-  font-size: var(--t-sm);
+  min-height: 7.25em;
+  font-size: var(--t-xs);
+  line-height: 1.45;
   color: var(--texte-doux);
 }
 
