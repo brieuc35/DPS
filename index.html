@@ -115,7 +115,11 @@
           </p>
         </div>
 
-        <div class="bulles">
+        <!-- Le triangle se lit 1 → 2 → 3 : « Rejoignez » relevé au centre,
+             « Choisissez » et « Partagez » de part et d'autre, à la base. Les
+             deux flèches suivent ce même mouvement en losange ; repliées à la
+             verticale sous 900 px, où les bulles s'empilent. -->
+        <div class="bulles bulles--triangle">
           <div class="bulle apparait">
             <span class="bulle__icone" aria-hidden="true">
               <!-- Choisir parmi ce qui est proposé : une grille, et un curseur
@@ -132,6 +136,13 @@
               Parmi les activités proposées, choisissez simplement celle qui vous donne envie.
             </p>
           </div>
+
+          <span class="bulles__fleche bulles__fleche--1" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 54C20 40 34 26 45 14"/>
+              <path d="M27 11.5 47 12l1 20"/>
+            </svg>
+          </span>
 
           <div class="bulle apparait">
             <span class="bulle__icone" aria-hidden="true">
@@ -152,6 +163,13 @@
               aussi, choisi de tenter l’aventure.
             </p>
           </div>
+
+          <span class="bulles__fleche bulles__fleche--2" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 14c13 14 27 28 38 40"/>
+              <path d="M57 33 57.5 53 37 53.5"/>
+            </svg>
+          </span>
 
           <div class="bulle apparait">
             <span class="bulle__icone" aria-hidden="true">

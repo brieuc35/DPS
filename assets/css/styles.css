@@ -1198,12 +1198,17 @@ select {
 
 /* Une teinte du sigle par bulle, dans son ordre de lecture : ambre, magenta,
    violet. Tout le relief en découle — halo, bord, lueur, disque de l'icône —
-   ce qui évite d'écrire trois fois les mêmes règles. */
+   ce qui évite d'écrire trois fois les mêmes règles.
+
+   `nth-of-type` plutôt que `nth-child` : les flèches, intercalées entre les
+   bulles dans le document, décaleraient sinon le compte (la 2ᵉ bulle
+   occuperait la position 3 parmi les enfants). `nth-of-type` ne compte que
+   les `<div>` entre elles, insensible aux `<span>` glissés autour. */
 /* L'ambre est creusé vers l'orange brûlé : au ton du sigle, son halo se
    confondrait avec l'abricot de la page. */
-.bulle:nth-child(1) { --teinte: #d15c0c; --teinte-claire: #f59134; }
-.bulle:nth-child(2) { --teinte: #c2185b; --teinte-claire: #ec4899; }
-.bulle:nth-child(3) { --teinte: #5a2fce; --teinte-claire: #8b63f5; }
+.bulle:nth-of-type(1) { --teinte: #d15c0c; --teinte-claire: #f59134; }
+.bulle:nth-of-type(2) { --teinte: #c2185b; --teinte-claire: #ec4899; }
+.bulle:nth-of-type(3) { --teinte: #5a2fce; --teinte-claire: #8b63f5; }
 
 .bulle {
   display: grid;
@@ -1232,7 +1237,13 @@ select {
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
-.bulle:hover {
+/* Trois classes, pas une seule : l'apparition au défilement (plus bas dans ce
+   fichier) pose `transform: none` sur `.js .apparait.est-visible`, déjà à
+   trois classes de spécificité. Un sélecteur à deux classes seulement
+   (essayé d'abord) restait à égalité, et la règle la plus tardive dans le
+   fichier l'emportait — annulant le survol quel que soit son état. Il fallait
+   dépasser ce total, pas seulement l'atteindre. */
+.bulles .bulle.apparait:hover {
   transform: translateY(-6px);
   box-shadow:
     inset 0 2px 0 var(--bulle-lustre),
@@ -1275,6 +1286,61 @@ select {
   font-size: var(--t-xs);
   line-height: 1.45;
   color: var(--texte-doux);
+}
+
+/* --- Disposition en triangle ---
+   « Rejoignez » relevé au centre, les deux autres à sa base : le parcours se
+   lit en losange plutôt qu'en ligne. Repose sur les trois bulles seules — les
+   flèches sont sorties de la grille (`position: absolute`) pour ne pas y
+   ouvrir deux cellules parasites.
+
+   Repliée en dessous de 900 px, où les bulles retombent en colonne : un
+   triangle n'a plus de sens une fois empilé, et la mise en page d'origine,
+   déjà éprouvée sur mobile, reste la plus sûre. Les flèches, masquées par
+   défaut, ne comptent alors pour rien dans la grille — c'est ce qui permet à
+   `.bulles` de retrouver ses trois colonnes sans règle séparée. */
+.bulles__fleche {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .bulles--triangle {
+    position: relative;
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+    /* Dégage la place que prend la bulle centrale en s'élevant. */
+    padding-top: var(--e-7);
+  }
+
+  /* `margin`, pas `transform` : l'apparition au défilement (plus bas dans ce
+     fichier) repose une transition sur `transform` avec la même spécificité
+     et l'aurait emporté selon l'ordre des règles, annulant le décalage une
+     fois la bulle révélée. Le pourcentage d'une marge verticale se résout
+     sur la largeur du bloc englobant — qui vaut ici la hauteur, la bulle
+     étant carrée — donc le même calcul, sans ce risque. */
+  .bulles--triangle .bulle:nth-of-type(2) {
+    margin-top: -22%;
+  }
+
+  .bulles--triangle .bulle:nth-of-type(1),
+  .bulles--triangle .bulle:nth-of-type(3) {
+    margin-top: 10%;
+  }
+
+  .bulles__fleche {
+    display: block;
+    position: absolute;
+    top: 4%;
+    width: 11%;
+    color: var(--texte-doux);
+    opacity: 0.6;
+  }
+
+  .bulles__fleche svg { width: 100%; height: 100%; display: block; }
+
+  /* De la base de « Choisissez » vers le sommet de « Rejoignez ». */
+  .bulles__fleche--1 { left: 25%; }
+  /* Du sommet de « Rejoignez » vers la base de « Partagez ». */
+  .bulles__fleche--2 { left: 64%; }
 }
 
 /* --- Charte de bienveillance --- */
