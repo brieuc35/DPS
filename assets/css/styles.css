@@ -848,6 +848,11 @@ select {
   text-align: center;
 }
 
+/* Sans paragraphe entre les deux, les boutons collaient au titre. */
+.hero--centre .hero__titre {
+  margin-bottom: var(--e-6);
+}
+
 .hero--centre .hero__actions {
   justify-content: center;
 }
