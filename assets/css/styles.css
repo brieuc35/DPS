@@ -1518,7 +1518,7 @@ select {
 }
 
 /* --- Instagram --- */
-.instagram {
+.reseau-social {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -1532,29 +1532,29 @@ select {
 
 /* Le sigle porte ses propres couleurs : pas de fond derrière lui, qui les
    concurrencerait. Largeur fixée, hauteur déduite du rapport de l'image. */
-.instagram__glyphe {
+.reseau-social__logo {
   flex: none;
   display: block;
   width: 96px;
 }
 
-.instagram__glyphe img {
+.reseau-social__logo img {
   display: block;
   width: 100%;
   height: auto;
 }
 
-.instagram__texte {
+.reseau-social__texte {
   flex: 1 1 220px;
 }
 
-.instagram__titre {
+.reseau-social__titre {
   font-size: var(--t-lg);
   line-height: 1.2;
   margin: 0;
 }
 
-.instagram__pseudo {
+.reseau-social__pseudo {
   margin: var(--e-1) 0 0;
   color: var(--texte-doux);
   font-size: var(--t-sm);
@@ -1563,8 +1563,8 @@ select {
 /* Sur un écran étroit, le bouton passe sous le texte : autant qu'il occupe
    toute la largeur plutôt que de flotter à gauche. */
 @media (max-width: 520px) {
-  .instagram { padding: var(--e-5); }
-  .instagram .btn { width: 100%; justify-content: center; }
+  .reseau-social { padding: var(--e-5); }
+  .reseau-social .btn { width: 100%; justify-content: center; }
 }
 
 /* ==========================================================================
