@@ -75,20 +75,23 @@
 
   /* Braise — les fonds sombres. Des bruns chauds, presque terre cuite, plutôt
      qu'un noir bleuté : une pièce éclairée le soir, pas un écran de terminal. */
-  --braise-900: #1a120c;
-  --braise-800: #211710;
-  --braise-700: #2c1f16;
+  --braise-900: #1c1108;
+  --braise-800: #24160c;
+  --braise-700: #311e12;
 
   /* Sable — les fonds clairs, franchement tirés vers l'abricot et le pain :
      c'est là que se joue l'essentiel de la chaleur. Les surfaces restent plus
-     claires que la page, sinon les cartes cesseraient de s'en détacher. */
-  --blanc: #fffaf4;
-  --sable-50: #fcf0e2;
-  --sable-100: #f7e5d1;
-  --sable-200: #ebd3ba;
-  --sable-300: #d9b992;
-  --sable-600: #75604f;
-  --encre: #2e211a;
+     claires que la page, sinon les cartes cesseraient de s'en détacher.
+
+     La page est nettement teintée, la surface à peine : c'est cet écart qui
+     fait la chaleur sans que le texte, lui, se lise sur de la couleur. */
+  --blanc: #fffaf2;
+  --sable-50: #fde7cf;
+  --sable-100: #fadcbc;
+  --sable-200: #eec9a2;
+  --sable-300: #dcac79;
+  --sable-600: #6f5540;
+  --encre: #2b1c11;
 
   /* Rôles sémantiques — surchargés en thème sombre */
   --fond: var(--sable-50);
@@ -109,7 +112,7 @@
   --sur-accent: #ffffff;
 
   /* Lueur chaude du haut de page — l'ambre du sigle, à peine dilué. */
-  --halo: #f7cfa4;
+  --halo: #f8c48c;
 
   /* Terre brûlée pour les actions irréversibles. Volontairement dans la même
      famille chaude que le reste : un rouge d'alerte pur jurerait avec le fond
@@ -170,12 +173,12 @@
 [data-theme="dark"] {
   --fond: var(--braise-900);
   --fond-alt: var(--braise-800);
-  --surface: #251a12;
+  --surface: #2a1a0f;
   --surface-2: var(--braise-700);
-  --bordure: #3d2c1f;
-  --bordure-forte: #533d2b;
-  --texte: #f8ece0;
-  --texte-doux: #c0a892;
+  --bordure: #45301d;
+  --bordure-forte: #5d4127;
+  --texte: #fbeddc;
+  --texte-doux: #c8ad8e;
   --texte-inverse: var(--braise-900);
   --primaire: #a78bff;
   --primaire-fort: #bda7ff;
@@ -184,7 +187,7 @@
   --accent-fort: #f892c8;
   --accent-doux: #3a1c2a;
   --sur-accent: #1a0a13;
-  --halo: #4a2d18;
+  --halo: #5a3316;
   --danger: #f0a08a;
   --danger-doux: #3d211b;
   --sur-danger: #2a1109;
