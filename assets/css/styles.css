@@ -837,6 +837,18 @@ select {
   margin-bottom: var(--e-6);
 }
 
+/* Variante de l'accueil, où le hero ne porte plus qu'un titre et deux
+   boutons : l'axe central est plus lisible qu'un alignement à gauche qui
+   laisserait la moitié droite vide. `vision.html` garde le fer à gauche, son
+   hero contenant plusieurs paragraphes. */
+.hero--centre {
+  text-align: center;
+}
+
+.hero--centre .hero__actions {
+  justify-content: center;
+}
+
 /* --- Bandeau valeurs --- */
 .bandeau-valeurs {
   display: grid;
