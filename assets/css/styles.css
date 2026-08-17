@@ -1530,22 +1530,18 @@ select {
   box-shadow: var(--ombre-sm);
 }
 
+/* Le sigle porte ses propres couleurs : pas de fond derrière lui, qui les
+   concurrencerait. Largeur fixée, hauteur déduite du rapport de l'image. */
 .instagram__glyphe {
   flex: none;
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--r-md);
-  color: #fff;
-  /* Le dégradé d'Instagram, pas celui du site : c'est à cette couleur-là qu'on
-     reconnaît le service sans avoir à lire. */
-  background: linear-gradient(135deg, #f9ce34 0%, #ee2a7b 55%, #6228d7 100%);
+  display: block;
+  width: 96px;
 }
 
-.instagram__glyphe svg {
-  width: 30px;
-  height: 30px;
+.instagram__glyphe img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .instagram__texte {

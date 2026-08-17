@@ -289,13 +289,12 @@
     <section class="section section--alt" id="instagram">
       <div class="conteneur">
         <div class="instagram apparait">
-          <span class="instagram__glyphe" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.4"></rect>
-              <circle cx="12" cy="12" r="4.1"></circle>
-              <circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"></circle>
-            </svg>
+          <!-- Le sigle, pas le glyphe d'Instagram : le titre et le pseudo
+               nomment déjà le service. `alt` vide, l'image ne porte donc rien
+               que le texte voisin ne dise. -->
+          <span class="instagram__glyphe">
+            <img src="assets/img/logo.png" alt=""
+                 width="388" height="181" decoding="async" loading="lazy">
           </span>
 
           <div class="instagram__texte">
