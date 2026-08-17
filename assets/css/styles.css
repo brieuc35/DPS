@@ -2534,31 +2534,47 @@ select {
 
 .cal-sortie--complet { filter: saturate(0.55); }
 
-/* --- Agenda (écran étroit) --- */
-.cal-agenda {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--e-4);
-}
-
-.cal-agenda__date {
-  margin: 0 0 var(--e-2);
-  font-family: var(--police-titre);
-  font-weight: 700;
-  font-size: var(--t-base);
-}
-
-.cal-agenda .cal-sortie { padding: var(--e-3); }
-
-.cal-agenda .cal-sortie__titre { font-size: var(--t-base); }
-
 .cal-vide {
-  margin: 0;
-  padding: var(--e-5) 0;
+  margin: var(--e-4) 0 0;
   text-align: center;
   color: var(--texte-doux);
+  font-size: var(--t-sm);
+}
+
+/* --- Écran étroit ---
+   La même grille, réduite. Elle garde une largeur minimale sous laquelle les
+   noms d'activités cesseraient d'être lisibles : en dessous, c'est le
+   conteneur qui défile du doigt, jamais la page. */
+.cal-defilement {
+  overflow-x: auto;
+  /* Le halo de focus des pastilles ne doit pas être rogné par le cadrage. */
+  padding: 2px;
+  margin: -2px;
+}
+
+@media (max-width: 860px) {
+  .calendrier { padding: var(--e-3); }
+
+  .cal-grille {
+    min-width: 660px;
+    border-spacing: 3px;
+  }
+
+  .cal-case {
+    height: 86px;
+    padding: 5px;
+    border-radius: var(--r-sm);
+  }
+
+  .cal-case__numero { font-size: var(--t-xs); }
+
+  .cal-sortie { padding: 5px; }
+
+  .cal-sortie__heure { font-size: 0.68rem; }
+
+  .cal-sortie__titre { font-size: 0.78rem; }
+
+  .cal-titre { font-size: var(--t-md); }
 }
 
 /* ==========================================================================

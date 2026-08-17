@@ -6,21 +6,11 @@
  * catalogue que la grille de cartes. Ajouter une sortie dans `donnees.js`
  * suffit à la voir apparaître à sa case.
  *
- * Deux rendus pour une seule source :
- *
- * - **grille mensuelle** sur écran large, en `<table>` — c'est la structure
- *   qu'un lecteur d'écran sait annoncer (« ligne 3, colonne mercredi »), et
- *   celle que tout le monde reconnaît d'un coup d'œil ;
- * - **agenda** sur écran étroit, la liste des seuls jours occupés. Sept
- *   colonnes sur 390 px donneraient des cases de 50 px, où aucun nom
- *   d'activité ne tient — et le but du calendrier est justement de les lire.
- *
- * Le basculement se fait sur `matchMedia`, pas en CSS : rendre les deux et en
- * masquer un doublerait le DOM, et surtout les boutons de navigation en double
- * exemplaire.
+ * Une seule vue, la grille mensuelle, en `<table>` — c'est la structure qu'un
+ * lecteur d'écran sait annoncer (« ligne 3, colonne mercredi »), et celle que
+ * tout le monde reconnaît d'un coup d'œil. Elle est simplement réduite sur
+ * écran étroit ; le CSS s'en charge seul, sans second rendu.
  */
-
-const CAL_SEUIL_GRILLE = '(min-width: 860px)';
 
 /** Lundi en tête : la semaine française commence là, pas au dimanche. */
 const CAL_JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
@@ -190,46 +180,13 @@ function calGabaritGrille(parJour) {
   `;
 }
 
-/** Agenda : les seuls jours occupés du mois, en liste. */
-function calGabaritAgenda(parJour) {
+/** Le mois affiché porte-t-il au moins une sortie ? */
+function calMoisOccupe(parJour) {
   const mois = etatCalendrier.mois;
-
-  const jours = [...parJour.keys()]
-    .filter((cle) => {
-      const date = new Date(`${cle}T00:00`);
-      return date.getFullYear() === mois.getFullYear() && date.getMonth() === mois.getMonth();
-    })
-    .sort();
-
-  if (!jours.length) {
-    return `
-      <p class="cal-vide">Aucune sortie proposée en ${echapper(
-        calNomDuMois(mois).toLowerCase()
-      )} pour l’instant.</p>
-    `;
-  }
-
-  const entrees = jours
-    .map((cle) => {
-      const date = new Date(`${cle}T00:00`);
-      const intitule = new Intl.DateTimeFormat('fr-FR', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-      }).format(date);
-
-      return `
-        <li class="cal-agenda__jour">
-          <p class="cal-agenda__date">${echapper(
-            intitule.charAt(0).toUpperCase() + intitule.slice(1)
-          )}</p>
-          ${(parJour.get(cle) || []).map(calGabaritPastille).join('')}
-        </li>
-      `;
-    })
-    .join('');
-
-  return `<ul class="cal-agenda">${entrees}</ul>`;
+  return [...parJour.keys()].some((cle) => {
+    const date = new Date(`${cle}T00:00`);
+    return date.getFullYear() === mois.getFullYear() && date.getMonth() === mois.getMonth();
+  });
 }
 
 function rendreCalendrier() {
@@ -239,9 +196,14 @@ function rendreCalendrier() {
   if (!etatCalendrier.mois) etatCalendrier.mois = calMoisInitial();
 
   const parJour = calActivitesParJour();
-  const enGrille = window.matchMedia(CAL_SEUIL_GRILLE).matches;
 
-  const vue = enGrille ? calGabaritGrille(parJour) : calGabaritAgenda(parJour);
+  // Une grille de cases vides ne dit pas d'elle-même qu'il n'y a rien de
+  // prévu : elle peut aussi bien passer pour un affichage en défaut.
+  const note = calMoisOccupe(parJour)
+    ? ''
+    : `<p class="cal-vide">Aucune sortie proposée en ${echapper(
+        calNomDuMois(etatCalendrier.mois).toLowerCase()
+      )} pour l’instant.</p>`;
 
   conteneurs.forEach((conteneur) => {
     conteneur.innerHTML = `
@@ -258,7 +220,11 @@ function rendreCalendrier() {
           ${picto('<path d="M9 6l6 6-6 6"/>', 18)}
         </button>
       </div>
-      ${vue}
+      <!-- Le défilement horizontal est porté par ce conteneur, jamais par la
+           page : sous 660 px la grille garde sa largeur minimale et se fait
+           balayer du doigt. -->
+      <div class="cal-defilement">${calGabaritGrille(parJour)}</div>
+      ${note}
     `;
   });
 }
@@ -296,13 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-
-  // Le passage grille ↔ agenda ne dépend que de la largeur : on réagit au
-  // changement de palier plutôt qu'à chaque pixel de redimensionnement.
-  const palier = window.matchMedia(CAL_SEUIL_GRILLE);
-  const surChangement = () => rendreCalendrier();
-  if (palier.addEventListener) palier.addEventListener('change', surChangement);
-  else palier.addListener(surChangement);
 
   // Les jauges partagées arrivent après coup : « Complet » doit suivre.
   window.addEventListener('dps:donnees-pretes', rendreCalendrier);
