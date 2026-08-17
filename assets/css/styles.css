@@ -338,11 +338,17 @@ select {
   background: var(--fond-alt);
 }
 
-/* Une section qui suit immédiatement le hero : celui-ci a déjà son propre
-   rembourrage bas, les cumuler repousse le contenu sous la ligne de
-   flottaison sur un écran de portable. */
+/* Une section qui suit immédiatement une autre : chacune a son propre
+   rembourrage, les cumuler laisse un vide disproportionné entre les deux. */
 .section--suite {
   padding-top: var(--e-5);
+}
+
+/* Et la section précédente, symétriquement : les deux rembourrages
+   s'additionnaient (96 + 96 px) pour un vide bien plus large qu'entre les
+   autres sections de la page. */
+.section--suivie {
+  padding-bottom: var(--e-6);
 }
 
 .section__entete {
