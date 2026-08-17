@@ -1177,19 +1177,36 @@ select {
    dans le carré inscrit quelle que soit la taille de la bulle ; un
    rembourrage en pixels laisserait les lignes déborder sur les bords
    arrondis dès que le disque rétrécit. */
+/* La colonne est plafonnée à 300 px, exactement comme la bulle : le
+   rembourrage de celle-ci est en pourcentage, or un pourcentage de
+   rembourrage se résout sur la largeur de la *colonne*, pas de l'élément.
+   Une colonne plus large que la bulle donnait un rembourrage surdimensionné
+   qui poussait le contenu hors du disque — 300 × 316 px à 480 px de large.
+
+   Le nombre de colonnes est déclaré par paliers plutôt que laissé à
+   `auto-fit` : celui-ci compte ses colonnes d'après le maximum de `minmax`
+   dès qu'il est fixe, et plafonner à 300 px faisait tomber 890 px de trois
+   colonnes à deux. Les paliers garantissent en prime des colonnes toujours
+   au-dessus de 260 px, en deçà desquels le texte déborderait du cercle. */
 .bulles {
   display: grid;
   gap: var(--e-5);
-  /* 260 px et pas moins : en deçà, le contenu dépasse la hauteur que le
-     rapport 1:1 réserve, et le disque s'ovalise de deux pixels. Sous cette
-     largeur la grille passe à deux colonnes, donc plus larges. */
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: minmax(0, 300px);
+  justify-content: center;
   justify-items: center;
 
   /* Le reflet du haut, qui fait lire le disque comme une sphère éclairée.
      Franc sur fond clair, presque rien sur fond sombre — un liseré blanc y
      ferait une découpe au lieu d'une lumière. */
   --bulle-lustre: rgba(255, 255, 255, 0.9);
+}
+
+@media (min-width: 640px) {
+  .bulles { grid-template-columns: repeat(2, minmax(0, 300px)); }
+}
+
+@media (min-width: 900px) {
+  .bulles { grid-template-columns: repeat(3, minmax(0, 300px)); }
 }
 
 [data-theme="dark"] .bulles {
@@ -1271,19 +1288,21 @@ select {
 
 .bulle__titre {
   margin: var(--e-2) 0 var(--e-1);
-  font-size: 1.05rem;
+  font-size: 1.25rem;
 }
 
 /* Un cran sous le corps courant : dans un disque, la place utile est celle du
    carré inscrit — environ 70 % de la largeur.
 
-   La hauteur minimale vaut cinq lignes, celle du texte le plus long. Sans
-   elle, le contenu étant centré verticalement, chaque bulle placerait son
-   icône à une hauteur différente selon la longueur de sa phrase. */
+   La hauteur minimale vaut cinq lignes, celle du texte le plus long — en
+   `em`, donc toujours cinq lignes de ce texte-là quel que soit le corps
+   choisi ici. Sans elle, le contenu étant centré verticalement, chaque bulle
+   placerait son icône à une hauteur différente selon la longueur de sa
+   phrase. */
 .bulle__texte {
   margin: 0;
   min-height: 7.25em;
-  font-size: var(--t-xs);
+  font-size: var(--t-sm);
   line-height: 1.45;
   color: var(--texte-doux);
 }
@@ -1306,7 +1325,9 @@ select {
 @media (min-width: 900px) {
   .bulles--triangle {
     position: relative;
-    grid-template-columns: repeat(3, minmax(260px, 1fr));
+    /* L'espace restant est reporté sur l'écart entre les colonnes plutôt que
+       sur leur largeur, que le plafond de 300 px fige. */
+    justify-content: space-between;
     /* Dégage la place que prend la bulle centrale en s'élevant. */
     padding-top: var(--e-7);
   }
@@ -1326,21 +1347,23 @@ select {
     margin-top: 10%;
   }
 
+  /* Largeur au format du tracé (100 × 46) : sans elle, la hauteur se cale
+     sur le carré implicite d'un `width` seul et le trait s'écrase. */
   .bulles__fleche {
     display: block;
     position: absolute;
-    top: 4%;
-    width: 11%;
+    width: 7%;
+    aspect-ratio: 100 / 46;
     color: var(--texte-doux);
-    opacity: 0.6;
+    opacity: 0.55;
   }
 
   .bulles__fleche svg { width: 100%; height: 100%; display: block; }
 
   /* De la base de « Choisissez » vers le sommet de « Rejoignez ». */
-  .bulles__fleche--1 { left: 25%; }
+  .bulles__fleche--1 { left: 27%; top: 18%; }
   /* Du sommet de « Rejoignez » vers la base de « Partagez ». */
-  .bulles__fleche--2 { left: 64%; }
+  .bulles__fleche--2 { left: 66%; top: 18%; }
 }
 
 /* --- Charte de bienveillance --- */
