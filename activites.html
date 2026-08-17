@@ -112,6 +112,23 @@
       </div>
     </section>
 
+    <!-- ================= Calendrier =================
+         Une seconde lecture du même catalogue : le contenu est déduit de
+         `ACTIVITES`, rien n'est saisi ici. -->
+    <section class="section section--alt" id="calendrier">
+      <div class="conteneur">
+        <div class="section__entete">
+          <h2>Le calendrier</h2>
+          <p class="plomb">
+            Les mêmes sorties, rangées par date. Cliquez sur l’une d’elles pour
+            vous inscrire.
+          </p>
+        </div>
+
+        <div class="calendrier" data-calendrier></div>
+      </div>
+    </section>
+
     <!-- Réassurance -->
     <section class="section section--alt">
       <div class="conteneur">
@@ -238,6 +255,9 @@
   <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/comptes.js"></script>
   <script src="assets/js/activites.js"></script>
+  <!-- Après activites.js : le calendrier réutilise sa modale de réservation
+       et ses fonctions de jauge. -->
+  <script src="assets/js/calendrier.js"></script>
   <script type="module" src="assets/js/firebase-init.js"></script>
 </body>
 </html>

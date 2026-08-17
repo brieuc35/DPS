@@ -2381,6 +2381,187 @@ select {
 }
 
 /* ==========================================================================
+   8 quater. Calendrier des activités
+   --------------------------------------------------------------------------
+   Deux rendus d'une même source, choisis par `calendrier.js` : la grille
+   mensuelle au-dessus de 860 px, l'agenda en dessous.
+   ========================================================================== */
+
+.calendrier {
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--r-lg);
+  box-shadow: var(--ombre-sm);
+  padding: var(--e-4);
+}
+
+.cal-entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-3);
+  margin-bottom: var(--e-4);
+}
+
+.cal-titre {
+  margin: 0;
+  font-family: var(--police-titre);
+  font-size: var(--t-lg);
+  font-weight: 700;
+}
+
+.cal-nav {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border: 1px solid var(--bordure-forte);
+  border-radius: var(--r-full);
+  background: var(--surface);
+  color: var(--texte);
+  cursor: pointer;
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.cal-nav:hover {
+  background: var(--surface-2);
+  border-color: var(--primaire);
+}
+
+/* --- Grille mensuelle --- */
+.cal-grille {
+  width: 100%;
+  border-collapse: separate;
+  /* Séparé, pas fusionné : c'est ce qui permet aux cases d'avoir leur propre
+     coin arrondi et leur propre fond. */
+  border-spacing: 4px;
+  table-layout: fixed;
+}
+
+.cal-grille th {
+  padding: var(--e-2) 0;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texte-doux);
+  text-align: center;
+}
+
+.cal-grille th abbr {
+  text-decoration: none;
+  border: 0;
+}
+
+/* `height` sur une cellule de tableau vaut hauteur *minimale* : la ligne
+   s'étire d'elle-même dès qu'une case porte plusieurs sorties. C'est ce qui
+   donne des cases assez hautes pour lire un nom d'activité en entier. */
+.cal-case {
+  vertical-align: top;
+  height: 116px;
+  padding: var(--e-2);
+  border-radius: var(--r-md);
+  background: var(--fond);
+  border: 1px solid var(--bordure);
+}
+
+.cal-case__numero {
+  display: block;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--texte-doux);
+  margin-bottom: var(--e-1);
+}
+
+/* Les jours des mois voisins complètent la grille sans attirer l'œil. */
+.cal-case--hors-mois {
+  background: transparent;
+  border-color: transparent;
+}
+
+.cal-case--hors-mois .cal-case__numero { opacity: 0.35; }
+
+.cal-case--aujourdhui {
+  border-color: var(--primaire);
+  box-shadow: inset 0 0 0 1px var(--primaire);
+}
+
+/* --- Pastille d'une sortie --- */
+.cal-sortie {
+  display: block;
+  width: 100%;
+  margin-top: var(--e-1);
+  padding: var(--e-2);
+  border: 0;
+  border-radius: var(--r-sm);
+  background: var(--cal-degrade, var(--primaire));
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: transform var(--transition), filter var(--transition);
+}
+
+.cal-sortie:hover { transform: translateY(-1px); filter: brightness(1.06); }
+
+.cal-sortie__heure {
+  display: block;
+  font-size: var(--t-xs);
+  opacity: 0.85;
+}
+
+.cal-sortie__titre {
+  display: block;
+  font-family: var(--police-titre);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  line-height: 1.25;
+  /* Le nom entier, quitte à passer à la ligne : lisible, c'est tout l'objet
+     de cases aussi hautes. `anywhere` évite qu'un nom sans espace pousse la
+     colonne au-delà de sa part. */
+  overflow-wrap: anywhere;
+}
+
+.cal-sortie__etat {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 0 6px;
+  border-radius: var(--r-full);
+  background: rgba(0, 0, 0, 0.28);
+  font-size: var(--t-xs);
+  font-weight: 600;
+}
+
+.cal-sortie--complet { filter: saturate(0.55); }
+
+/* --- Agenda (écran étroit) --- */
+.cal-agenda {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--e-4);
+}
+
+.cal-agenda__date {
+  margin: 0 0 var(--e-2);
+  font-family: var(--police-titre);
+  font-weight: 700;
+  font-size: var(--t-base);
+}
+
+.cal-agenda .cal-sortie { padding: var(--e-3); }
+
+.cal-agenda .cal-sortie__titre { font-size: var(--t-base); }
+
+.cal-vide {
+  margin: 0;
+  padding: var(--e-5) 0;
+  text-align: center;
+  color: var(--texte-doux);
+}
+
+/* ==========================================================================
    8 ter. Pages légales
    --------------------------------------------------------------------------
    Du texte long, lu par obligation plus que par envie : une colonne étroite,
