@@ -1135,6 +1135,55 @@ select {
 .etape__titre { margin-top: var(--e-3); font-size: 1.1rem; }
 .etape__texte { font-size: var(--t-sm); color: var(--texte-doux); margin: 0; }
 
+/* --- Bulles « c'est simple » ---
+   La variante de l'accueil : pas de numéros, une icône par temps, et trois
+   cartes centrées comme sur l'affiche du collectif. */
+.bulles {
+  display: grid;
+  gap: var(--e-5);
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.bulle {
+  display: grid;
+  /* La rangée des icônes garde la même hauteur d'une bulle à l'autre, sinon
+     les titres se décalent quand un texte est plus court. */
+  grid-template-rows: auto auto 1fr;
+  justify-items: center;
+  text-align: center;
+  padding: var(--e-6) var(--e-5);
+  background: var(--surface);
+  border: 1px solid var(--bordure);
+  border-radius: var(--r-xl);
+  box-shadow: var(--ombre-sm);
+}
+
+.bulle__icone {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--r-full);
+  background: var(--primaire-doux);
+  color: var(--primaire);
+}
+
+.bulle__icone svg {
+  width: 30px;
+  height: 30px;
+}
+
+.bulle__titre {
+  margin: var(--e-4) 0 var(--e-2);
+  font-size: 1.15rem;
+}
+
+.bulle__texte {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--texte-doux);
+}
+
 /* --- Charte de bienveillance --- */
 .charte {
   display: grid;
