@@ -2513,9 +2513,11 @@ select {
   font-weight: 600;
   line-height: 1.25;
   /* Le nom entier, quitte à passer à la ligne : lisible, c'est tout l'objet
-     de cases aussi hautes. `anywhere` évite qu'un nom sans espace pousse la
-     colonne au-delà de sa part. */
-  overflow-wrap: anywhere;
+     de cases aussi hautes. `break-word` plutôt qu'`anywhere` : la coupure au
+     milieu d'un mot n'intervient qu'en dernier recours, quand un mot seul
+     dépasse la colonne. La largeur des colonnes étant fixée par le tableau,
+     rien ne peut la déborder de toute façon. */
+  overflow-wrap: break-word;
 }
 
 .cal-sortie__etat {
@@ -2551,8 +2553,12 @@ select {
 @media (max-width: 860px) {
   .calendrier { padding: var(--e-3); }
 
+  /* 560 px : le seuil mesuré sous lequel les noms se coupent en plein mot
+     (« Usin / e cidre / rie »). Au-dessus, ils se répartissent aux espaces.
+     Tout faire tenir sans balayage demanderait 392 px, donc des colonnes de
+     53 px — où plus aucun nom n'est lisible. */
   .cal-grille {
-    min-width: 660px;
+    min-width: 560px;
     border-spacing: 3px;
   }
 
