@@ -306,6 +306,79 @@ function notifier(message) {
 }
 
 /* ==========================================================================
+   Flèches du triangle « Comment ça marche »
+   ========================================================================== */
+
+/**
+ * Centre les deux flèches exactement entre les bulles qu'elles relient.
+ *
+ * Un pourcentage fixe en CSS ne le permettrait pas : la bulle est plafonnée à
+ * 300 px (`.bulle { max-width: 300px }`) mais sa colonne, elle, continue de
+ * grandir avec la largeur de l'écran — l'écart entre deux bulles n'est donc
+ * pas une fraction constante de la largeur totale. On mesure à la place les
+ * positions réelles, et on pose chaque flèche au milieu du segment qui joint
+ * les centres des deux bulles qu'elle relie — exactement sur la droite que la
+ * flèche est censée dessiner.
+ */
+function initFlechesTriangle() {
+  const conteneur = $('.bulles--triangle');
+  if (!conteneur) return;
+
+  const bulles = $$('.bulle', conteneur);
+  const fleches = [
+    { element: $('.bulles__fleche--1', conteneur), depart: bulles[0], arrivee: bulles[1] },
+    { element: $('.bulles__fleche--2', conteneur), depart: bulles[1], arrivee: bulles[2] },
+  ];
+  if (fleches.some(({ element, depart, arrivee }) => !element || !depart || !arrivee)) return;
+
+  function centrer() {
+    // En dessous de 900 px, les flèches sont masquées (bulles empilées) :
+    // le calcul serait fait sur des positions qui ne veulent rien dire.
+    if (!window.matchMedia('(min-width: 900px)').matches) return;
+
+    const cadre = conteneur.getBoundingClientRect();
+
+    fleches.forEach(({ element, depart, arrivee }) => {
+      const a = depart.getBoundingClientRect();
+      const b = arrivee.getBoundingClientRect();
+      const milieuX = (a.left + a.width / 2 + b.left + b.width / 2) / 2;
+      const milieuY = (a.top + a.height / 2 + b.top + b.height / 2) / 2;
+      const largeur = element.getBoundingClientRect().width;
+      const hauteur = element.getBoundingClientRect().height;
+
+      element.style.left = `${milieuX - cadre.left - largeur / 2}px`;
+      element.style.top = `${milieuY - cadre.top - hauteur / 2}px`;
+    });
+  }
+
+  centrer();
+
+  // Les colonnes sont fluides : la position idéale change avec la largeur.
+  let planifie;
+  window.addEventListener('resize', () => {
+    clearTimeout(planifie);
+    planifie = setTimeout(centrer, 120);
+  });
+
+  // Les polices arrivent après le premier rendu et peuvent décaler les
+  // bulles de quelques pixels — d'où un second passage une fois chargées.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(centrer);
+  }
+
+  // Chaque bulle porte `.apparait` : tant qu'elle n'a pas défilé jusque dans
+  // la fenêtre, elle est décalée de 18 px par l'apparition progressive
+  // (`.js .apparait`, plus bas dans styles.css). Un premier calcul fait avant
+  // ce défilement mesurerait donc la mauvaise position et la flèche resterait
+  // figée là — visible au chargement direct sur cette section, ou en
+  // remontant la page après l'avoir déjà vue. On réagit à la fin de cette
+  // transition précise plutôt que d'ajouter une temporisation arbitraire.
+  conteneur.addEventListener('transitionend', (evenement) => {
+    if (evenement.propertyName === 'transform') centrer();
+  });
+}
+
+/* ==========================================================================
    Démarrage
    ========================================================================== */
 
@@ -313,6 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   initNavigation();
   initApparitions();
+  initFlechesTriangle();
 
   const anneeCourante = $('#annee');
   if (anneeCourante) anneeCourante.textContent = new Date().getFullYear();

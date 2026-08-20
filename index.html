@@ -137,14 +137,23 @@
             </p>
           </div>
 
-          <!-- L'inclinaison suit l'écart réel, mesuré à l'écran, entre le
-               centre des bulles voisines (environ 17°) — un angle bien plus
-               plat que la diagonale à 45° d'un premier essai, qui pointait
-               à côté de « Rejoignez ». -->
+          <!-- L'inclinaison suit l'écart réel entre le centre des bulles
+               voisines (environ 17°), et le dégradé relie leurs deux teintes :
+               la flèche part de l'orange de « Choisissez » pour arriver au
+               magenta de « Rejoignez ». Les repères du dégradé sont posés en
+               coordonnées du tracé (`userSpaceOnUse`), donc exactement sur les
+               deux extrémités du trait. -->
           <span class="bulles__fleche bulles__fleche--1" aria-hidden="true">
-            <svg viewBox="0 0 100 46" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 40 92 12"/>
-              <path d="M81 23 92 12 76 10"/>
+            <svg viewBox="0 0 100 46" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+              <defs>
+                <linearGradient id="degrade-fleche-1" gradientUnits="userSpaceOnUse"
+                                x1="8" y1="38" x2="88" y2="14">
+                  <stop offset="0" stop-color="#f59134"/>
+                  <stop offset="1" stop-color="#ec4899"/>
+                </linearGradient>
+              </defs>
+              <path stroke="url(#degrade-fleche-1)" d="M8 38 86 14"/>
+              <path stroke="url(#degrade-fleche-1)" d="M72 11 88 14 77 25"/>
             </svg>
           </span>
 
@@ -168,10 +177,19 @@
             </p>
           </div>
 
+          <!-- Même principe, teintes inverses : du magenta de « Rejoignez »
+               au violet de « Partagez ». -->
           <span class="bulles__fleche bulles__fleche--2" aria-hidden="true">
-            <svg viewBox="0 0 100 46" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 6 92 34"/>
-              <path d="M77 36 92 34 81 23"/>
+            <svg viewBox="0 0 100 46" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+              <defs>
+                <linearGradient id="degrade-fleche-2" gradientUnits="userSpaceOnUse"
+                                x1="12" y1="8" x2="92" y2="32">
+                  <stop offset="0" stop-color="#ec4899"/>
+                  <stop offset="1" stop-color="#8b63f5"/>
+                </linearGradient>
+              </defs>
+              <path stroke="url(#degrade-fleche-2)" d="M14 8 92 32"/>
+              <path stroke="url(#degrade-fleche-2)" d="M77 34 92 32 81 21"/>
             </svg>
           </span>
 

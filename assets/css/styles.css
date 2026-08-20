@@ -1348,22 +1348,47 @@ select {
   }
 
   /* Largeur au format du tracé (100 × 46) : sans elle, la hauteur se cale
-     sur le carré implicite d'un `width` seul et le trait s'écrase. */
+     sur le carré implicite d'un `width` seul et le trait s'écrase.
+
+     `left`/`top` posent un repli approximatif — utile sans JavaScript, ou le
+     temps que `initFlechesTriangle()` (app.js) fasse son premier calcul.
+     Cette fonction mesure ensuite la position réelle des bulles et resserre
+     chaque flèche exactement sur le segment qui joint leurs deux centres, en
+     écrasant ces valeurs par un style en ligne — un pourcentage fixe ne le
+     pourrait pas, la bulle étant plafonnée à 300 px alors que sa colonne
+     continue de s'élargir avec l'écran. */
   .bulles__fleche {
     display: block;
     position: absolute;
-    width: 7%;
+    width: 8%;
     aspect-ratio: 100 / 46;
-    color: var(--texte-doux);
-    opacity: 0.55;
+    animation: fleche-respire 2600ms ease-in-out infinite;
   }
 
-  .bulles__fleche svg { width: 100%; height: 100%; display: block; }
+  .bulles__fleche svg { width: 100%; height: 100%; display: block; overflow: visible; }
 
-  /* De la base de « Choisissez » vers le sommet de « Rejoignez ». */
-  .bulles__fleche--1 { left: 27%; top: 18%; }
-  /* Du sommet de « Rejoignez » vers la base de « Partagez ». */
-  .bulles__fleche--2 { left: 66%; top: 18%; }
+  /* Le trait porte lui-même le dégradé (`stroke="url(#…)"` dans le SVG) : ces
+     teintes n'habillent que la lueur portée, assortie à chaque flèche. */
+  .bulles__fleche--1 {
+    left: 27%;
+    top: 18%;
+    filter: drop-shadow(0 4px 10px rgba(236, 72, 153, 0.45));
+  }
+  .bulles__fleche--2 {
+    left: 66%;
+    top: 18%;
+    filter: drop-shadow(0 4px 10px rgba(139, 99, 245, 0.45));
+    animation-delay: 260ms;
+  }
+}
+
+/* Un souffle discret plutôt qu'un simple élément statique — de quoi remarquer
+   le sens de lecture sans distraire du contenu. Neutralisé comme toutes les
+   animations du site pour qui préfère moins de mouvement (règle globale plus
+   bas dans ce fichier). */
+@keyframes fleche-respire {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
 }
 
 /* --- Charte de bienveillance --- */
