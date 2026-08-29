@@ -75,6 +75,25 @@ function placesRestantes(activite) {
    Rendu des cartes
    ========================================================================== */
 
+/**
+ * En dessous de `placesMinimum`, la sortie est ouverte aux réservations mais
+ * pas encore garantie — c'est la version chiffrée de ce que les CGU disent
+ * déjà : « une sortie peut être annulée ou reportée, notamment faute de
+ * participants ». Rendu commun à la carte, à la modale et à la confirmation,
+ * pour que les trois racontent toujours la même histoire.
+ */
+function etatConfirmation(activite, occupees) {
+  const minimum = activite.placesMinimum;
+  if (!minimum) return null;
+
+  const manquants = minimum - occupees;
+  return {
+    minimum,
+    confirmee: manquants <= 0,
+    manquants: Math.max(0, manquants),
+  };
+}
+
 function gabaritCarte(activite) {
   const theme = trouverThematique(activite.thematique);
   const restantes = placesRestantes(activite);
@@ -82,12 +101,23 @@ function gabaritCarte(activite) {
   const pourcentage = Math.round((occupees / activite.placesTotal) * 100);
   const presqueComplet = restantes > 0 && restantes <= 3;
   const complet = restantes === 0;
+  const confirmation = etatConfirmation(activite, occupees);
 
   const etiquetteDispo = complet
     ? '<span class="etiquette-flottante carte-activite__dispo">Complet</span>'
     : presqueComplet
       ? `<span class="etiquette-flottante carte-activite__dispo">Plus que ${restantes} place${restantes > 1 ? 's' : ''}</span>`
       : '';
+
+  const seuilPourcentage = confirmation
+    ? Math.round((confirmation.minimum / activite.placesTotal) * 100)
+    : null;
+
+  const badgeConfirmation = !confirmation
+    ? ''
+    : confirmation.confirmee
+      ? `<span class="badge badge--accent">${picto('<path d="M20 6 9 17l-5-5"/>', 13)} Sortie confirmée</span>`
+      : `<span class="badge">${picto('<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>', 13)} Encore ${confirmation.manquants} inscription${confirmation.manquants > 1 ? 's' : ''} pour confirmer</span>`;
 
   return `
     <article class="carte-activite apparait" data-activite="${activite.id}">
@@ -112,11 +142,22 @@ function gabaritCarte(activite) {
           <div class="jauge__entete">
             <span>${occupees} / ${activite.placesTotal} participants</span>
           </div>
-          <div class="jauge__barre" role="img"
-               aria-label="${occupees} participants sur ${activite.placesTotal}">
-            <div class="jauge__remplissage${presqueComplet || complet ? ' est-presque-complet' : ''}"
-                 style="width:${pourcentage}%"></div>
+          <div class="jauge__piste">
+            <div class="jauge__barre" role="img"
+                 aria-label="${occupees} participants sur ${activite.placesTotal}${
+    confirmation ? `, ${confirmation.minimum} nécessaires pour confirmer la sortie` : ''
+  }">
+              <div class="jauge__remplissage${presqueComplet || complet ? ' est-presque-complet' : ''}"
+                   style="width:${pourcentage}%"></div>
+            </div>
+            ${
+              seuilPourcentage
+                ? `<span class="jauge__seuil" style="left:${seuilPourcentage}%"
+                         title="Seuil de confirmation : ${confirmation.minimum} participants"></span>`
+                : ''
+            }
           </div>
+          ${badgeConfirmation ? `<p class="carte-activite__confirmation">${badgeConfirmation}</p>` : ''}
         </div>
 
         <div class="carte-activite__pied">
@@ -332,16 +373,35 @@ function gabaritFormulaire(activite) {
   const restantes = placesRestantes(activite);
   const maximum = Math.min(4, restantes);
   const theme = trouverThematique(activite.thematique);
+  const confirmation = etatConfirmation(activite, activite.placesTotal - restantes);
 
   const optionsPlaces = Array.from({ length: maximum }, (_, index) => {
     const nombre = index + 1;
     return `<option value="${nombre}">${nombre} personne${nombre > 1 ? 's' : ''}</option>`;
   }).join('');
 
+  // Avant de s'engager, autant savoir si la sortie est déjà garantie ou si
+  // cette réservation compte parmi celles qui la confirmeront.
+  const noteConfirmation = !confirmation
+    ? ''
+    : confirmation.confirmee
+      ? `<p class="note-confirmation note-confirmation--acquise">
+           ${picto('<path d="M20 6 9 17l-5-5"/>', 15)}
+           Cette sortie est déjà confirmée : elle aura lieu quoi qu’il arrive.
+         </p>`
+      : `<p class="note-confirmation">
+           ${picto('<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>', 15)}
+           Encore ${confirmation.manquants} inscription${confirmation.manquants > 1 ? 's' : ''}
+           avant que la sortie ne soit garantie — en dessous de
+           ${confirmation.minimum} participants, elle peut être annulée ou reportée.
+         </p>`;
+
   return `
     <p class="plomb" style="font-size:var(--t-sm);margin-bottom:var(--e-5)">
       ${echapper(activite.resume)}
     </p>
+
+    ${noteConfirmation}
 
     <div class="recap">
       <div>

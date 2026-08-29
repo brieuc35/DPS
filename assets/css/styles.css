@@ -1079,6 +1079,14 @@ select {
   margin-bottom: var(--e-1);
 }
 
+/* Enveloppe la barre pour donner un repère de position au seuil de
+   confirmation, sans hériter du `overflow: hidden` de la barre elle-même —
+   celui-ci reste nécessaire pour clore proprement le remplissage, mais
+   couperait aussi le repère à ses deux extrémités. */
+.jauge__piste {
+  position: relative;
+}
+
 .jauge__barre {
   height: 4px;
   border-radius: var(--r-full);
@@ -1095,6 +1103,48 @@ select {
 
 .jauge__remplissage.est-presque-complet {
   background: linear-gradient(90deg, var(--ambre), var(--magenta));
+}
+
+/* Le trait qui marque, sur la jauge, le nombre d'inscriptions à partir
+   duquel la sortie est garantie. */
+.jauge__seuil {
+  position: absolute;
+  top: 50%;
+  width: 2px;
+  height: 10px;
+  background: var(--texte-doux);
+  opacity: 0.5;
+  border-radius: 1px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.carte-activite__confirmation {
+  margin: var(--e-2) 0 var(--e-3);
+}
+
+/* Note de confirmation dans la modale de réservation : même famille que les
+   textes d'aide d'un champ, avec un pictogramme et un fond qui la détachent
+   du formulaire — c'est une information sur la sortie, pas sur le champ
+   qu'elle précède. */
+.note-confirmation {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--e-2);
+  margin-bottom: var(--e-5);
+  padding: var(--e-3);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  color: var(--texte-doux);
+  font-size: var(--t-xs);
+  line-height: 1.5;
+}
+
+.note-confirmation svg { flex-shrink: 0; margin-top: 0.15em; }
+
+.note-confirmation--acquise {
+  background: var(--accent-doux);
+  color: var(--accent-fort);
 }
 
 /* Le pied ne porte plus que l'action, désormais pleine largeur : le tarif

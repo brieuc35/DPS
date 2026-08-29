@@ -25,6 +25,12 @@ const THEMATIQUES = [
    compteur partagé de Firestore au tout premier passage — la faire mentir
    ferait mentir les vraies jauges.
 
+   `placesMinimum` est le seuil en dessous duquel la sortie n'est pas encore
+   garantie — la traduction chiffrée de ce que les CGU disaient déjà en
+   termes vagues (« une sortie peut être annulée ou reportée, notamment faute
+   de participants »). Les deux doivent rester cohérents : si ce nombre
+   change ici, il change aussi dans conditions.html.
+
    Les programmes et prestations ci-dessous sont en revanche des textes
    d'attente : ils restent volontairement génériques tant qu'ils n'ont pas été
    validés avec chaque partenaire. */
@@ -38,6 +44,7 @@ const ACTIVITES = [
     duree: '2 h',
     prix: 15,
     placesTotal: 12,
+    placesMinimum: 3,
     placesPrises: 0,
     niveau: 'Accessible à tous',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar' },
@@ -59,6 +66,7 @@ const ACTIVITES = [
     duree: '2 h',
     prix: 8,
     placesTotal: 12,
+    placesMinimum: 3,
     placesPrises: 0,
     niveau: 'Débutant bienvenu',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar--prune' },
@@ -80,6 +88,7 @@ const ACTIVITES = [
     duree: '2 h',
     prix: 10,
     placesTotal: 12,
+    placesMinimum: 3,
     placesPrises: 0,
     niveau: 'Accessible à tous',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar--terre' },
@@ -101,6 +110,7 @@ const ACTIVITES = [
     duree: '2 h',
     prix: 10,
     placesTotal: 12,
+    placesMinimum: 3,
     placesPrises: 0,
     niveau: 'Accessible à tous',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar--ambre' },
