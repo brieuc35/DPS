@@ -146,6 +146,22 @@
 
           <!-- ============ Colonne centrale : fil ============ -->
           <div>
+            <!-- Affichée à la place du composeur quand le fil est partagé
+                 (Firestore) et qu'aucun compte vérifiable n'est ouvert : lire
+                 ne demande rien, mais publier doit pouvoir être rattaché à
+                 quelqu'un de réel. -->
+            <div class="carte composeur" data-composeur-connexion hidden style="text-align:center">
+              <p style="margin:0 0 var(--e-4)">
+                Le fil est partagé entre tous les membres. Publier, soutenir ou
+                répondre demande un compte, pour que ce que vous écrivez reste
+                bien de vous.
+              </p>
+              <div style="display:flex;gap:var(--e-3);flex-wrap:wrap;justify-content:center">
+                <a class="btn btn--primaire" href="compte.html#inscription">Créer un compte</a>
+                <a class="btn btn--fantome" href="compte.html#connexion">Se connecter</a>
+              </div>
+            </div>
+
             <!-- Composeur -->
             <form class="carte composeur" data-composeur>
               <div class="composeur__haut">

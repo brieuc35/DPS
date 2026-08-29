@@ -42,6 +42,15 @@ service cloud.firestore {
           && donnees.texte.size() <= 600;
     }
 
+    // Même forme que `texteAcceptable`, pour le champ `contenu` d'une
+    // publication — un nom différent côté site, pour ne pas confondre une
+    // publication du fil avec un message de discussion.
+    function contenuAcceptable(donnees) {
+      return donnees.contenu is string
+          && donnees.contenu.size() > 0
+          && donnees.contenu.size() <= 600;
+    }
+
     // -------------------------------------------------------------- messages
     match /messages/{messageId} {
 
@@ -124,6 +133,81 @@ service cloud.firestore {
                     && request.resource.data.placesPrises <= resource.data.placesPrises + 4
                     && request.resource.data.placesPrises >= resource.data.placesPrises - 4;
       allow delete: if false;
+    }
+
+    // -------------------------------------------------------- publications
+    match /publications/{publicationId} {
+
+      // Public, comme les jauges : le fil se parcourt avant toute connexion,
+      // seule la question d'entrée (posée côté site, pas ici) filtre qui
+      // arrive jusque-là.
+      allow read: if true;
+
+      // Une publication ordinaire porte l'identité de son autrice ou auteur.
+      // Une annonce automatique (pont activités → fil) porte, elle, un
+      // identifiant déterministe — « annonce-<activité> » — pour qu'une
+      // deuxième tentative ne puisse pas en recréer une seconde : Firestore
+      // traite alors l'écriture comme une modification, et `allow update`
+      // plus bas la refuse. N'importe quel membre connecté peut être celui
+      // qui la déclenche — le site n'a pas de service qui tourne seul en
+      // arrière-plan, ce sont les visites qui la font apparaître.
+      allow create: if connecte()
+                    && request.resource.data.auteurId == moi()
+                    && request.resource.data.date == request.time
+                    && request.resource.data.cercle is string
+                    && request.resource.data.cercle.size() > 0
+                    && request.resource.data.jaimesCompte == 0
+                    && contenuAcceptable(request.resource.data);
+
+      // Recréer une publication existante est refusé (voir plus haut, pour
+      // les annonces automatiques). La seule modification tolérée est le
+      // compteur de soutiens, d'un pas à la fois — même logique que le
+      // compteur de places d'une activité : quiconque est connecté peut
+      // faire évoluer ce nombre, mais rien d'autre dans le document ne peut
+      // changer au même moment.
+      allow update: if connecte()
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['jaimesCompte'])
+                    && request.resource.data.jaimesCompte is int
+                    && request.resource.data.jaimesCompte >= 0
+                    && request.resource.data.jaimesCompte != resource.data.jaimesCompte
+                    && request.resource.data.jaimesCompte <= resource.data.jaimesCompte + 1
+                    && request.resource.data.jaimesCompte >= resource.data.jaimesCompte - 1;
+      allow delete: if connecte() && resource.data.auteurId == moi();
+    }
+
+    // ------------------------------------------------------------ réponses
+    match /reponses/{reponseId} {
+
+      // Publiques au même titre que les publications qu'elles complètent.
+      allow read: if true;
+
+      allow create: if connecte()
+                    && request.resource.data.auteurId == moi()
+                    && request.resource.data.date == request.time
+                    && request.resource.data.publicationId is string
+                    && texteAcceptable(request.resource.data);
+
+      allow update: if false;
+      allow delete: if connecte() && resource.data.auteurId == moi();
+    }
+
+    // -------------------------------------------------------------- soutiens
+    match /jaimes/{jaimeId} {
+
+      // Chacun ne voit que les siens : le compteur public suffit à tout le
+      // monde, savoir précisément qui a soutenu quoi ne regarde que l'auteur
+      // du soutien.
+      allow read: if connecte() && resource.data.membreId == moi();
+
+      // Même principe que les réservations : l'identifiant composé
+      // « <publication>_<uid> » rend un double soutien impossible sans
+      // requête, et le prouve d'une seule lecture.
+      allow create: if connecte()
+                    && request.resource.data.membreId == moi()
+                    && jaimeId == request.resource.data.publicationId + '_' + moi();
+
+      allow update: if false;
+      allow delete: if connecte() && resource.data.membreId == moi();
     }
 
     // Tout le reste est fermé.

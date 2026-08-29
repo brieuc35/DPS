@@ -736,6 +736,35 @@ async function enregistrerReservation(activite, participant) {
   `;
 }
 
+/**
+ * Le pont vers le fil de la communauté : chaque activité du catalogue y
+ * obtient une annonce, créée par le premier membre connecté qui charge cette
+ * page après son ouverture. Le site n'a pas de service qui tourne seul en
+ * arrière-plan — ce sont les visites qui font le travail, une fois chacune,
+ * grâce à l'identifiant déterministe que `annoncerActivite` pose côté
+ * Firestore (voir firebase-donnees.js).
+ */
+async function synchroniserAnnonces() {
+  const distant = baseActivites();
+  const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
+  if (!distant || !compte) return;
+
+  for (const activite of ACTIVITES) {
+    await distant.annoncerActivite(
+      activite.id,
+      {
+        auteur: 'DPS Collective',
+        initiales: 'DP',
+        couleur: 'avatar',
+        cercle: activite.thematique,
+        contenu: `Nouvelle sortie ouverte : ${activite.titre}, le ${formaterDate(activite.date)}. ${activite.resume}`,
+        badge: 'Annonce',
+      },
+      compte.id
+    );
+  }
+}
+
 /* ==========================================================================
    Démarrage
    ========================================================================== */
@@ -769,6 +798,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   suivreJauges();
   window.addEventListener('dps:donnees-pretes', suivreJauges);
+
+  // Le compte et Firestore arrivent chacun par leur propre événement, sans
+  // garantie d'ordre : on retente sur les deux jusqu'à ce que les deux soient
+  // là, puis on s'arrête — la fonction elle-même est sans effet au-delà de la
+  // première réussite par activité, mais rien ne sert de la rappeler sans fin.
+  let annoncesSynchronisees = false;
+  const tenterSynchronisation = () => {
+    const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
+    if (annoncesSynchronisees || !baseActivites() || !compte) return;
+    annoncesSynchronisees = true;
+    synchroniserAnnonces();
+  };
+  tenterSynchronisation();
+  window.addEventListener('dps:session', tenterSynchronisation);
+  window.addEventListener('dps:donnees-pretes', tenterSynchronisation);
 
   // Le lien d'une thématique depuis le pied de page ne recharge pas la page :
   // on réagit au changement d'ancre pour que le filtre suive quand même.

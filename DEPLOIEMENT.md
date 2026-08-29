@@ -34,5 +34,11 @@ a pas de `firebase init` à lancer.
 ## Vérifier que c'est bien parti
 
 Dans la console, l'onglet **Règles** affiche la date de la dernière publication.
-Côté site, le test qui compte : supprimer un compte qui avait une inscription,
-puis vérifier que la place est bien revenue dans la jauge de la sortie.
+Côté site, deux tests qui comptent :
+
+- supprimer un compte qui avait une inscription, puis vérifier que la place
+  est bien revenue dans la jauge de la sortie ;
+- depuis un compte connecté, publier un message dans le fil de la communauté
+  et vérifier qu'il apparaît — c'est le signe que les collections
+  `publications`, `reponses` et `jaimes` sont bien couvertes par les règles
+  publiées.
