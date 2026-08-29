@@ -16,6 +16,9 @@ const THEMATIQUES = [
   { id: 'loisir',     nom: 'Jeux & loisirs',        icone: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/>', degrade: 'linear-gradient(150deg, #7c4df0, #3b39c4)' },
   { id: 'entreprise', nom: 'Visites d’entreprise',  icone: '<path d="M3 21h18"/><path d="M4 21V10l6 3.5V10l6 3.5V6h4v15"/><path d="M7 21v-3.5"/>', degrade: 'linear-gradient(150deg, #f7b267, #e8556d)' },
   { id: 'brasserie',  nom: 'Brasseries',            icone: '<path d="M6 8h9v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z"/><path d="M15 11h2.5a2.5 2.5 0 0 1 0 5H15"/><path d="M6 8c0-2 1.4-3 3-3 .4-1.2 1.5-2 2.8-2 1.4 0 2.6 1 2.9 2.3"/>', degrade: 'linear-gradient(150deg, #f2718c, #b03fd0)' },
+  // Alvéole de ruche : un hexagone, pas une abeille — le même parti pris que
+  // les autres pictogrammes, une forme plutôt qu'une figuration.
+  { id: 'nature',     nom: 'Nature & terroir',       icone: '<path d="M12 3 19.8 7.5 19.8 16.5 12 21 4.2 16.5 4.2 7.5Z"/>', degrade: 'linear-gradient(150deg, #f0b429, #c17817)' },
 ];
 
 /* Activités proposées.
