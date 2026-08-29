@@ -18,6 +18,12 @@ const ICONE_CADEAU =
   '<path d="M12 9.5c-1.7 0-3.2-1.1-3.2-2.8C8.8 5.2 9.9 4 11.2 4c1.1 0 2 .9 2.1 2.1"/>' +
   '<path d="M12 9.5c1.7 0 3.2-1.1 3.2-2.8C15.2 5.2 14.1 4 12.8 4c-1.1 0-2 .9-2.1 2.1"/>';
 
+/* Icône cadenas — la sortie non confirmée se lit comme verrouillée, pas
+   comme signalée par une simple mise en garde. Partagée par la carte et la
+   modale. */
+const ICONE_CADENAS =
+  '<rect x="5" y="11" width="14" height="9" rx="1.6"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/>';
+
 /* ==========================================================================
    État
    ========================================================================== */
@@ -124,7 +130,7 @@ function gabaritCarte(activite) {
     ? ''
     : confirmation.confirmee
       ? `<span class="badge badge--accent">${picto('<path d="M20 6 9 17l-5-5"/>', 13)} Sortie confirmée</span>`
-      : `<span class="badge">${picto('<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>', 13)} Encore ${confirmation.manquants} inscription${confirmation.manquants > 1 ? 's' : ''} pour confirmer</span>`;
+      : `<span class="badge badge--petit">${picto(ICONE_CADENAS, 12)} Encore ${confirmation.manquants} participant${confirmation.manquants > 1 ? 's' : ''} pour débloquer</span>`;
 
   const etiquetteCadeau = activite.cadeau
     ? `<span class="etiquette-flottante carte-activite__cadeau" title="${echapper(activite.cadeau)}">
@@ -159,7 +165,7 @@ function gabaritCarte(activite) {
           <div class="jauge__piste">
             <div class="jauge__barre" role="img"
                  aria-label="${occupees} participants sur ${activite.placesTotal}${
-    confirmation ? `, ${confirmation.minimum} nécessaires pour confirmer la sortie` : ''
+    confirmation ? `, ${confirmation.minimum} nécessaires pour débloquer la sortie` : ''
   }">
               <div class="jauge__remplissage${presqueComplet || complet ? ' est-presque-complet' : ''}"
                    style="width:${pourcentage}%"></div>
@@ -167,7 +173,7 @@ function gabaritCarte(activite) {
             ${
               seuilPourcentage
                 ? `<span class="jauge__seuil" style="left:${seuilPourcentage}%"
-                         title="Seuil de confirmation : ${confirmation.minimum} participants"></span>`
+                         title="Seuil de déblocage : ${confirmation.minimum} participants"></span>`
                 : ''
             }
           </div>
@@ -404,9 +410,9 @@ function gabaritFormulaire(activite) {
            Cette sortie est déjà confirmée : elle aura lieu quoi qu’il arrive.
          </p>`
       : `<p class="note-confirmation">
-           ${picto('<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>', 15)}
-           Encore ${confirmation.manquants} inscription${confirmation.manquants > 1 ? 's' : ''}
-           avant que la sortie ne soit garantie — en dessous de
+           ${picto(ICONE_CADENAS, 15)}
+           Encore ${confirmation.manquants} participant${confirmation.manquants > 1 ? 's' : ''}
+           pour débloquer cette sortie — en dessous de
            ${confirmation.minimum} participants, elle peut être annulée ou reportée.
          </p>`;
 

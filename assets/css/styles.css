@@ -521,6 +521,16 @@ select {
 .badge--primaire { background: var(--primaire-doux); color: var(--primaire); }
 .badge--alerte { background: #fde8e4; color: #b1442a; }
 
+/* Le badge « verrouillée » de la carte : un cran sous la taille de badge
+   habituelle, pour rester une information secondaire face au titre et au
+   bouton. Seul sur sa ligne (jamais à côté d'un autre badge), il peut
+   revenir à la ligne sans dérégler quoi que ce soit. */
+.badge--petit {
+  padding: 0.25em 0.6em;
+  font-size: 0.68rem;
+  white-space: normal;
+}
+
 [data-theme="dark"] .badge--alerte { background: #3d211b; color: #f0a08a; }
 [data-theme="dark"] .badge--accent { color: var(--accent); }
 
