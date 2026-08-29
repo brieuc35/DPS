@@ -11,6 +11,13 @@
 
 const CLE_RESERVATIONS = 'dps.reservations';
 
+/* Icône cadeau — un paquet noué, dans le trait des autres pictogrammes du
+   site, pas un émoji. Partagée par la carte et la modale. */
+const ICONE_CADEAU =
+  '<rect x="4" y="9.5" width="16" height="10.5" rx="1.2"/><path d="M4 9.5h16"/><path d="M12 9.5v10.5"/>' +
+  '<path d="M12 9.5c-1.7 0-3.2-1.1-3.2-2.8C8.8 5.2 9.9 4 11.2 4c1.1 0 2 .9 2.1 2.1"/>' +
+  '<path d="M12 9.5c1.7 0 3.2-1.1 3.2-2.8C15.2 5.2 14.1 4 12.8 4c-1.1 0-2 .9-2.1 2.1"/>';
+
 /* ==========================================================================
    État
    ========================================================================== */
@@ -119,6 +126,12 @@ function gabaritCarte(activite) {
       ? `<span class="badge badge--accent">${picto('<path d="M20 6 9 17l-5-5"/>', 13)} Sortie confirmée</span>`
       : `<span class="badge">${picto('<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>', 13)} Encore ${confirmation.manquants} inscription${confirmation.manquants > 1 ? 's' : ''} pour confirmer</span>`;
 
+  const etiquetteCadeau = activite.cadeau
+    ? `<span class="etiquette-flottante carte-activite__cadeau" title="${echapper(activite.cadeau)}">
+         ${picto(ICONE_CADEAU, 13)} Cadeau
+       </span>`
+    : '';
+
   return `
     <article class="carte-activite apparait" data-activite="${activite.id}">
       <div class="carte-activite__visuel" style="background:${theme.degrade}">
@@ -128,6 +141,7 @@ function gabaritCarte(activite) {
         </div>
         <span class="carte-activite__picto" aria-hidden="true">${picto(theme.icone, 44)}</span>
         ${etiquetteDispo}
+        ${etiquetteCadeau}
       </div>
 
       <div class="carte-activite__corps">
@@ -396,11 +410,19 @@ function gabaritFormulaire(activite) {
            ${confirmation.minimum} participants, elle peut être annulée ou reportée.
          </p>`;
 
+  const noteCadeau = activite.cadeau
+    ? `<p class="note-confirmation note-confirmation--cadeau">
+         ${picto(ICONE_CADEAU, 15)}
+         ${echapper(activite.cadeau)}
+       </p>`
+    : '';
+
   return `
     <p class="plomb" style="font-size:var(--t-sm);margin-bottom:var(--e-5)">
       ${echapper(activite.resume)}
     </p>
 
+    ${noteCadeau}
     ${noteConfirmation}
 
     <div class="recap">

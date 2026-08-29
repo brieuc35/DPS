@@ -1023,6 +1023,21 @@ select {
   z-index: 2;
 }
 
+/* Le cadeau se pose à droite, en miroir de la disponibilité : les deux
+   coexistent sans jamais se chevaucher. Le détail complet reste dans la
+   modale — ici, un simple repère à remarquer sur la grille. */
+.carte-activite__cadeau {
+  position: absolute;
+  right: var(--e-2);
+  bottom: var(--e-2);
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.92);
+  color: #96650d;
+  cursor: help;
+}
+
+[data-theme="dark"] .carte-activite__cadeau { color: #7a5209; }
+
 .etiquette-flottante {
   padding: 0.25em 0.6em;
   border-radius: var(--r-full);
@@ -1145,6 +1160,19 @@ select {
 .note-confirmation--acquise {
   background: var(--accent-doux);
   color: var(--accent-fort);
+}
+
+/* Ton doré, à part du reste : c'est un bonus, pas une condition — la couleur
+   ne doit pas se confondre avec les notes qui portent sur la garantie de la
+   sortie elle-même. */
+.note-confirmation--cadeau {
+  background: #fbecc7;
+  color: #7a5209;
+}
+
+[data-theme="dark"] .note-confirmation--cadeau {
+  background: #3d2e0c;
+  color: #f0c96a;
 }
 
 /* Le pied ne porte plus que l'action, désormais pleine largeur : le tarif

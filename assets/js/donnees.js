@@ -48,6 +48,7 @@ const ACTIVITES = [
     placesPrises: 0,
     niveau: 'Accessible à tous',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar' },
+    cadeau: 'Une réduction pour revivre la descente vous est offerte à la fin de la visite.',
     resume: 'Descente dans une ardoisière et visite guidée du fond.',
     programme: [
       'Accueil du groupe et tour de table',
@@ -70,6 +71,7 @@ const ACTIVITES = [
     placesPrises: 0,
     niveau: 'Débutant bienvenu',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar--prune' },
+    cadeau: 'Une offre pour 4 heures de billard vous est offerte à l’issue de l’initiation.',
     resume: 'Les bases de la queue et du placement, sans aucun prérequis.',
     programme: [
       'Présentation du groupe autour des tables',
@@ -92,6 +94,7 @@ const ACTIVITES = [
     placesPrises: 0,
     niveau: 'Accessible à tous',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar--terre' },
+    cadeau: 'Une bouteille de cidre vous est offerte à l’issue de la visite.',
     resume: 'De la pomme à la bouteille, les coulisses de la cidrerie.',
     programme: [
       'Accueil et présentation du site',
