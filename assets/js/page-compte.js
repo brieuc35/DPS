@@ -281,6 +281,54 @@ function initConnexion() {
     notifier(`Content de vous revoir, ${resultat.compte.prenom}`);
     window.setTimeout(() => allerVers('chat'), 500);
   });
+
+  initMotDePasseOublie(formulaire);
+}
+
+/**
+ * Envoie un lien de réinitialisation vers l'adresse déjà saisie. La réponse
+ * ne distingue jamais une adresse inconnue d'un envoi réussi — même principe
+ * que l'erreur de connexion plus haut, qui ne dit pas non plus laquelle des
+ * deux informations est fausse.
+ */
+function initMotDePasseOublie(formulaireConnexion) {
+  const bouton = $('[data-mot-de-passe-oublie]', formulaireConnexion);
+  const confirmation = $('[data-confirmation-reinitialisation]', formulaireConnexion);
+  if (!bouton) return;
+
+  bouton.addEventListener('click', async () => {
+    const email = formulaireConnexion.elements.email;
+
+    if (!marquer(email, EMAIL_VALIDE.test(email.value.trim()))) {
+      $('[data-erreur-email]').textContent = 'Indiquez votre adresse e-mail pour recevoir le lien.';
+      marquer(email, false);
+      email.focus();
+      return;
+    }
+
+    bouton.disabled = true;
+    const resultat = await Comptes.reinitialiserMotDePasse(email.value);
+    bouton.disabled = false;
+
+    if (!resultat.ok && resultat.motif === 'indisponible-local') {
+      notifier('Indisponible dans cet aperçu hors ligne : aucun e-mail ne peut être envoyé ici.');
+      return;
+    }
+
+    if (!resultat.ok && !signalerIncident(resultat.motif)) {
+      notifier('Envoi impossible pour le moment. Réessayez dans un instant.');
+      return;
+    }
+
+    if (!resultat.ok) return;
+
+    const message = `Si un compte existe pour ${email.value.trim()}, un lien de réinitialisation vient d’y être envoyé.`;
+    notifier(message);
+    if (confirmation) {
+      confirmation.textContent = message;
+      confirmation.hidden = false;
+    }
+  });
 }
 
 function initInscription() {

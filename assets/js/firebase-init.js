@@ -27,6 +27,7 @@ import {
   EmailAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   signOut,
   updateProfile,
   onAuthStateChanged,
@@ -137,6 +138,23 @@ try {
         const { user } = await signInWithEmailAndPassword(auth, email.trim(), motDePasse);
         return { ok: true, compte: versProfil(user) };
       } catch (erreur) {
+        return { ok: false, motif: motifDe(erreur) };
+      }
+    },
+
+    /**
+     * Envoie un lien de réinitialisation. Réussit aussi, à dessein, quand
+     * l'adresse ne correspond à aucun compte : la réponse ne doit pas
+     * permettre de deviner qui est membre du site — le même principe que le
+     * message de connexion, qui ne dit jamais si c'est l'adresse ou le mot
+     * de passe qui cloche.
+     */
+    async reinitialiserMotDePasse(email) {
+      try {
+        await sendPasswordResetEmail(auth, email.trim());
+        return { ok: true };
+      } catch (erreur) {
+        if (erreur && erreur.code === 'auth/user-not-found') return { ok: true };
         return { ok: false, motif: motifDe(erreur) };
       }
     },

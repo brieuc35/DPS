@@ -197,7 +197,7 @@ function gabaritCarte(activite) {
 function activitesFiltrees() {
   const requete = etatFiltres.recherche.trim().toLowerCase();
 
-  const resultat = ACTIVITES.filter((activite) => {
+  const resultat = activitesAvenir().filter((activite) => {
     if (!requete) return true;
 
     const champs = [
@@ -244,14 +244,26 @@ function rendreGrille() {
     const liste = resultats.slice(0, limite);
 
     if (!liste.length) {
-      grille.innerHTML = `
-        <div class="message-vide">
-          <span class="message-vide__picto" aria-hidden="true">${picto('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>', 34)}</span>
-          <h3>Rien ne correspond à votre recherche</h3>
-          <p>Essayez d’autres mots-clés : une ville, une envie, un type de sortie.</p>
-          <button type="button" class="btn btn--fantome" data-reinitialiser>Effacer la recherche</button>
-        </div>
-      `;
+      // Deux raisons bien différentes à une grille vide : soit la recherche
+      // ne correspond à rien, soit aucune sortie à venir n'est au catalogue
+      // pour l'instant — ce n'est pas un problème de recherche, et le message
+      // ne doit pas laisser croire qu'il suffirait de l'effacer.
+      grille.innerHTML = !activitesAvenir().length
+        ? `
+          <div class="message-vide">
+            <span class="message-vide__picto" aria-hidden="true">${picto('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>', 34)}</span>
+            <h3>Aucune sortie n’est prévue pour l’instant</h3>
+            <p>Le programme s’étoffera au fil des lieux et des savoir-faire que nous rencontrons. Revenez bientôt.</p>
+          </div>
+        `
+        : `
+          <div class="message-vide">
+            <span class="message-vide__picto" aria-hidden="true">${picto('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>', 34)}</span>
+            <h3>Rien ne correspond à votre recherche</h3>
+            <p>Essayez d’autres mots-clés : une ville, une envie, un type de sortie.</p>
+            <button type="button" class="btn btn--fantome" data-reinitialiser>Effacer la recherche</button>
+          </div>
+        `;
       return;
     }
 
@@ -504,7 +516,10 @@ function libellePlaces(nombre) {
 
 function ouvrirModale(activiteId, declencheur) {
   const activite = ACTIVITES.find((element) => element.id === activiteId);
-  if (!activite || placesRestantes(activite) === 0) return;
+  // Le garde-fou vaut aussi pour une sortie passée : la grille et le
+  // calendrier ne l'affichent plus, mais un lien resté ailleurs — une
+  // annonce dans le fil, une page mise en favori — pourrait encore y mener.
+  if (!activite || activiteEstPassee(activite) || placesRestantes(activite) === 0) return;
 
   creerModale();
   activiteEnCours = activite;
@@ -749,7 +764,9 @@ async function synchroniserAnnonces() {
   const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
   if (!distant || !compte) return;
 
-  for (const activite of ACTIVITES) {
+  // Une sortie passée n'a plus rien d'une « nouvelle sortie ouverte » — pas
+  // la peine de l'annoncer, même une seule fois.
+  for (const activite of activitesAvenir()) {
     await distant.annoncerActivite(
       activite.id,
       {
@@ -774,9 +791,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!grilles.length) return;
 
   // Compteurs rédactionnels (« Voir les N activités »), tenus à jour depuis
-  // les données pour ne pas se désynchroniser du catalogue.
+  // les données pour ne pas se désynchroniser du catalogue — et réduits aux
+  // sorties à venir, sinon le chiffre resterait vrai un temps puis mentirait
+  // dès la première date dépassée.
   $$('[data-total-activites]').forEach((element) => {
-    element.textContent = ACTIVITES.length;
+    element.textContent = activitesAvenir().length;
   });
 
   initFiltres();

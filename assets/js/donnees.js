@@ -131,6 +131,21 @@ const ACTIVITES = [
   },
 ];
 
+/**
+ * Une activité est passée dès l'heure de son début — une sortie ne se réserve
+ * pas après coup. Fonction partagée par la grille, le calendrier et le pont
+ * vers le fil de la communauté : les trois doivent s'accorder sur ce qui
+ * compte encore comme « à venir ».
+ */
+function activiteEstPassee(activite) {
+  return new Date(activite.date).getTime() < Date.now();
+}
+
+/** Le catalogue, réduit aux sorties qui n'ont pas encore eu lieu. */
+function activitesAvenir() {
+  return ACTIVITES.filter((activite) => !activiteEstPassee(activite));
+}
+
 /* Cercles de discussion du réseau social. */
 const CERCLES = [
   { id: 'tous',        nom: 'Tout le fil',          icone: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/>' },

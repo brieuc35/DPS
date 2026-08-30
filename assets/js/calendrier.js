@@ -47,7 +47,10 @@ function calRangDansLaSemaine(date) {
 function calActivitesParJour() {
   const parJour = new Map();
 
-  ACTIVITES.forEach((activite) => {
+  // Le calendrier reste tourné vers ce qui reste à vivre, comme la grille de
+  // cartes : une case pour le 15 août affichée « 0 / 12 participants » un
+  // 30 août n'aurait plus rien d'une invitation à réserver.
+  activitesAvenir().forEach((activite) => {
     const date = new Date(activite.date);
     if (Number.isNaN(date.getTime())) return;
 

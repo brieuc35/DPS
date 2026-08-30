@@ -119,6 +119,16 @@ const Local = {
     Stockage.effacer(CLE_SESSION);
   },
 
+  /**
+   * Un compte local n'a pas d'adresse à laquelle envoyer quoi que ce soit —
+   * il ne quitte jamais ce navigateur. La réinitialisation n'a donc de sens
+   * qu'une fois Firestore là ; ce repli le dit sans détour plutôt que de
+   * feindre un envoi qui ne partira jamais.
+   */
+  async reinitialiserMotDePasse() {
+    return { ok: false, motif: 'indisponible-local' };
+  },
+
   /** Efface le compte et tout ce que ce navigateur garde de lui. */
   async supprimer(motDePasse) {
     const compte = this.courant();
@@ -176,6 +186,11 @@ const Comptes = {
   async deconnecter() {
     const distant = pont();
     return distant ? distant.deconnecter() : Local.deconnecter();
+  },
+
+  async reinitialiserMotDePasse(email) {
+    const distant = pont();
+    return distant ? distant.reinitialiserMotDePasse(email) : Local.reinitialiserMotDePasse(email);
   },
 
   /**
