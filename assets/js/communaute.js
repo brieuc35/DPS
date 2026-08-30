@@ -306,6 +306,35 @@ function rendreCercles() {
   }).join('');
 }
 
+/**
+ * Annonce discrètement l'arrivée de nouvelles publications — les siennes
+ * exceptées, déjà confirmées par le composeur au moment de l'envoi.
+ * Un seul toast à la fois (`notifier`) : plusieurs arrivées d'un coup se
+ * résument en un seul message plutôt que de se chasser l'une l'autre.
+ */
+function signalerNouvellesPublications(publications, changements) {
+  const identite = identiteRequise();
+
+  const nouvellesDautrui = changements
+    .filter((changement) => changement.type === 'added')
+    .map((changement) => publications.find((publication) => publication.id === changement.id))
+    .filter((publication) => publication && (!identite || publication.auteurId !== identite.id));
+
+  if (!nouvellesDautrui.length) return;
+
+  if (nouvellesDautrui.length === 1) {
+    const [publication] = nouvellesDautrui;
+    notifier(
+      publication.badge === 'Annonce'
+        ? 'Une nouvelle sortie vient d’être annoncée dans le fil'
+        : `Nouveau message de ${publication.auteur} dans le fil`
+    );
+    return;
+  }
+
+  notifier(`${nouvellesDautrui.length} nouveaux messages dans le fil`);
+}
+
 /* ==========================================================================
    Abonnements Firestore
    ========================================================================== */
@@ -334,6 +363,11 @@ function suivreFil() {
       changements.forEach((changement) => rafraichirCompteurSoutiens(changement.id));
       return;
     }
+
+    // Pas au tout premier chargement — ce serait annoncer comme neuf tout
+    // l'historique du fil. Pas non plus pour ses propres publications : le
+    // composeur le confirme déjà à l'instant où on l'envoie.
+    if (!premierChargement) signalerNouvellesPublications(publications, changements);
 
     rendreFil();
   });
