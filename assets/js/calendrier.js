@@ -51,6 +51,12 @@ function calActivitesParJour() {
   // cartes : une case pour le 15 août affichée « 0 / 12 participants » un
   // 30 août n'aurait plus rien d'une invitation à réserver.
   activitesAvenir().forEach((activite) => {
+    // Une sortie sans date n'a pas de case où se poser. Le garde-fou est
+    // nécessaire : `new Date(null)` ne vaut pas NaN mais le 1ᵉʳ janvier 1970,
+    // et la sortie irait donc s'échouer dans un mois que personne ne consulte
+    // au lieu de disparaître proprement.
+    if (!activiteEstDatee(activite)) return;
+
     const date = new Date(activite.date);
     if (Number.isNaN(date.getTime())) return;
 
@@ -202,11 +208,22 @@ function rendreCalendrier() {
 
   // Une grille de cases vides ne dit pas d'elle-même qu'il n'y a rien de
   // prévu : elle peut aussi bien passer pour un affichage en défaut.
+  //
+  // Et un calendrier vide alors que la grille montre quatre sorties se lit
+  // comme une contradiction. Quand des sorties attendent leur date, on le dit
+  // ici plutôt que de laisser le visiteur conclure qu'il n'y a rien.
+  const sansDate = activitesAvenir().filter((activite) => !activiteEstDatee(activite)).length;
   const note = calMoisOccupe(parJour)
     ? ''
-    : `<p class="cal-vide">Aucune sortie proposée en ${echapper(
+    : `<p class="cal-vide">Aucune sortie n’est calée en ${echapper(
         calNomDuMois(etatCalendrier.mois).toLowerCase()
-      )} pour l’instant.</p>`;
+      )}.${
+        sansDate
+          ? ` ${sansDate} sortie${sansDate > 1 ? 's sont' : ' est'} proposée${
+              sansDate > 1 ? 's' : ''
+            } sans date fixée — <a href="activites.html">voir le programme</a>.`
+          : ''
+      }</p>`;
 
   conteneurs.forEach((conteneur) => {
     conteneur.innerHTML = `

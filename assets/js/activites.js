@@ -142,6 +142,26 @@ function etatConfirmation(activite, occupees) {
   };
 }
 
+const ICONE_AGENDA =
+  '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>';
+
+/* Une horloge plutôt qu'un agenda quand la date n'est pas fixée : l'agenda
+   promet une case dans un mois, l'horloge dit seulement que ça viendra. */
+const ICONE_ATTENTE =
+  '<circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3 2"/>';
+
+/**
+ * La ligne de date d'une carte. Une sortie programmée annonce son jour ; une
+ * sortie qui attend encore sa date le dit, plutôt que d'afficher un blanc ou
+ * — pire — une date de remplissage.
+ */
+function ligneDate(activite) {
+  if (activiteEstDatee(activite)) {
+    return `<span>${picto(ICONE_AGENDA, 14)} ${formaterDateCourte(activite.date)}</span>`;
+  }
+  return `<span class="carte-activite__attente">${picto(ICONE_ATTENTE, 14)} Date à venir</span>`;
+}
+
 function gabaritCarte(activite) {
   const theme = trouverThematique(activite.thematique);
   const restantes = placesRestantes(activite);
@@ -188,7 +208,7 @@ function gabaritCarte(activite) {
       <div class="carte-activite__corps">
         <div class="carte-activite__meta">
           <span>${picto('<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>', 14)} ${echapper(ville(activite.lieu))}</span>
-          <span>${picto('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>', 14)} ${formaterDateCourte(activite.date)}</span>
+          ${ligneDate(activite)}
         </div>
 
         <h3 class="carte-activite__titre">${echapper(activite.titre)}</h3>
@@ -220,7 +240,7 @@ function gabaritCarte(activite) {
                   class="btn btn--bloc ${complet ? 'btn--fantome' : 'btn--primaire'}"
                   data-reserver="${activite.id}"
                   ${complet ? 'disabled' : ''}>
-            ${complet ? 'Complet' : 'Je participe'}
+            ${complet ? 'Complet' : (activiteEstDatee(activite) ? 'Je participe' : 'Ça m’intéresse')}
           </button>
         </div>
       </div>
@@ -248,7 +268,15 @@ function activitesFiltrees() {
   });
 
   const tris = {
-    date: (a, b) => new Date(a.date) - new Date(b.date),
+    // Les sorties déjà calées d'abord, dans l'ordre du calendrier ; celles
+    // qui attendent leur date ensuite, par ordre alphabétique. Sans ce
+    // traitement, `new Date(null)` les daterait de 1970 et les placerait en
+    // tête — juste avant des sorties qui, elles, ont un jour et une heure.
+    date: (a, b) => {
+      if (activiteEstDatee(a) !== activiteEstDatee(b)) return activiteEstDatee(a) ? -1 : 1;
+      if (!activiteEstDatee(a)) return a.titre.localeCompare(b.titre, 'fr');
+      return new Date(a.date) - new Date(b.date);
+    },
     prix: (a, b) => a.prix - b.prix,
     places: (a, b) => placesRestantes(b) - placesRestantes(a),
   };
@@ -567,7 +595,9 @@ function ouvrirModale(activiteId, declencheur) {
   $('#modale-titre', modale).textContent = activite.titre;
   $('[data-modale-resume]', modale).innerHTML = `
     <span>${picto('<path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/>', 14)} ${echapper(activite.lieu)}</span>
-    <span>${picto('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/>', 14)} ${formaterDate(activite.date)}</span>
+    <span>${activiteEstDatee(activite)
+      ? picto(ICONE_AGENDA, 14) + ' ' + formaterDate(activite.date)
+      : picto(ICONE_ATTENTE, 14) + ' Prochaine date à venir'}</span>
     <span>${picto('<path d="M16 20v-1.5a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4V20"/><circle cx="9.5" cy="7.5" r="3.2"/><path d="M21 20v-1.5a4 4 0 0 0-3-3.8"/><path d="M16 4.3a3.2 3.2 0 0 1 0 6.2"/>', 14)} ${libellePlaces(placesRestantes(activite))}</span>
   `;
   $('[data-modale-corps]', modale).innerHTML = gabaritFormulaire(activite);
@@ -755,11 +785,16 @@ async function enregistrerReservation(activite, participant) {
   $('[data-modale-corps]', modale).innerHTML = `
     <div class="confirmation">
       <div class="confirmation__pastille" aria-hidden="true">✓</div>
-      <h3>C’est réservé, ${echapper(participant.prenom)} !</h3>
+      <h3>${activiteEstDatee(activite)
+        ? `C’est réservé, ${echapper(participant.prenom)} !`
+        : `C’est noté, ${echapper(participant.prenom)} !`}</h3>
       <p style="color:var(--texte-doux)">
-        Votre place pour <strong>${echapper(activite.titre)}</strong> est confirmée
-        le ${formaterDate(activite.date)}.<br>
-        Un récapitulatif part vers ${echapper(participant.email)}.
+        ${activiteEstDatee(activite)
+          ? `Votre place pour <strong>${echapper(activite.titre)}</strong> est confirmée
+             le ${formaterDate(activite.date)}.`
+          : `Votre place pour <strong>${echapper(activite.titre)}</strong> est retenue.
+             La date n’est pas encore calée avec le lieu : elle le sera dès que le
+             groupe sera au complet, et vous la recevrez avant tout le monde.`}
       </p>
 
       <div class="recap" style="text-align:left">
@@ -809,7 +844,9 @@ async function synchroniserAnnonces() {
         initiales: 'DP',
         couleur: 'avatar',
         cercle: activite.thematique,
-        contenu: `Nouvelle sortie ouverte : ${activite.titre}, le ${formaterDate(activite.date)}. ${activite.resume}`,
+        contenu: activiteEstDatee(activite)
+          ? `Nouvelle sortie ouverte : ${activite.titre}, le ${formaterDate(activite.date)}. ${activite.resume}`
+          : `Nouvelle sortie proposée : ${activite.titre}. ${activite.resume} La date sera fixée dès que le groupe sera formé.`,
         badge: 'Annonce',
       },
       compte.id

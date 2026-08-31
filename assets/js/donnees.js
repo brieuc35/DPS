@@ -63,7 +63,22 @@ THEMATIQUES.forEach((theme) => { theme.degrade = degradeThematique(theme); });
 
    Pour en ajouter une : déposer le fichier dans `assets/img/activites/` et
    renseigner `photo: 'assets/img/activites/mine-bleue.jpg'`. Cadrage 3:2,
-   1200 px de large environ. Rien d'autre à changer. */
+   1200 px de large environ. Rien d'autre à changer.
+
+   `date` vaut `null` tant que la sortie n'est pas calée avec le lieu. Les
+   quatre sorties ci-dessous portaient des dates d'août 2026, dépassées et
+   jamais confirmées avec les partenaires ; les remplacer par d'autres dates
+   aurait fait annoncer au site des rendez-vous fermes qui n'existent pas.
+   Sans date, la carte affiche « Prochaine date à venir » et propose de
+   marquer son intérêt plutôt que de réserver — ce qui rejoint le seuil des
+   trois participants : on fixe la date quand on sait qui vient.
+
+   Pour programmer une sortie, il suffit de renseigner l'horodatage :
+
+     date: '2026-10-04T14:00',
+
+   La carte redevient d'elle-même une réservation datée, et la sortie
+   reparaît dans le calendrier. */
 const ACTIVITES = [
   {
     id: 'mine-bleue',
@@ -71,7 +86,7 @@ const ACTIVITES = [
     thematique: 'patrimoine',
     photo: null,
     lieu: 'Segré-en-Anjou, Maine-et-Loire',
-    date: '2026-08-15T14:00',
+    date: null,
     duree: '2 h',
     prix: 15,
     placesTotal: 12,
@@ -95,7 +110,7 @@ const ACTIVITES = [
     thematique: 'loisir',
     photo: null,
     lieu: 'Vitré, Ille-et-Vilaine',
-    date: '2026-08-16T18:30',
+    date: null,
     duree: '2 h',
     prix: 8,
     placesTotal: 12,
@@ -119,7 +134,7 @@ const ACTIVITES = [
     thematique: 'entreprise',
     photo: null,
     lieu: 'Domagné, Ille-et-Vilaine',
-    date: '2026-08-17T10:00',
+    date: null,
     duree: '2 h',
     prix: 10,
     placesTotal: 12,
@@ -143,7 +158,7 @@ const ACTIVITES = [
     thematique: 'brasserie',
     photo: null,
     lieu: 'Argentré-du-Plessis, Ille-et-Vilaine',
-    date: '2026-08-18T18:00',
+    date: null,
     duree: '2 h',
     prix: 10,
     placesTotal: 12,
@@ -163,12 +178,27 @@ const ACTIVITES = [
 ];
 
 /**
+ * Une sortie dont la date est fixée : `date` porte alors un horodatage ISO.
+ * Tant qu'elle vaut `null`, la sortie est proposée mais pas encore
+ * programmée — un état courant pour un collectif qui cale ses dates une fois
+ * qu'il sait combien de personnes viennent.
+ */
+function activiteEstDatee(activite) {
+  return Boolean(activite.date);
+}
+
+/**
  * Une activité est passée dès l'heure de son début — une sortie ne se réserve
  * pas après coup. Fonction partagée par la grille, le calendrier et le pont
  * vers le fil de la communauté : les trois doivent s'accorder sur ce qui
  * compte encore comme « à venir ».
+ *
+ * Une sortie sans date n'est jamais passée : elle n'a pas encore eu lieu,
+ * par définition. Sans ce cas particulier, `new Date(null)` vaut le 1ᵉʳ
+ * janvier 1970 et le filtre l'écarterait toutes.
  */
 function activiteEstPassee(activite) {
+  if (!activiteEstDatee(activite)) return false;
   return new Date(activite.date).getTime() < Date.now();
 }
 

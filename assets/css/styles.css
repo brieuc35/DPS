@@ -1184,6 +1184,15 @@ select {
   gap: 0.35em;
 }
 
+/* « Date à venir » n'est pas une donnée manquante mais un état de la sortie :
+   il se lit donc comme les autres méta, en un peu plus affirmé. Le
+   pictogramme prend l'orange du sigle — une touche de la taille d'une icône,
+   assez pour attirer l'œil sans colorer le texte, qui à cette taille ne
+   passerait aucun seuil de contraste dans cette teinte. */
+.carte-activite__attente { font-weight: 600; }
+.carte-activite__attente .picto { color: var(--dps-orange); }
+[data-theme="dark"] .carte-activite__attente .picto { color: #feaf73; }
+
 .carte-activite__titre {
   font-size: var(--t-md);
   line-height: 1.22;
