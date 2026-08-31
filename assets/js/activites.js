@@ -24,6 +24,40 @@ const ICONE_CADEAU =
 const ICONE_CADENAS =
   '<rect x="5" y="11" width="14" height="9" rx="1.6"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/>';
 
+/**
+ * La couverture d'une carte.
+ *
+ * Une photographie quand il y en a une : c'est elle qui donne envie, et la
+ * charte lui demande de peser autant qu'une petite affiche.
+ *
+ * Sinon, le motif de la marque — la porte du D, son soleil et sa volée de
+ * marches — détouré sur la couleur de la thématique. Ce n'est pas un
+ * remplissage : « l'activité est la porte d'entrée » est la phrase qui définit
+ * DPS, et le sigle la dessine déjà. Un substitut assumé vaut mieux qu'une
+ * image de banque qui ferait croire au lieu.
+ */
+function couvertureDe(activite, theme) {
+  if (activite.photo) {
+    return `<img class="carte-activite__photo" src="${echapper(activite.photo)}"
+                 alt="" width="600" height="400" loading="lazy" decoding="async">`;
+  }
+
+  // Tout tient dans un seul SVG — porte, marches et pictogramme imbriqué —
+  // pour que les trois restent alignés quelle que soit la largeur de la
+  // carte. Deux éléments superposés en CSS auraient dérivé l'un par rapport
+  // à l'autre dès que le rapport de la vignette change.
+  return `
+    <span class="carte-activite__motif" aria-hidden="true" style="background:${theme.degrade}">
+      <svg viewBox="0 0 120 80" preserveAspectRatio="xMidYMid meet" fill="none">
+        <path d="M22 80v-7h9v7Zm9 0V69h9v11Zm9 0V64h6v16Z" fill="rgba(255,255,255,.1)"/>
+        <path d="M46 80V50a14 14 0 0 1 28 0v30Z" fill="rgba(255,255,255,.15)"/>
+        <svg x="48" y="38" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="rgba(255,255,255,.85)" stroke-width="1.6"
+             stroke-linecap="round" stroke-linejoin="round">${theme.icone}</svg>
+      </svg>
+    </span>`;
+}
+
 /* ==========================================================================
    État
    ========================================================================== */
@@ -43,7 +77,8 @@ function trouverThematique(id) {
       id,
       nom: 'Activité',
       icone: '',
-      degrade: 'linear-gradient(150deg, #6b7f8c, #2f3f4a)',
+      couleur: '#4d2f3f',
+      degrade: 'linear-gradient(155deg, #4d2f3f, #2a1622)',
     }
   );
 }
@@ -140,12 +175,12 @@ function gabaritCarte(activite) {
 
   return `
     <article class="carte-activite apparait" data-activite="${activite.id}">
-      <div class="carte-activite__visuel" style="background:${theme.degrade}">
+      <div class="carte-activite__visuel">
+        ${couvertureDe(activite, theme)}
         <div class="carte-activite__etiquettes">
           <span class="etiquette-flottante">${echapper(theme.nom)}</span>
           <span class="etiquette-flottante etiquette-flottante--prix">${activite.prix} € <small>/ pers.</small></span>
         </div>
-        <span class="carte-activite__picto" aria-hidden="true">${picto(theme.icone, 44)}</span>
         ${etiquetteDispo}
         ${etiquetteCadeau}
       </div>

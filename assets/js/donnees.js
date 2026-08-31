@@ -10,16 +10,31 @@
 
    Les pictogrammes sont des tracés, pas des émojis : un émoji change de dessin
    selon le système, jure avec les lettres géométriques du sigle, et donne au
-   site un air de conversation plutôt que de proposition. */
+   site un air de conversation plutôt que de proposition.
+
+   `couleur` est prélevée sur le logo, sans retouche. Chaque thématique en
+   reçoit **une seule** : un dégradé de deux teintes différentes par carte
+   rendait la grille arc-en-ciel, ce qui est exactement ce que la charte
+   cherche à éviter. Le dégradé qui suit part donc de cette couleur et
+   descend vers elle-même assombrie — une profondeur, pas un second ton. */
 const THEMATIQUES = [
-  { id: 'patrimoine', nom: 'Patrimoine',            icone: '<path d="M3 21l7-7"/><path d="M13 11a9 9 0 0 1 8-5 14 14 0 0 0-8 5Z"/><path d="M13 11a9 9 0 0 0-5 8 14 14 0 0 1 5-8Z"/><path d="M13 11l3 3"/>', degrade: 'linear-gradient(150deg, #5fd3e0, #2f6fe0)' },
-  { id: 'loisir',     nom: 'Jeux & loisirs',        icone: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/>', degrade: 'linear-gradient(150deg, #7c4df0, #3b39c4)' },
-  { id: 'entreprise', nom: 'Visites d’entreprise',  icone: '<path d="M3 21h18"/><path d="M4 21V10l6 3.5V10l6 3.5V6h4v15"/><path d="M7 21v-3.5"/>', degrade: 'linear-gradient(150deg, #f7b267, #e8556d)' },
-  { id: 'brasserie',  nom: 'Brasseries',            icone: '<path d="M6 8h9v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z"/><path d="M15 11h2.5a2.5 2.5 0 0 1 0 5H15"/><path d="M6 8c0-2 1.4-3 3-3 .4-1.2 1.5-2 2.8-2 1.4 0 2.6 1 2.9 2.3"/>', degrade: 'linear-gradient(150deg, #f2718c, #b03fd0)' },
+  { id: 'patrimoine', nom: 'Patrimoine',            couleur: '#065c90', icone: '<path d="M3 21l7-7"/><path d="M13 11a9 9 0 0 1 8-5 14 14 0 0 0-8 5Z"/><path d="M13 11a9 9 0 0 0-5 8 14 14 0 0 1 5-8Z"/><path d="M13 11l3 3"/>' },
+  { id: 'loisir',     nom: 'Jeux & loisirs',        couleur: '#3550a7', icone: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/>' },
+  { id: 'entreprise', nom: 'Visites d’entreprise',  couleur: '#fe6d01', icone: '<path d="M3 21h18"/><path d="M4 21V10l6 3.5V10l6 3.5V6h4v15"/><path d="M7 21v-3.5"/>' },
+  { id: 'brasserie',  nom: 'Brasseries',            couleur: '#f45791', icone: '<path d="M6 8h9v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2Z"/><path d="M15 11h2.5a2.5 2.5 0 0 1 0 5H15"/><path d="M6 8c0-2 1.4-3 3-3 .4-1.2 1.5-2 2.8-2 1.4 0 2.6 1 2.9 2.3"/>' },
   // Alvéole de ruche : un hexagone, pas une abeille — le même parti pris que
   // les autres pictogrammes, une forme plutôt qu'une figuration.
-  { id: 'nature',     nom: 'Nature & terroir',       icone: '<path d="M12 3 19.8 7.5 19.8 16.5 12 21 4.2 16.5 4.2 7.5Z"/>', degrade: 'linear-gradient(150deg, #f0b429, #c17817)' },
+  { id: 'nature',     nom: 'Nature & terroir',      couleur: '#40848e', icone: '<path d="M12 3 19.8 7.5 19.8 16.5 12 21 4.2 16.5 4.2 7.5Z"/>' },
 ];
+
+/* Le dégradé d'une thématique : sa couleur, puis la même assombrie de 45 %.
+   Calculé plutôt qu'écrit à la main, pour que changer `couleur` suffise. */
+function degradeThematique(theme) {
+  return `linear-gradient(155deg, ${theme.couleur}, ` +
+    `color-mix(in srgb, ${theme.couleur} 55%, #2a1622))`;
+}
+
+THEMATIQUES.forEach((theme) => { theme.degrade = degradeThematique(theme); });
 
 /* Activités proposées.
 
@@ -36,12 +51,25 @@ const THEMATIQUES = [
 
    Les programmes et prestations ci-dessous sont en revanche des textes
    d'attente : ils restent volontairement génériques tant qu'ils n'ont pas été
-   validés avec chaque partenaire. */
+   validés avec chaque partenaire.
+
+   `photo` est le champ que la direction artistique attend. Une activité se
+   choisit sur une image avant de se choisir sur un texte, et la charte
+   demande que la photographie pèse presque autant qu'une affiche. Aucune
+   n'est renseignée ici : montrer une image de banque d'un lieu réel — la
+   Mine Bleue, la cidrerie — reviendrait à faire croire à une visite qu'on
+   n'a pas photographiée. Tant que le champ vaut `null`, la carte affiche le
+   motif de la marque, qui ne prétend rien.
+
+   Pour en ajouter une : déposer le fichier dans `assets/img/activites/` et
+   renseigner `photo: 'assets/img/activites/mine-bleue.jpg'`. Cadrage 3:2,
+   1200 px de large environ. Rien d'autre à changer. */
 const ACTIVITES = [
   {
     id: 'mine-bleue',
     titre: 'La Mine Bleue',
     thematique: 'patrimoine',
+    photo: null,
     lieu: 'Segré-en-Anjou, Maine-et-Loire',
     date: '2026-08-15T14:00',
     duree: '2 h',
@@ -65,6 +93,7 @@ const ACTIVITES = [
     id: 'initiation-billard',
     titre: 'Initiation au billard',
     thematique: 'loisir',
+    photo: null,
     lieu: 'Vitré, Ille-et-Vilaine',
     date: '2026-08-16T18:30',
     duree: '2 h',
@@ -88,6 +117,7 @@ const ACTIVITES = [
     id: 'cidrerie-loic-raison',
     titre: 'Usine cidrerie Loïc Raison',
     thematique: 'entreprise',
+    photo: null,
     lieu: 'Domagné, Ille-et-Vilaine',
     date: '2026-08-17T10:00',
     duree: '2 h',
@@ -111,6 +141,7 @@ const ACTIVITES = [
     id: 'brasserie-athanor',
     titre: 'Brasserie Athanor',
     thematique: 'brasserie',
+    photo: null,
     lieu: 'Argentré-du-Plessis, Ille-et-Vilaine',
     date: '2026-08-18T18:00',
     duree: '2 h',

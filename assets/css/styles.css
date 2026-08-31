@@ -2,11 +2,23 @@
    DPS Collective — Découvrir, Partager, Simplement
    Feuille de styles principale
    --------------------------------------------------------------------------
-   Direction artistique dérivée du logo : sigle en dégradé du spectre
-   (ambre → magenta → violet → cyan), lettres géométriques, porte ouverte
-   comme motif de marque. Les fonds sont volontairement chauds — ivoire le
-   jour, brun profond le soir — pour qu'on s'y sente accueilli plutôt
-   qu'impressionné.
+   Direction artistique : le contraste entre le sigle et l'interface.
+
+   Le logo est franchement coloré — sept teintes relevées sur le fichier
+   lui-même, de l'orange du D au bleu du S. L'interface, elle, se tait :
+   fond ivoire à peine chaud, encre prune presque noire, et les couleurs du
+   sigle réservées aux touches — pastilles, filets, lavis, couvertures de
+   cartes. Aucune section ne les porte toutes.
+
+   Trois règles en découlent, valables partout dans ce fichier :
+     · le geste principal est en prune, pas en couleur ;
+     · une couleur du sigle ne porte jamais de petit texte — seuls l'indigo
+       et le bleu atteignent 4,5:1 sur l'ivoire, les autres servent en aplat ;
+     · la photographie prime sur l'ornement : quand une image existe, elle
+       occupe la place, et le motif de la porte ne la remplace qu'à défaut.
+
+   Le thème sombre n'est pas une seconde charte : c'est la même prune, passée
+   de l'encre au papier.
    --------------------------------------------------------------------------
    Sommaire
    0.  Polices
@@ -54,71 +66,95 @@
    ========================================================================== */
 
 :root {
-  /* Spectre de la marque — repris du logo, de la chaleur au froid.
-     C'est l'ordre de lecture du sigle : D ambre, P magenta/violet, S cyan. */
-  --ambre: #f5a65a;
-  --corail: #f2718c;
-  --magenta: #ec4899;
-  --violet: #7c4df0;
-  --indigo: #4f46e5;
-  --bleu: #3b82f6;
-  --cyan: #5fd3e0;
+  /* --- Le spectre du sigle -------------------------------------------------
+     Ces sept valeurs ne sont pas choisies « dans l'esprit » du logo : elles
+     en sont extraites. Le fichier logo.png a été échantillonné pixel par
+     pixel, les pixels ternes et le fond écartés, le reste regroupé par
+     secteur de teinte, et chaque famille représentée par son noyau le plus
+     saturé — la moyenne aurait rendu la boue des dégradés plutôt que leurs
+     ancres. L'ordre ci-dessous est celui de la lecture du sigle, de gauche
+     à droite : le D chaud, le P qui bascule, le S froid.
 
-  /* Le dégradé complet, réservé aux moments forts (sigle, jauges, badges). */
+     Aucune de ces couleurs n'atteint 4,5:1 sur l'ivoire, sauf l'indigo et le
+     bleu. Ce n'est pas un défaut à corriger : c'est ce qui décide de leur
+     emploi. Elles servent en aplat, en lavis, en filet, en pastille — jamais
+     en petit texte coloré. */
+  --dps-orange: #fe6d01;  /* montant gauche du D */
+  --dps-corail: #ff6759;  /* bas du D */
+  --dps-rose: #f45791;    /* haut du D, jonction avec le P */
+  --dps-magenta: #e0539d; /* boucle du P */
+  --dps-indigo: #3550a7;  /* descente du P */
+  --dps-bleu: #065c90;    /* corps du S */
+  --dps-teal: #40848e;    /* crochet haut du S */
+
+  /* Le dégradé complet, réservé aux rares moments où la marque signe. */
   --spectre: linear-gradient(
     120deg,
-    var(--ambre) 0%,
-    var(--magenta) 34%,
-    var(--violet) 62%,
-    var(--cyan) 100%
+    var(--dps-orange) 0%,
+    var(--dps-rose) 36%,
+    var(--dps-indigo) 68%,
+    var(--dps-teal) 100%
   );
 
-  /* Braise — les fonds sombres. Des bruns chauds, presque terre cuite, plutôt
-     qu'un noir bleuté : une pièce éclairée le soir, pas un écran de terminal. */
-  --braise-900: #1c1108;
-  --braise-800: #24160c;
-  --braise-700: #311e12;
+  /* --- Ivoire : la respiration ---------------------------------------------
+     Presque blanc, mais pas blanc. Une pointe de chaleur autour de 38° de
+     teinte, à peine 3 % de saturation : assez pour que la page ne soit pas
+     froide, trop peu pour qu'on pense « beige ». C'est le contrepoint du
+     logo — la couleur est dans le sigle et dans les photos, pas dans le
+     papier. */
+  --ivoire: #f9f6f1;
+  --ivoire-creux: #f2ece4; /* bandes alternées, léger renfoncement */
+  --blanc-chaud: #fffdfa;  /* surfaces posées sur l'ivoire */
 
-  /* Sable — les fonds clairs, franchement tirés vers l'abricot et le pain :
-     c'est là que se joue l'essentiel de la chaleur. Les surfaces restent plus
-     claires que la page, sinon les cartes cesseraient de s'en détacher.
-
-     La page est nettement teintée, la surface à peine : c'est cet écart qui
-     fait la chaleur sans que le texte, lui, se lise sur de la couleur. */
-  --blanc: #fffaf2;
-  --sable-50: #fde7cf;
-  --sable-100: #fadcbc;
-  --sable-200: #eec9a2;
-  --sable-300: #dcac79;
-  --sable-600: #6f5540;
-  --encre: #2b1c11;
+  /* --- Prune : la structure ------------------------------------------------
+     Le marron-violet du site devient une vraie couleur porteuse. Ni noir ni
+     gris : une prune sombre à 325° de teinte, cousine lointaine du rose du
+     sigle. Sur l'ivoire elle donne 15,8:1 — davantage qu'il n'en faut, ce
+     qui laisse la place de l'employer en grandes surfaces sans fatiguer. */
+  --prune-900: #2a1622;
+  --prune-800: #3a2130;
+  --prune-700: #4d2f3f;
+  --prune-400: #6f5462;
+  --prune-100: #e6dcdf;
 
   /* Rôles sémantiques — surchargés en thème sombre */
-  --fond: var(--sable-50);
-  --fond-alt: var(--sable-100);
-  --surface: var(--blanc);
-  --surface-2: var(--sable-100);
-  --bordure: var(--sable-200);
-  --bordure-forte: var(--sable-300);
-  --texte: var(--encre);
-  --texte-doux: var(--sable-600);
-  --texte-inverse: var(--blanc);
-  --primaire: #6b3fe0;
-  --primaire-fort: #5a2fce;
-  --primaire-doux: #efe5f8;
-  --accent: var(--magenta);
-  --accent-fort: #c22472;
-  --accent-doux: #fbe4ee;
+  --fond: var(--ivoire);
+  --fond-alt: var(--ivoire-creux);
+  --surface: var(--blanc-chaud);
+  --surface-2: var(--ivoire-creux);
+  --bordure: #e7ded2;
+  --bordure-forte: #d3c5b4;
+  --texte: var(--prune-900);
+  --texte-doux: var(--prune-400);
+  --texte-inverse: var(--ivoire);
+
+  /* Le geste principal est en prune, pas en couleur : sur une page ivoire,
+     un bouton presque noir est le plus désirable et le plus calme des deux.
+     La couleur, elle, reste disponible pour ce qui doit chanter. */
+  --encre-action: var(--prune-900);
+  --encre-action-fort: var(--prune-800);
+
+  /* La seule couleur du logo qui tienne le petit texte : le bleu du S, à
+     6,6:1. C'est donc lui qui porte les liens, les bordures actives et les
+     anneaux de focus — une couleur de marque, pas un bleu de navigateur. */
+  --primaire: var(--dps-bleu);
+  --primaire-fort: #0a4a74;
+  --primaire-doux: #e4edf1;
+
+  /* L'accent décoratif par défaut. Il ne porte jamais de texte : le texte
+     posé dessus est en prune. */
+  --accent: var(--dps-rose);
+  --accent-fort: #b32a5c;
+  --accent-doux: #f8dde2;
   --sur-accent: #ffffff;
 
-  /* Lueur chaude du haut de page — l'ambre du sigle, à peine dilué. */
-  --halo: #f8c48c;
+  /* Lueur du haut de page — l'orange du D, très dilué. */
+  --halo: #f6dcc4;
 
-  /* Terre brûlée pour les actions irréversibles. Volontairement dans la même
-     famille chaude que le reste : un rouge d'alerte pur jurerait avec le fond
-     crème et dramatiserait plus que nécessaire. */
-  --danger: #a63c24;
-  --danger-doux: #fbe6de;
+  /* Terre brûlée pour les actions irréversibles, cousine du corail du sigle
+     mais assez sombre pour porter du blanc. */
+  --danger: #a83224;
+  --danger-doux: #f7dfd9;
   --sur-danger: #ffffff;
 
   /* Typographie — géométrique, comme les lettres du sigle */
@@ -146,58 +182,72 @@
   --e-8: 4rem;
   --e-9: 6rem;
 
-  /* Rayons & ombres */
-  --r-sm: 8px;
-  --r-md: 14px;
-  --r-lg: 22px;
-  --r-xl: 32px;
+  /* Rayons — resserrés. Les grands arrondis donnent un air d'application ;
+     une page qui veut se lire comme un imprimé garde des angles plus fermes.
+     Le rond intégral reste réservé aux pastilles et aux jauges. */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
   --r-full: 999px;
 
-  /* Ombres teintées de brun : une ombre grise sur un fond crème le grise. */
-  --ombre-sm: 0 1px 2px rgba(88, 54, 26, 0.08),
-    0 2px 6px rgba(88, 54, 26, 0.07);
-  --ombre-md: 0 4px 12px rgba(88, 54, 26, 0.09),
-    0 12px 28px rgba(88, 54, 26, 0.1);
-  --ombre-lg: 0 10px 24px rgba(88, 54, 26, 0.12),
-    0 24px 60px rgba(88, 54, 26, 0.16);
+  /* Ombres teintées de prune, et volontairement discrètes : sur un fond
+     ivoire, ce qui détache une carte c'est son filet et le blanc qui
+     l'entoure, pas un halo sous elle. Une ombre grise, en plus, grise le
+     fond qu'elle touche. */
+  --ombre-sm: 0 1px 2px rgba(42, 22, 34, 0.05),
+    0 1px 3px rgba(42, 22, 34, 0.04);
+  --ombre-md: 0 2px 6px rgba(42, 22, 34, 0.06),
+    0 8px 20px rgba(42, 22, 34, 0.06);
+  --ombre-lg: 0 6px 16px rgba(42, 22, 34, 0.08),
+    0 20px 48px rgba(42, 22, 34, 0.1);
 
   --largeur-max: 1180px;
   --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
 
 }
 
-/* Thème sombre — le monde d'origine du logo, activé par data-theme sur <html>.
-   Réchauffé lui aussi : les gris bleutés deviennent des bruns, les couleurs du
-   spectre restent éclaircies faute de quoi elles perdraient trop de contraste
-   sur un fond aussi profond. */
-[data-theme="dark"] {
-  --fond: var(--braise-900);
-  --fond-alt: var(--braise-800);
-  --surface: #2a1a0f;
-  --surface-2: var(--braise-700);
-  --bordure: #45301d;
-  --bordure-forte: #5d4127;
-  --texte: #fbeddc;
-  --texte-doux: #c8ad8e;
-  --texte-inverse: var(--braise-900);
-  --primaire: #a78bff;
-  --primaire-fort: #bda7ff;
-  --primaire-doux: #2b2140;
-  --accent: #f472b6;
-  --accent-fort: #f892c8;
-  --accent-doux: #3a1c2a;
-  --sur-accent: #1a0a13;
-  --halo: #5a3316;
-  --danger: #f0a08a;
-  --danger-doux: #3d211b;
-  --sur-danger: #2a1109;
+/* Thème sombre — la même prune, poussée jusqu'à la nuit. Le jour, la prune
+   est l'encre sur l'ivoire ; le soir, elle devient le papier. C'est la même
+   marque retournée, pas une seconde charte.
 
-  /* Sur fond sombre, la profondeur vient d'une lueur colorée plus que d'une
-     ombre — ambre plutôt que violette, pour rester dans la même chaleur. */
+   Les couleurs du sigle y sont éclaircies : à leur valeur d'origine, l'orange
+   et le bleu perdraient toute lisibilité sur un fond aussi profond. La teinte
+   est conservée, seule la clarté change. */
+[data-theme="dark"] {
+  --fond: #170d13;
+  --fond-alt: #1e1119;
+  --surface: #21141c;
+  --surface-2: #2a1a24;
+  --bordure: #3c2733;
+  --bordure-forte: #55394a;
+  --texte: #f7efe9;
+  --texte-doux: #c0a7b2;
+  --texte-inverse: #170d13;
+
+  /* Le geste principal s'inverse : l'ivoire devient le bouton, la prune le
+     texte qu'il porte. */
+  --encre-action: #f3e7dc;
+  --encre-action-fort: #ffffff;
+
+  --primaire: #8dc4e6;
+  --primaire-fort: #b0d8f2;
+  --primaire-doux: #16232d;
+  --accent: #f9a3c3;
+  --accent-fort: #fdc0d6;
+  --accent-doux: #391a28;
+  --sur-accent: #1c0b13;
+  --halo: #3a2018;
+  --danger: #f3a493;
+  --danger-doux: #3a1d18;
+  --sur-danger: #24100c;
+
+  /* Dans le noir, une ombre ne se voit pas : la profondeur vient du contour
+     et d'une lueur très basse, ici prune plutôt que noire. */
   --ombre-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --ombre-md: 0 4px 14px rgba(0, 0, 0, 0.55);
   --ombre-lg: 0 12px 44px rgba(0, 0, 0, 0.6),
-    0 0 40px rgba(245, 166, 90, 0.1);
+    0 0 40px rgba(244, 87, 145, 0.07);
 }
 
 /* ==========================================================================
@@ -361,24 +411,28 @@ select {
   text-align: center;
 }
 
+/* Le chapeau des sections, tenu comme une manchette de revue : le mot reste
+   en encre, et c'est le filet qui porte la couleur. Chaque section peut
+   changer ce filet en posant `--filet`, ce qui donne au site sa couleur par
+   touches sans jamais colorer le texte lui-même — ce qu'aucune couleur du
+   sigle ne permettrait de toute façon à cette taille. */
 .sur-titre {
   display: inline-flex;
   align-items: center;
-  gap: var(--e-2);
-  font-size: var(--t-sm);
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  gap: var(--e-3);
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--primaire);
-  margin-bottom: var(--e-3);
+  color: var(--texte);
+  margin-bottom: var(--e-4);
 }
 
 .sur-titre::before {
   content: "";
-  width: 24px;
-  height: 2px;
-  border-radius: var(--r-full);
-  background: var(--accent);
+  width: 28px;
+  height: 3px;
+  background: var(--filet, var(--dps-rose));
 }
 
 .section__entete--centre .sur-titre::before { display: none; }
@@ -447,22 +501,29 @@ select {
   transform: none;
 }
 
+/* Le geste principal est en prune, pas en couleur. Sur une page ivoire, un
+   bouton presque noir est à la fois le plus désirable et le plus calme : il
+   ne dispute rien au sigle ni aux photos, et il laisse les couleurs du logo
+   libres pour ce qui doit vraiment chanter. */
 .btn--primaire {
-  background: var(--primaire);
-  color: var(--texte-inverse);
+  background: var(--encre-action);
+  color: var(--surface);
   box-shadow: var(--ombre-sm);
 }
 
 .btn--primaire:hover:not(:disabled) {
-  background: var(--primaire-fort);
-  color: var(--texte-inverse);
+  background: var(--encre-action-fort);
+  color: var(--surface);
   box-shadow: var(--ombre-md);
 }
 
-[data-theme="dark"] .btn--primaire { color: var(--texte-inverse); }
+/* En thème sombre le rapport s'inverse : le bouton devient l'ivoire. */
+[data-theme="dark"] .btn--primaire,
+[data-theme="dark"] .btn--primaire:hover:not(:disabled) { color: var(--fond); }
 
-/* Le magenta plein ne porte pas de blanc lisible (3,5:1) : le bouton prend la
-   déclinaison foncée du ton, réservée jusqu'ici au survol. */
+/* Le bouton secondaire, lui, prend une couleur du sigle — c'est l'un des
+   rares endroits où elle vient en aplat. Le rose plein ne porte pas de blanc
+   lisible (3,2:1) : on emploie sa déclinaison foncée. */
 .btn--accent {
   background: var(--accent-fort);
   color: var(--sur-accent);
@@ -519,7 +580,7 @@ select {
 
 .badge--accent { background: var(--accent-doux); color: var(--accent-fort); }
 .badge--primaire { background: var(--primaire-doux); color: var(--primaire); }
-.badge--alerte { background: #fde8e4; color: #b1442a; }
+.badge--alerte { background: var(--danger-doux); color: var(--danger); }
 
 /* Le badge « verrouillée » de la carte : un cran sous la taille de badge
    habituelle, pour rester une information secondaire face au titre et au
@@ -531,7 +592,7 @@ select {
   white-space: normal;
 }
 
-[data-theme="dark"] .badge--alerte { background: #3d211b; color: #f0a08a; }
+[data-theme="dark"] .badge--alerte { background: var(--danger-doux); color: var(--danger); }
 [data-theme="dark"] .badge--accent { color: var(--accent); }
 
 /* --- Cartes génériques --- */
@@ -584,17 +645,16 @@ select {
   display: none;
   font-size: var(--t-xs);
   font-weight: 600;
-  color: #b1442a;
+  color: var(--danger);
   margin-top: var(--e-1);
 }
 
-[data-theme="dark"] .champ__erreur { color: #f0a08a; }
 
 .champ.est-invalide .champ__erreur { display: block; }
 
 .champ.est-invalide .saisie,
 .champ.est-invalide .zone-texte {
-  border-color: #b1442a;
+  border-color: var(--danger);
 }
 
 .saisie,
@@ -798,48 +858,27 @@ select {
    6. Sections
    ========================================================================== */
 
-/* --- Hero --- */
+/* --- Hero ---------------------------------------------------------------
+   L'ouverture était une grande nappe abricot doublée de deux halos floutés.
+   C'était le travers que la charte nomme explicitement : fond coloré, plus
+   couleur par-dessus. Elle devient ici une page ivoire, sans nappe et sans
+   halo, où la seule chose qui parle est le titre.
+
+   Il ne reste qu'un lever de chaleur très bas, de l'ordre de quelques
+   pour-cent : assez pour que le haut de page ne soit pas plat, pas assez
+   pour qu'on lui trouve une couleur. */
 .hero {
   position: relative;
   overflow: hidden;
   padding-block: var(--e-9) var(--e-8);
-  /* La chaleur est en haut et s'éteint sur le fond de page : la section se
-     termine exactement sur la couleur qui la suit, sans couture visible. */
   background: linear-gradient(
     186deg,
-    color-mix(in srgb, var(--halo) 62%, var(--fond)) 0%,
-    var(--fond) 78%
+    color-mix(in srgb, var(--halo) 34%, var(--fond)) 0%,
+    var(--fond) 62%
   );
 }
 
-.hero::before,
-.hero::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.5;
-  pointer-events: none;
-}
 
-.hero::before {
-  width: 460px;
-  height: 460px;
-  top: -160px;
-  right: -120px;
-  background: color-mix(in srgb, var(--accent) 55%, transparent);
-}
-
-/* L'ambre du sigle, et non le cyan : c'est la tache colorée que l'œil croise
-   en premier, elle donne le climat de toute la page. Placée en haut comme la
-   rose : les deux lueurs entourent le titre et le bas reste net. */
-.hero::after {
-  width: 420px;
-  height: 420px;
-  top: -170px;
-  left: -150px;
-  background: color-mix(in srgb, var(--ambre) 60%, transparent);
-}
 
 .hero__interieur {
   position: relative;
@@ -884,6 +923,19 @@ select {
 /* Sans paragraphe entre les deux, les boutons collaient au titre. */
 .hero--centre .hero__titre {
   margin-bottom: var(--e-6);
+}
+
+/* Le seul endroit du site où le spectre complet paraît : un court filet sous
+   le titre d'accueil, comme une signature. Le logo apporte la couleur,
+   l'interface la laisse respirer — ce trait est la charnière entre les deux,
+   et il appartient au titre, pas à la section. */
+.hero--centre .hero__titre::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: 3px;
+  margin: var(--e-5) auto 0;
+  background: var(--spectre);
 }
 
 .hero--centre .hero__actions {
@@ -984,39 +1036,62 @@ select {
   border-color: color-mix(in srgb, var(--primaire) 35%, var(--bordure));
 }
 
+/* La couverture de la carte. Elle passe d'un bandeau de 116 px à une vraie
+   image en 3:2 : c'est elle qui doit donner envie, le texte ne fait que
+   confirmer. Le rapport est fixe pour que la grille reste alignée quelles
+   que soient les photos fournies. */
 .carte-activite__visuel {
   position: relative;
-  height: 116px;
+  aspect-ratio: 3 / 2;
   display: grid;
   place-items: center;
-  font-size: 2.4rem;
-  color: #fff;
   overflow: hidden;
+  background: var(--surface-2);
 }
 
-/* Motif discret par-dessus le dégradé */
+.carte-activite__photo {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.carte-activite:hover .carte-activite__photo { transform: scale(1.04); }
+
+/* Un voile sombre en haut et en bas seulement : les étiquettes flottantes
+   doivent rester lisibles sur une photo claire sans que le centre de
+   l'image, lui, soit terni. */
 .carte-activite__visuel::after {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(
-    circle at 1px 1px,
-    rgba(255, 255, 255, 0.22) 1px,
-    transparent 0
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(42, 22, 34, 0.3) 0%,
+    rgba(42, 22, 34, 0) 28%,
+    rgba(42, 22, 34, 0) 68%,
+    rgba(42, 22, 34, 0.3) 100%
   );
-  background-size: 18px 18px;
-  opacity: 0.6;
 }
 
-/* Pictogramme de la vignette : un trait blanc sur le dégradé, assez discret
-   pour que le titre reste le point d'entrée de la carte. */
-.carte-activite__picto {
-  position: relative;
-  z-index: 1;
+/* --- La couverture en attente de photographie ---------------------------
+   Tant qu'aucune image n'est fournie, la carte ne montre pas un aplat vide :
+   elle montre la porte du sigle, ouverte sur un lavis de la couleur de la
+   thématique. C'est le motif de la marque — « l'activité est la porte
+   d'entrée » — et cela reste franchement un substitut, jamais une fausse
+   photo de lieu. */
+.carte-activite__motif {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
   display: grid;
   place-items: center;
-  color: rgba(255, 255, 255, 0.9);
 }
+
+.carte-activite__motif > svg { width: 100%; height: 100%; }
 
 .carte-activite__etiquettes {
   position: absolute;
@@ -1058,18 +1133,20 @@ select {
   right: var(--e-2);
   bottom: var(--e-2);
   z-index: 2;
-  background: rgba(255, 255, 255, 0.92);
-  color: #96650d;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--prune-900);
   cursor: help;
 }
 
-[data-theme="dark"] .carte-activite__cadeau { color: #7a5209; }
+/* Le pictogramme seul prend la couleur — l'orange du sigle, en une touche de
+   la taille d'une icône. Le mot, lui, reste en encre. */
+.carte-activite__cadeau .picto { color: var(--dps-orange); }
 
 .etiquette-flottante {
   padding: 0.25em 0.6em;
   border-radius: var(--r-full);
   background: rgba(255, 255, 255, 0.92);
-  color: var(--encre);
+  color: var(--prune-900);
   font-size: 0.68rem;
   font-weight: 600;
   backdrop-filter: blur(4px);
@@ -1099,8 +1176,9 @@ select {
 }
 
 .carte-activite__titre {
-  font-size: 0.98rem;
-  line-height: 1.3;
+  font-size: var(--t-md);
+  line-height: 1.22;
+  letter-spacing: -0.015em;
   margin-bottom: var(--e-3);
   /* Le titre occupe l'espace libre : les pieds de carte restent alignés
      entre eux quel que soit le nombre de lignes. */
@@ -1139,12 +1217,12 @@ select {
 .jauge__remplissage {
   height: 100%;
   border-radius: var(--r-full);
-  background: linear-gradient(90deg, var(--cyan), var(--violet));
+  background: linear-gradient(90deg, var(--dps-teal), var(--dps-bleu));
   transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .jauge__remplissage.est-presque-complet {
-  background: linear-gradient(90deg, var(--ambre), var(--magenta));
+  background: linear-gradient(90deg, var(--dps-orange), var(--dps-rose));
 }
 
 /* Le trait qui marque, sur la jauge, le nombre d'inscriptions à partir
@@ -1189,18 +1267,23 @@ select {
   color: var(--accent-fort);
 }
 
-/* Ton doré, à part du reste : c'est un bonus, pas une condition — la couleur
-   ne doit pas se confondre avec les notes qui portent sur la garantie de la
-   sortie elle-même. */
+/* Le cadeau se distingue par l'orange du D — une couleur du sigle, et non
+   plus un doré inventé pour l'occasion. Il reste à part des notes qui portent
+   sur la garantie de la sortie : c'est un bonus, pas une condition. Le texte
+   est en encre, seul le fond porte la teinte : à cette taille, l'orange plein
+   ne serait pas lisible. */
 .note-confirmation--cadeau {
-  background: #fbecc7;
-  color: #7a5209;
+  background: color-mix(in srgb, var(--dps-orange) 16%, var(--fond));
+  color: var(--texte);
 }
 
+.note-confirmation--cadeau svg { color: var(--dps-orange); }
+
 [data-theme="dark"] .note-confirmation--cadeau {
-  background: #3d2e0c;
-  color: #f0c96a;
+  background: color-mix(in srgb, var(--dps-orange) 22%, var(--fond));
 }
+
+[data-theme="dark"] .note-confirmation--cadeau svg { color: #feaf73; }
 
 /* Le pied ne porte plus que l'action, désormais pleine largeur : le tarif
    est remonté sur le visuel. */
@@ -1326,11 +1409,13 @@ select {
    bulles dans le document, décaleraient sinon le compte (la 2ᵉ bulle
    occuperait la position 3 parmi les enfants). `nth-of-type` ne compte que
    les `<div>` entre elles, insensible aux `<span>` glissés autour. */
-/* L'ambre est creusé vers l'orange brûlé : au ton du sigle, son halo se
-   confondrait avec l'abricot de la page. */
-.bulle:nth-of-type(1) { --teinte: #d15c0c; --teinte-claire: #f59134; }
-.bulle:nth-of-type(2) { --teinte: #c2185b; --teinte-claire: #ec4899; }
-.bulle:nth-of-type(3) { --teinte: #5a2fce; --teinte-claire: #8b63f5; }
+/* Les trois couleurs sont maintenant celles du sigle, prélevées telles
+   quelles, et suivent son sens de lecture : le D orange, le P rose, le S
+   bleu. « Choisissez, Rejoignez, Partagez » parcourt donc le logo de gauche
+   à droite — la marque explique la démarche avec ses propres couleurs. */
+.bulle:nth-of-type(1) { --teinte: var(--dps-orange); }
+.bulle:nth-of-type(2) { --teinte: var(--dps-rose); }
+.bulle:nth-of-type(3) { --teinte: var(--dps-bleu); }
 
 .bulle {
   display: grid;
@@ -1344,18 +1429,23 @@ select {
   border-radius: 50%;
 
   /* Le halo teinté part du haut et s'éteint avant le centre : le texte reste
-     sur la surface franche, jamais sur de la couleur. */
+     sur la surface franche, jamais sur de la couleur. Il est passé de 20 %
+     à 9 % — sur l'ivoire, une teinte à 20 % faisait de la bulle un objet
+     coloré, alors qu'elle doit rester un disque clair que la couleur ne fait
+     qu'effleurer. */
   background:
     radial-gradient(
       115% 85% at 50% 0%,
-      color-mix(in srgb, var(--teinte-claire) 20%, var(--surface)) 0%,
+      color-mix(in srgb, var(--teinte) 9%, var(--surface)) 0%,
       var(--surface) 62%
     );
-  border: 1px solid color-mix(in srgb, var(--teinte) 22%, var(--bordure));
+  /* En revanche le filet est plus franc : c'est lui, et non le fond, qui
+     porte l'identité colorée de la bulle. */
+  border: 1px solid color-mix(in srgb, var(--teinte) 34%, var(--bordure));
   box-shadow:
     inset 0 2px 0 var(--bulle-lustre),
-    0 24px 45px -22px color-mix(in srgb, var(--teinte) 55%, transparent),
-    0 8px 18px -10px rgba(88, 54, 26, 0.35);
+    0 20px 38px -24px color-mix(in srgb, var(--teinte) 40%, transparent),
+    0 6px 14px -10px rgba(42, 22, 34, 0.22);
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
@@ -1369,21 +1459,23 @@ select {
   transform: translateY(-6px);
   box-shadow:
     inset 0 2px 0 var(--bulle-lustre),
-    0 34px 60px -24px color-mix(in srgb, var(--teinte) 70%, transparent),
-    0 10px 22px -10px rgba(88, 54, 26, 0.38);
+    0 30px 52px -26px color-mix(in srgb, var(--teinte) 52%, transparent),
+    0 8px 18px -10px rgba(42, 22, 34, 0.24);
 }
 
+/* Le disque de l'icône est le seul aplat plein de la bulle : c'est là que la
+   couleur du sigle se pose franchement, en une pastille et rien de plus. */
 .bulle__icone {
   display: grid;
   place-items: center;
   width: 52px;
   height: 52px;
   border-radius: var(--r-full);
-  background: linear-gradient(145deg, var(--teinte-claire), var(--teinte));
+  background: var(--teinte);
   color: #fff;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 10px 20px -8px color-mix(in srgb, var(--teinte) 75%, transparent);
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 8px 16px -8px color-mix(in srgb, var(--teinte) 60%, transparent);
 }
 
 .bulle__icone svg {
@@ -1477,12 +1569,12 @@ select {
   .bulles__fleche--1 {
     left: 27%;
     top: 18%;
-    filter: drop-shadow(0 4px 10px rgba(236, 72, 153, 0.45));
+    filter: drop-shadow(0 4px 10px rgba(244, 87, 145, 0.4));
   }
   .bulles__fleche--2 {
     left: 66%;
     top: 18%;
-    filter: drop-shadow(0 4px 10px rgba(139, 99, 245, 0.45));
+    filter: drop-shadow(0 4px 10px rgba(6, 92, 144, 0.35));
     animation-delay: 260ms;
   }
 }
@@ -1503,22 +1595,40 @@ select {
   align-items: center;
   padding: var(--e-7);
   border-radius: var(--r-xl);
-  /* Prune → lie-de-vin → rouge terre : on reste dans la moitié chaude du
-     spectre. L'extrémité est volontairement sombre — les encarts translucides
-     posés dessus perdraient sinon leur lisibilité (3,7:1). */
-  background: linear-gradient(140deg, #4a1f4e 0%, #7b2f63 52%, #8a3446 100%);
-  color: #fff;
+  /* L'encart le plus vaste du site : il prend donc la couleur structurelle,
+     pas une couleur d'accent. La prune s'éclaire légèrement en descendant, et
+     ne se teinte de rose — une seule couleur du sigle — qu'à son extrémité.
+     L'ensemble reste sombre : les encarts translucides posés dessus
+     perdraient sinon leur lisibilité. */
+  background: linear-gradient(
+    140deg,
+    var(--prune-900) 0%,
+    var(--prune-800) 55%,
+    color-mix(in srgb, var(--dps-rose) 26%, var(--prune-700)) 100%
+  );
   box-shadow: var(--ombre-lg);
+
+  /* L'encart redéfinit les jetons sémantiques pour son propre fond sombre,
+     au lieu de repeindre chaque élément un par un. Tout ce qu'on y dépose —
+     chapeau, bouton fantôme, filet — s'accorde alors sans règle
+     supplémentaire. C'était le manque qui rendait, un temps, le chapeau
+     « La communauté » invisible : il suivait l'encre de la page, restée
+     prune, sur un panneau devenu prune lui aussi. */
+  --texte: #ffffff;
+  --texte-doux: rgba(255, 255, 255, 0.85);
+  --bordure: rgba(255, 255, 255, 0.22);
+  --bordure-forte: rgba(255, 255, 255, 0.4);
+  --surface-2: rgba(255, 255, 255, 0.12);
+  --primaire: #b0d8f2;
+  --primaire-fort: #d3ebfa;
+  color: var(--texte);
 }
 
 @media (min-width: 900px) {
   .charte { grid-template-columns: 0.9fr 1.1fr; gap: var(--e-8); }
 }
 
-.charte h2,
-.charte h3 { color: #fff; }
-
-.charte__intro { color: rgba(255, 255, 255, 0.85); margin-bottom: 0; }
+.charte__intro { color: var(--texte-doux); margin-bottom: 0; }
 
 .charte__liste {
   display: grid;
@@ -1592,14 +1702,19 @@ select {
 .avatar--sm { width: 32px; height: 32px; font-size: var(--t-xs); }
 .avatar--lg { width: 56px; height: 56px; font-size: var(--t-base); }
 
-.avatar--ambre { background: var(--accent-doux); color: var(--accent-fort); }
-.avatar--ciel { background: #dbeafe; color: #2d5fd0; }
-.avatar--prune { background: #efe5f8; color: #6b3fe0; }
-.avatar--terre { background: #fbe4ee; color: #c22472; }
+/* Quatre pastilles, quatre couleurs du sigle : un lavis pour le fond, la
+   couleur elle-même pour les initiales — assombrie quand elle est trop claire
+   pour porter du texte. Les noms de classes sont ceux d'origine ; seules les
+   valeurs ont changé. */
+.avatar--ambre { background: color-mix(in srgb, var(--dps-orange) 16%, var(--fond)); color: #8a3d00; }
+.avatar--ciel  { background: color-mix(in srgb, var(--dps-bleu) 16%, var(--fond));   color: var(--dps-bleu); }
+.avatar--prune { background: color-mix(in srgb, var(--dps-indigo) 16%, var(--fond)); color: var(--dps-indigo); }
+.avatar--terre { background: color-mix(in srgb, var(--dps-rose) 16%, var(--fond));   color: var(--accent-fort); }
 
-[data-theme="dark"] .avatar--ciel { background: #16244a; color: #93b8ff; }
-[data-theme="dark"] .avatar--prune { background: #2b2140; color: #bda7ff; }
-[data-theme="dark"] .avatar--terre { background: #3a1c2a; color: #f892c8; }
+[data-theme="dark"] .avatar--ambre { color: #feaf73; }
+[data-theme="dark"] .avatar--ciel  { color: #76a5c2; }
+[data-theme="dark"] .avatar--prune { color: #909fcf; }
+[data-theme="dark"] .avatar--terre { color: #f9a3c3; }
 
 .identite__nom {
   font-weight: 600;
@@ -1994,7 +2109,7 @@ select {
   font-variant-numeric: tabular-nums;
 }
 
-.compteur.est-limite { color: #b1442a; font-weight: 600; }
+.compteur.est-limite { color: var(--danger); font-weight: 600; }
 
 /* Rappel bienveillance affiché dynamiquement */
 .rappel-doux {
@@ -2114,7 +2229,7 @@ select {
   align-items: center;
   gap: var(--e-3);
   padding: var(--e-3) var(--e-5);
-  background: var(--encre);
+  background: var(--prune-900);
   color: #fff;
   border-radius: var(--r-full);
   box-shadow: var(--ombre-lg);
@@ -2621,19 +2736,23 @@ select {
   padding: var(--e-2);
   border: 0;
   border-radius: var(--r-sm);
-  background: var(--cal-degrade, var(--primaire));
-  color: #fff;
+  background: color-mix(in srgb, var(--cal-teinte, var(--primaire)) 15%, var(--surface));
+  border-left: 3px solid var(--cal-teinte, var(--primaire));
+  color: var(--texte);
   text-align: left;
   cursor: pointer;
   transition: transform var(--transition), filter var(--transition);
 }
 
-.cal-sortie:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.cal-sortie:hover {
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--cal-teinte, var(--primaire)) 26%, var(--surface));
+}
 
 .cal-sortie__heure {
   display: block;
   font-size: var(--t-xs);
-  opacity: 0.85;
+  color: var(--texte-doux);
 }
 
 .cal-sortie__titre {
@@ -2829,7 +2948,7 @@ select {
    sections teintées. */
 .pied {
   padding-block: var(--e-8) var(--e-5);
-  background: var(--braise-900);
+  background: var(--prune-900);
   color: rgba(255, 255, 255, 0.72);
 }
 

@@ -108,7 +108,7 @@ function calGabaritPastille(activite) {
 
   return `
     <button type="button" class="cal-sortie${complet ? ' cal-sortie--complet' : ''}"
-            style="--cal-degrade:${theme.degrade}"
+            style="--cal-teinte:${theme.couleur}"
             data-cal-sortie="${echapper(activite.id)}">
       <span class="cal-sortie__heure">${echapper(calHeure(activite.date))}</span>
       <span class="cal-sortie__titre">${echapper(activite.titre)}</span>
