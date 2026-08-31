@@ -563,10 +563,11 @@ select {
   margin-top: var(--e-1);
 }
 
-/* Un lien discret posé à côté d'un label — « Mot de passe oublié ? » à
-   hauteur du champ, sans réclamer sa propre ligne. */
+/* Un bouton qui ne se donne pas l'air d'un bouton — « Mot de passe oublié ? »
+   en bas du formulaire, au même poids typographique que les mentions d'aide
+   qui l'entourent : présent quand on le cherche, discret sinon. */
 .champ__lien {
-  flex: none;
+  font: inherit;
   background: none;
   border: 0;
   padding: 0;

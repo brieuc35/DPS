@@ -165,20 +165,20 @@
               </div>
 
               <div class="champ">
-                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:var(--e-3)">
-                  <label class="champ__label" for="co-motdepasse" style="margin-bottom:0">Mot de passe</label>
-                  <button type="button" class="champ__lien" data-mot-de-passe-oublie>Mot de passe oublié&nbsp;?</button>
-                </div>
+                <label class="champ__label" for="co-motdepasse">Mot de passe</label>
                 <input class="saisie" id="co-motdepasse" name="motDePasse" type="password" autocomplete="current-password" required>
                 <span class="champ__erreur" data-erreur-motdepasse>Mot de passe incorrect.</span>
-                <p class="champ__aide" data-confirmation-reinitialisation hidden></p>
               </div>
 
               <button type="submit" class="btn btn--primaire btn--large btn--bloc">Se connecter</button>
               <p class="champ__aide" style="text-align:center;margin-top:var(--e-3)">
                 Pas encore de compte ?
-                <a href="#inscription" data-vers-inscription>Créez-en un, c’est immédiat.</a>
+                <a href="#inscription" data-vers-inscription>Créer mon compte</a>
               </p>
+              <p class="champ__aide" style="text-align:center">
+                <button type="button" class="champ__lien" data-mot-de-passe-oublie>Mot de passe oublié&nbsp;?</button>
+              </p>
+              <p class="champ__aide" data-confirmation-reinitialisation hidden style="text-align:center"></p>
             </form>
           </div>
 
