@@ -97,13 +97,22 @@
   );
 
   /* --- Ivoire : la respiration ---------------------------------------------
-     Presque blanc, mais pas blanc. Une pointe de chaleur autour de 38° de
-     teinte, à peine 3 % de saturation : assez pour que la page ne soit pas
-     froide, trop peu pour qu'on pense « beige ». C'est le contrepoint du
-     logo — la couleur est dans le sigle et dans les photos, pas dans le
-     papier. */
-  --ivoire: #f9f6f1;
-  --ivoire-creux: #f2ece4; /* bandes alternées, léger renfoncement */
+     Presque blanc, mais pas blanc. Le premier essai visait #f9f6f1 : mesuré,
+     il ne s'écarte du blanc pur que de ΔE 4 — perceptible si on pose les deux
+     aplats côte à côte, invisible dans la vraie vie, où personne n'a de
+     nuancier sous les yeux. Le site se lisait donc simplement blanc, ce que
+     la charte demandait précisément d'éviter.
+
+     Celui-ci est à ΔE 8 : le double d'écart, et toujours 14,8:1 avec l'encre.
+     C'est le point où la chaleur se ressent sans qu'on puisse nommer la
+     couleur — au-delà, vers ΔE 12, on entre dans le beige.
+
+     La page est nettement teintée, la surface des cartes à peine : c'est cet
+     écart-là qui fait la chaleur, et c'est lui qui détache les cartes du
+     papier. Le réduire à rien, comme au premier essai (ΔE 2,6 entre les
+     deux), noie tout dans un même champ indistinct. */
+  --ivoire: #f5efe4;
+  --ivoire-creux: #ece4d5; /* bandes alternées, léger renfoncement */
   --blanc-chaud: #fffdfa;  /* surfaces posées sur l'ivoire */
 
   /* --- Prune : la structure ------------------------------------------------
@@ -122,8 +131,8 @@
   --fond-alt: var(--ivoire-creux);
   --surface: var(--blanc-chaud);
   --surface-2: var(--ivoire-creux);
-  --bordure: #e7ded2;
-  --bordure-forte: #d3c5b4;
+  --bordure: #e2d7c4;
+  --bordure-forte: #cbbba2;
   --texte: var(--prune-900);
   --texte-doux: var(--prune-400);
   --texte-inverse: var(--ivoire);
@@ -149,7 +158,7 @@
   --sur-accent: #ffffff;
 
   /* Lueur du haut de page — l'orange du D, très dilué. */
-  --halo: #f6dcc4;
+  --halo: #f3d3b4;
 
   /* Terre brûlée pour les actions irréversibles, cousine du corail du sigle
      mais assez sombre pour porter du blanc. */
