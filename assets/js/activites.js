@@ -96,6 +96,26 @@ function placesReserveesLocalement(activiteId) {
     .reduce((total, reservation) => total + reservation.places, 0);
 }
 
+/**
+ * Les sorties auxquelles le membre connecté est déjà inscrit, tenues à jour
+ * par Firestore. Côté règles, la double inscription est déjà impossible :
+ * l'identifiant du document vaut « activité_uid ». Mais un refus au moment
+ * d'envoyer le formulaire arrive trop tard — autant que la carte le dise
+ * avant qu'on la remplisse.
+ */
+let mesInscriptions = new Set();
+
+/**
+ * Une inscription vaut pour une personne : un compte ne peut donc en avoir
+ * qu'une par sortie. Hors connexion, le repère est la liste locale — c'est
+ * alors « un navigateur, une place », ce qu'on peut faire de mieux sans
+ * identité.
+ */
+function estInscrit(activiteId) {
+  if (mesInscriptions.has(activiteId)) return true;
+  return reservations.some((reservation) => reservation.activiteId === activiteId);
+}
+
 /** Le pont Firestore, ou null quand on tourne en local. */
 function baseActivites() {
   return window.DPS_DB && window.DPS_DB.disponible ? window.DPS_DB : null;
@@ -170,6 +190,7 @@ function gabaritCarte(activite) {
   const presqueComplet = restantes > 0 && restantes <= 3;
   const complet = restantes === 0;
   const confirmation = etatConfirmation(activite, occupees);
+  const inscrit = estInscrit(activite.id);
 
   const etiquetteDispo = complet
     ? '<span class="etiquette-flottante carte-activite__dispo">Complet</span>'
@@ -237,10 +258,18 @@ function gabaritCarte(activite) {
 
         <div class="carte-activite__pied">
           <button type="button"
-                  class="btn btn--bloc ${complet ? 'btn--fantome' : 'btn--primaire'}"
+                  class="btn btn--bloc ${complet || inscrit ? 'btn--fantome' : 'btn--primaire'}"
                   data-reserver="${activite.id}"
-                  ${complet ? 'disabled' : ''}>
-            ${complet ? 'Complet' : (activiteEstDatee(activite) ? 'Je participe' : 'Ça m’intéresse')}
+                  ${complet || inscrit ? 'disabled' : ''}>
+            ${
+              inscrit
+                ? picto('<path d="M20 6 9 17l-5-5"/>', 15) + ' Vous êtes inscrit·e'
+                : complet
+                  ? 'Complet'
+                  : activiteEstDatee(activite)
+                    ? 'Je participe'
+                    : 'Ça m’intéresse'
+            }
           </button>
         </div>
       </div>
@@ -466,14 +495,8 @@ function creerModale() {
 
 function gabaritFormulaire(activite) {
   const restantes = placesRestantes(activite);
-  const maximum = Math.min(4, restantes);
   const theme = trouverThematique(activite.thematique);
   const confirmation = etatConfirmation(activite, activite.placesTotal - restantes);
-
-  const optionsPlaces = Array.from({ length: maximum }, (_, index) => {
-    const nombre = index + 1;
-    return `<option value="${nombre}">${nombre} personne${nombre > 1 ? 's' : ''}</option>`;
-  }).join('');
 
   // Avant de s'engager, autant savoir si la sortie est déjà garantie ou si
   // cette réservation compte parmi celles qui la confirmeront.
@@ -508,10 +531,12 @@ function gabaritFormulaire(activite) {
 
     <div class="recap">
       <div>
-        <p class="recap__libelle" style="margin:0">Total pour <span data-recap-places>1 personne</span></p>
-        <p style="margin:0;font-size:var(--t-xs);color:var(--texte-doux)">${activite.prix} € par personne</p>
+        <p class="recap__libelle" style="margin:0">Votre place</p>
+        <p style="margin:0;font-size:var(--t-xs);color:var(--texte-doux)">
+          Une inscription par personne, réglée sur place
+        </p>
       </div>
-      <p class="recap__total" data-recap-total>${activite.prix} €</p>
+      <p class="recap__total">${activite.prix} €</p>
     </div>
 
     <p class="champ__aide" style="margin-bottom:var(--e-5)">
@@ -538,14 +563,6 @@ function gabaritFormulaire(activite) {
         <input class="saisie" id="res-email" name="email" type="email" autocomplete="email" required>
         <span class="champ__aide">Sert uniquement à vous envoyer la confirmation et le point de rendez-vous.</span>
         <span class="champ__erreur">Cette adresse e-mail ne semble pas valide.</span>
-      </div>
-
-      <div class="champ">
-        <label class="champ__label" for="res-places">Nombre de places</label>
-        <select class="selection" id="res-places" name="places" data-champ-places>
-          ${optionsPlaces}
-        </select>
-        <span class="champ__aide">Vous pouvez réserver pour vous seul·e ou pour plusieurs personnes.</span>
       </div>
 
       <div class="champ">
@@ -583,6 +600,13 @@ function ouvrirModale(activiteId, declencheur) {
   // calendrier ne l'affichent plus, mais un lien resté ailleurs — une
   // annonce dans le fil, une page mise en favori — pourrait encore y mener.
   if (!activite || activiteEstPassee(activite) || placesRestantes(activite) === 0) return;
+
+  // Une inscription par compte : rouvrir le formulaire ne mènerait qu'à un
+  // refus une fois rempli.
+  if (estInscrit(activite.id)) {
+    notifier('Vous êtes déjà inscrit·e à cette sortie.');
+    return;
+  }
 
   creerModale();
   activiteEnCours = activite;
@@ -647,18 +671,6 @@ function fermerModale() {
 /** Validation et soumission du formulaire de réservation. */
 function brancherFormulaire(modale, activite) {
   const formulaire = $('[data-formulaire-reservation]', modale);
-  const champPlaces = $('[data-champ-places]', formulaire);
-  const recapPlaces = $('[data-recap-places]', modale);
-  const recapTotal = $('[data-recap-total]', modale);
-
-  const majTotal = () => {
-    const places = Number(champPlaces.value);
-    recapPlaces.textContent = `${places} personne${places > 1 ? 's' : ''}`;
-    recapTotal.textContent = `${places * activite.prix} €`;
-  };
-
-  champPlaces.addEventListener('change', majTotal);
-  majTotal();
 
   // Retire le signalement d'erreur dès que l'utilisateur corrige son entrée.
   formulaire.addEventListener('input', (evenement) => {
@@ -701,17 +713,20 @@ function brancherFormulaire(modale, activite) {
       prenom: donnees.get('prenom').trim(),
       nom: donnees.get('nom').trim(),
       email: donnees.get('email').trim(),
-      places: Number(donnees.get('places')),
+      // Une inscription vaut une place et une seule : un compte, une place.
+      // La valeur reste transmise parce que le compteur partagé et les règles
+      // Firestore raisonnent en places, pas en inscriptions.
+      places: 1,
       mot: (donnees.get('mot') || '').trim(),
     });
   });
 }
 
 async function enregistrerReservation(activite, participant) {
-  // Garde-fou : une place a pu être prise pendant que la modale était ouverte.
-  const disponibles = placesRestantes(activite);
-  if (participant.places > disponibles) {
-    notifier('Il ne reste plus assez de places pour ce groupe.');
+  // Garde-fou : la dernière place a pu partir pendant que la modale était
+  // ouverte.
+  if (placesRestantes(activite) < 1) {
+    notifier('La dernière place vient d’être prise.');
     rendreGrille();
     fermerModale();
     return;
@@ -742,6 +757,15 @@ async function enregistrerReservation(activite, participant) {
       return;
     }
   } else {
+    // Hors connexion, rien ne garantit l'identité : la liste locale est le
+    // seul repère disponible pour ne pas compter deux fois la même personne.
+    if (estInscrit(activite.id)) {
+      notifier('Vous êtes déjà inscrit·e à cette sortie.');
+      rendreGrille();
+      fermerModale();
+      return;
+    }
+
     reservations = [
       ...reservations,
       {
@@ -805,7 +829,7 @@ async function enregistrerReservation(activite, participant) {
             ${libellePlaces(restantes)}
           </p>
         </div>
-        <p class="recap__total">${participant.places * activite.prix} €</p>
+        <p class="recap__total">${activite.prix} €</p>
       </div>
 
       <p style="font-size:var(--t-sm);color:var(--texte-doux)">
@@ -889,6 +913,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   suivreJauges();
   window.addEventListener('dps:donnees-pretes', suivreJauges);
+
+  // Mêmes précautions que pour les annonces : le compte et Firestore arrivent
+  // par deux événements distincts, sans ordre garanti.
+  let desabonnerInscriptions = null;
+  let membreSuivi = null;
+  const suivreMesInscriptions = () => {
+    const distant = baseActivites();
+    const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
+    const id = compte ? compte.id : null;
+    if (id === membreSuivi) return;
+
+    if (desabonnerInscriptions) desabonnerInscriptions();
+    desabonnerInscriptions = null;
+    membreSuivi = id;
+
+    // À la déconnexion, les inscriptions de l'ancien membre ne doivent plus
+    // marquer les cartes.
+    if (!distant || !id) {
+      mesInscriptions = new Set();
+      rendreGrille();
+      return;
+    }
+
+    desabonnerInscriptions = distant.ecouterMesReservations(id, (liste) => {
+      mesInscriptions = new Set(liste.map((reservation) => reservation.activiteId));
+      rendreGrille();
+    });
+  };
+  suivreMesInscriptions();
+  window.addEventListener('dps:session', suivreMesInscriptions);
+  window.addEventListener('dps:donnees-pretes', suivreMesInscriptions);
 
   // Le compte et Firestore arrivent chacun par leur propre événement, sans
   // garantie d'ordre : on retente sur les deux jusqu'à ce que les deux soient

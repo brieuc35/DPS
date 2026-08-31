@@ -95,12 +95,15 @@ service cloud.firestore {
       // L'identifiant est imposé : il vaut « <activité>_<uid> ». C'est ce qui
       // rend la double réservation impossible et permet aux règles des messages
       // de vérifier une inscription sans requête.
+      // Une inscription vaut exactement une place : un compte, une personne.
+      // La borne était de 1 à 4 du temps où l'on pouvait réserver pour un
+      // groupe ; la laisser ouverte permettrait à quelqu'un contournant le
+      // formulaire de prendre quatre places d'un coup.
       allow create: if connecte()
                     && request.resource.data.membreId == moi()
                     && reservationId == request.resource.data.activiteId + '_' + moi()
                     && request.resource.data.places is int
-                    && request.resource.data.places >= 1
-                    && request.resource.data.places <= 4;
+                    && request.resource.data.places == 1;
 
       // Se désinscrire reste possible ; modifier sa réservation, non — il
       // faudrait alors retoucher le compteur dans le même mouvement.
