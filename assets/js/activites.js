@@ -121,6 +121,18 @@ function baseActivites() {
   return window.DPS_DB && window.DPS_DB.disponible ? window.DPS_DB : null;
 }
 
+/**
+ * Le membre connecté, ou null. La confirmation par courriel n'existe que pour
+ * lui : l'adresse qui la reçoit est celle de son compte, la seule qu'une règle
+ * de sécurité puisse confronter à la session. Une inscription sans compte
+ * n'ouvre donc aucun envoi — et les textes de la modale le disent, plutôt que
+ * de promettre à tout le monde.
+ */
+function membreConnecte() {
+  const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
+  return baseActivites() && compte ? compte : null;
+}
+
 /** « Marseille, Bouches-du-Rhône » → « Marseille ». Le détail est dans la fiche. */
 function ville(lieu) {
   return lieu.split(',')[0].trim();
@@ -539,10 +551,18 @@ function gabaritFormulaire(activite) {
       <p class="recap__total">${activite.prix} €</p>
     </div>
 
-    <p class="champ__aide" style="margin-bottom:var(--e-5)">
-      Le déroulé et le point de rendez-vous sont envoyés par e-mail après
-      l’inscription.
-    </p>
+    ${
+      membreConnecte()
+        ? `<p class="champ__aide" style="margin-bottom:var(--e-5)">
+             La confirmation part par e-mail à l’adresse de votre compte, avec le
+             lieu, le tarif et le déroulé.
+           </p>`
+        : `<p class="champ__aide" style="margin-bottom:var(--e-5)">
+             Votre inscription est enregistrée sur cet appareil. Pour recevoir la
+             confirmation par e-mail et retrouver vos sorties ailleurs,
+             <a href="compte.html#inscription">créez un compte</a>.
+           </p>`
+    }
 
     <form data-formulaire-reservation novalidate>
       <div class="duo-champs">
@@ -561,7 +581,7 @@ function gabaritFormulaire(activite) {
       <div class="champ">
         <label class="champ__label" for="res-email">Adresse e-mail</label>
         <input class="saisie" id="res-email" name="email" type="email" autocomplete="email" required>
-        <span class="champ__aide">Sert uniquement à vous envoyer la confirmation et le point de rendez-vous.</span>
+        <span class="champ__aide">Sert à vous reconnaître le jour de la sortie.</span>
         <span class="champ__erreur">Cette adresse e-mail ne semble pas valide.</span>
       </div>
 
@@ -722,7 +742,37 @@ function brancherFormulaire(modale, activite) {
   });
 }
 
+/**
+ * Les valeurs insérées dans le gabarit de la confirmation.
+ *
+ * Rien ici n'est du texte de message : ce sont des données, et c'est le
+ * gabarit — hébergé dans Firestore, hors d'atteinte du navigateur — qui décide
+ * des phrases. La liste des clés est reprise telle quelle dans les règles de
+ * sécurité : en ajouter une ici sans l'ajouter là-bas ferait refuser l'envoi.
+ */
+function donneesConfirmation(activite, membre) {
+  const restantes = placesRestantes(activite);
+  const confirmation = etatConfirmation(activite, activite.placesTotal - restantes);
+
+  return {
+    prenom: membre.prenom || 'Bonjour',
+    titre: activite.titre,
+    lieu: activite.lieu,
+    // Vide quand la sortie n'est pas encore programmée : le gabarit bascule
+    // alors sur sa formulation d'attente plutôt que d'annoncer un jour.
+    date: activiteEstDatee(activite) ? formaterDate(activite.date) : '',
+    duree: activite.duree || '',
+    prix: String(activite.prix),
+    cadeau: activite.cadeau || '',
+    manquants: confirmation && !confirmation.confirmee ? String(confirmation.manquants) : '',
+  };
+}
+
 async function enregistrerReservation(activite, participant) {
+  // La promesse de mise en file du courriel, à attendre avant toute
+  // navigation. Nulle pour une inscription sans compte : aucun envoi n'a lieu.
+  let confirmationEnVol = null;
+
   // Garde-fou : la dernière place a pu partir pendant que la modale était
   // ouverte.
   if (placesRestantes(activite) < 1) {
@@ -756,6 +806,23 @@ async function enregistrerReservation(activite, participant) {
       rendreGrille();
       return;
     }
+
+    // La place est prise : la confirmation part maintenant. L'adresse est
+    // celle du compte, jamais celle saisie dans le formulaire — c'est la seule
+    // qu'une règle de sécurité puisse confronter à la session, et donc la
+    // seule qui empêche d'expédier du courrier à un tiers depuis le site.
+    //
+    // L'envoi est lancé ici mais attendu plus bas, juste avant la redirection
+    // vers le fil du groupe : le travail d'affichage qui suit recouvre ainsi
+    // l'aller-retour réseau. Le laisser partir sans l'attendre le perdrait —
+    // la navigation détruit le contexte de la page, et la file d'écriture de
+    // Firestore ne vit qu'en mémoire, aucune persistance n'étant configurée.
+    confirmationEnVol = distant.envoyerConfirmation({
+      activiteId: activite.id,
+      membreId: membre.id,
+      adresse: membre.email,
+      donnees: donneesConfirmation(activite, membre),
+    });
   } else {
     // Hors connexion, rien ne garantit l'identité : la liste locale est le
     // seul repère disponible pour ne pas compter deux fois la même personne.
@@ -793,12 +860,23 @@ async function enregistrerReservation(activite, participant) {
   const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
 
   rendreGrille();
-  notifier(`Réservation confirmée : ${activite.titre}`);
+  notifier(compte
+    ? `Réservation confirmée. Le récapitulatif part vers ${compte.email}.`
+    : `Réservation confirmée : ${activite.titre}`);
 
   // Membre connecté : direction le groupe, sans étape intermédiaire. La modale
   // est refermée d'abord — dans la version fichier unique, rien ne recharge la
   // page et elle resterait posée par-dessus le fil, défilement bloqué.
   if (compte) {
+    // Une seconde au plus : passé ce délai, mieux vaut un courriel manqué
+    // qu'un membre bloqué sur une modale qui ne se ferme pas. L'inscription,
+    // elle, est acquise dans tous les cas.
+    if (confirmationEnVol) {
+      await Promise.race([
+        confirmationEnVol,
+        new Promise((resoudre) => setTimeout(resoudre, 1000)),
+      ]);
+    }
     fermerModale();
     allerVers('chat', `groupe-${activite.id}`);
     return;
@@ -819,6 +897,8 @@ async function enregistrerReservation(activite, participant) {
           : `Votre place pour <strong>${echapper(activite.titre)}</strong> est retenue.
              La date n’est pas encore calée avec le lieu : elle le sera dès que le
              groupe sera au complet, et vous la recevrez avant tout le monde.`}
+        <br>
+        Votre inscription est gardée sur cet appareil.
       </p>
 
       <div class="recap" style="text-align:left">

@@ -31,6 +31,24 @@ service cloud.firestore {
       return exists(/databases/$(database)/documents/reservations/$(activiteId + '_' + moi()));
     }
 
+    // Les valeurs insérées dans un gabarit de courriel. La liste des clés est
+    // fermée et chaque champ borné : le gabarit n'en rend qu'une poignée, mais
+    // sans ce contrôle rien n'empêcherait d'y loger des mégaoctets, aux frais
+    // du projet. La liste doit rester accordée à `donneesConfirmation()`, dans
+    // activites.js.
+    function donneesDeGabaritAcceptables(donnees) {
+      return donnees.keys().hasOnly(
+               ['prenom', 'titre', 'lieu', 'date', 'duree', 'prix', 'cadeau', 'manquants'])
+          && donnees.prenom is string && donnees.prenom.size() <= 80
+          && donnees.titre is string && donnees.titre.size() <= 120
+          && donnees.lieu is string && donnees.lieu.size() <= 160
+          && donnees.date is string && donnees.date.size() <= 60
+          && donnees.duree is string && donnees.duree.size() <= 20
+          && donnees.prix is string && donnees.prix.size() <= 10
+          && donnees.cadeau is string && donnees.cadeau.size() <= 300
+          && donnees.manquants is string && donnees.manquants.size() <= 4;
+    }
+
     // « groupe-mine-bleue » → « mine-bleue ».
     function activiteDuFil(conversation) {
       return conversation.split('groupe-')[1];
@@ -109,6 +127,64 @@ service cloud.firestore {
       // faudrait alors retoucher le compteur dans le même mouvement.
       allow update: if false;
       allow delete: if connecte() && resource.data.membreId == moi();
+    }
+
+    // ------------------------------------------------------- file d'e-mails
+    //
+    // L'extension « Trigger Email from Firestore » surveille cette collection
+    // et envoie, par le SMTP de Brevo, tout document qu'elle y trouve. Elle
+    // travaille avec le SDK admin : elle passe outre ces règles. Celles-ci ne
+    // protègent donc pas l'extension, elles protègent le compte Brevo.
+    //
+    // Le danger est précis : une collection ouverte ici, et le site devient un
+    // relais de courrier ouvert. N'importe qui écrit un document, l'extension
+    // l'envoie, et c'est le domaine d'expédition de DPS qui finit sur les
+    // listes noires. Quatre verrous, donc :
+    //
+    //   1. l'identifiant est imposé — « confirmation-<activité>_<uid> ». Un
+    //      même membre ne peut donc pas remplir la file pour une sortie : une
+    //      inscription, un courriel, et pas un de plus ;
+    //   2. le destinataire est l'adresse du jeton d'authentification, pas une
+    //      adresse fournie par le formulaire. On ne peut écrire qu'à soi ;
+    //   3. la réservation correspondante doit exister. On ne s'envoie pas la
+    //      confirmation d'une sortie à laquelle on n'est pas inscrit ;
+    //   4. le corps du message n'est jamais transmis par le site : seulement
+    //      un nom de gabarit et quelques champs. Le texte vit dans la
+    //      collection `templates`, hors de portée. Sans cela, le site
+    //      permettrait d'expédier n'importe quel contenu depuis une adresse
+    //      DPS — un cadeau pour l'hameçonnage.
+    //
+    // Limite assumée : l'adresse du jeton n'est pas nécessairement vérifiée,
+    // le site ne demandant pas encore de confirmer son adresse à l'inscription.
+    // Quelqu'un peut donc créer un compte avec l'adresse d'un tiers et lui
+    // faire parvenir jusqu'à un courriel par sortie au catalogue. Le plafond
+    // est bas et le contenu est fixe ; le jour où la vérification d'adresse
+    // sera en place, il suffira d'ajouter `request.auth.token.email_verified`.
+    match /mail/{courrielId} {
+
+      // La file contient les adresses des membres et l'état des envois.
+      // Personne ne la lit depuis le site, pas même son propre courriel.
+      allow read: if false;
+
+      allow create: if connecte()
+                    && request.resource.data.to == request.auth.token.email
+                    && courrielId == 'confirmation-' + request.resource.data.activiteId + '_' + moi()
+                    && inscritA(request.resource.data.activiteId)
+                    && request.resource.data.template.name == 'confirmation-sortie'
+                    && request.resource.data.keys().hasOnly(['to', 'activiteId', 'template'])
+                    && request.resource.data.template.keys().hasOnly(['name', 'data'])
+                    && donneesDeGabaritAcceptables(request.resource.data.template.data);
+
+      // L'extension écrit l'état de l'envoi dans le document : c'est elle,
+      // avec le SDK admin, qui en a besoin — jamais le site.
+      allow update, delete: if false;
+    }
+
+    // Les gabarits de courriel. L'extension les lit avec le SDK admin ; le
+    // site n'a aucune raison d'y toucher. Un gabarit modifiable depuis le
+    // navigateur reviendrait à laisser écrire le texte de tous les envois.
+    match /templates/{gabaritId} {
+      allow read, write: if false;
     }
 
     // ---------------------------------------------------- compteurs de places

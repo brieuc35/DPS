@@ -208,6 +208,41 @@ export function demarrerDonnees(application) {
       }
     },
 
+    /**
+     * Met la confirmation d'inscription dans la file d'envoi. Un site statique
+     * ne peut pas expédier de courrier lui-même, et la clé Brevo ne peut pas
+     * vivre dans la page — elle serait lisible par tout le monde. C'est donc
+     * l'extension « Trigger Email from Firestore » qui envoie : le site dépose
+     * un document, elle s'occupe du SMTP.
+     *
+     * Le site ne transmet **jamais** le texte du message, seulement le nom
+     * d'un gabarit et les quelques valeurs à y insérer. Laisser le corps au
+     * navigateur reviendrait à permettre d'expédier n'importe quoi depuis une
+     * adresse DPS.
+     *
+     * L'échec est silencieux, et c'est voulu : la place est déjà prise et
+     * affichée à l'écran. Une extension mal configurée ne doit pas faire
+     * croire que l'inscription a échoué.
+     */
+    async envoyerConfirmation({ activiteId, membreId, adresse, donnees }) {
+      // Identifiant déterministe : l'extension n'enverra jamais deux fois la
+      // confirmation d'une même inscription, même si la page est rechargée ou
+      // la fonction rappelée. La règle de sécurité impose la même forme.
+      const courriel = doc(base, 'mail', `confirmation-${activiteId}_${membreId}`);
+
+      try {
+        await setDoc(courriel, {
+          to: adresse,
+          activiteId,
+          template: { name: 'confirmation-sortie', data: donnees },
+        });
+        return { ok: true };
+      } catch (erreur) {
+        console.warn('Confirmation non mise en file.', erreur);
+        return { ok: false };
+      }
+    },
+
     /* ------------------------------------------------------ fil de la communauté */
 
     /**
