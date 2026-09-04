@@ -82,6 +82,12 @@
             <p class="plomb" data-membre-email></p>
           </div>
 
+          <!-- Bandeau de vérification d'adresse. Rempli et affiché par
+               page-compte.js, seulement quand l'adresse n'est pas confirmée et
+               qu'un envoi est possible — donc jamais hors connexion, où rien
+               ne part et où réclamer une confirmation serait mensonger. -->
+          <div class="bandeau-verif" data-verification hidden></div>
+
           <div class="carte" style="padding:var(--e-5);margin-bottom:var(--e-5)">
             <p class="pied__titre" style="margin-top:0">Vos sorties</p>
             <div data-membre-sorties></div>
@@ -201,16 +207,22 @@
               <div class="champ">
                 <label class="champ__label" for="in-email">Adresse e-mail</label>
                 <input class="saisie" id="in-email" name="email" type="email" autocomplete="email" required>
-                <span class="champ__aide">Sert d’identifiant. Aucun message ne part sans votre accord.</span>
+                <span class="champ__aide">Sert d’identifiant. Un lien de confirmation y sera envoyé&nbsp;; rien d’autre sans votre accord.</span>
                 <span class="champ__erreur" data-erreur-inscription>Cette adresse e-mail ne semble pas valide.</span>
               </div>
 
               <div class="duo-champs">
                 <div class="champ">
                   <label class="champ__label" for="in-motdepasse">Mot de passe</label>
-                  <input class="saisie" id="in-motdepasse" name="motDePasse" type="password" autocomplete="new-password" required>
-                  <span class="champ__aide">Huit caractères au minimum.</span>
-                  <span class="champ__erreur">Huit caractères au minimum.</span>
+                  <input class="saisie" id="in-motdepasse" name="motDePasse" type="password"
+                         autocomplete="new-password" required
+                         aria-describedby="exigences-motdepasse">
+                  <!-- Rempli par page-compte.js à partir d'EXIGENCES_MOT_DE_PASSE :
+                       les cases cochées et le contrôle à l'envoi lisent la même
+                       liste et ne peuvent pas diverger. `aria-live` annonce
+                       chaque exigence satisfaite au fil de la frappe. -->
+                  <ul class="exigences" id="exigences-motdepasse" data-exigences aria-live="polite"></ul>
+                  <span class="champ__erreur">Il manque encore quelque chose à ce mot de passe.</span>
                 </div>
                 <div class="champ">
                   <label class="champ__label" for="in-confirmation">Confirmation</label>

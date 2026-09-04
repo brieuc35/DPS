@@ -139,8 +139,12 @@ service cloud.firestore {
     // Le danger est précis : une collection ouverte ici, et le site devient un
     // relais de courrier ouvert. N'importe qui écrit un document, l'extension
     // l'envoie, et c'est le domaine d'expédition de DPS qui finit sur les
-    // listes noires. Quatre verrous, donc :
+    // listes noires. Cinq verrous, donc :
     //
+    //   0. l'adresse du compte doit avoir été confirmée par un clic sur le lien
+    //      reçu à l'inscription. Sans cela, une adresse inventée pour passer le
+    //      formulaire — « 0@0.com » — recevrait du courrier, et l'adresse d'un
+    //      tiers pourrait servir à lui en faire parvenir ;
     //   1. l'identifiant est imposé — « confirmation-<activité>_<uid> ». Un
     //      même membre ne peut donc pas remplir la file pour une sortie : une
     //      inscription, un courriel, et pas un de plus ;
@@ -154,12 +158,11 @@ service cloud.firestore {
     //      permettrait d'expédier n'importe quel contenu depuis une adresse
     //      DPS — un cadeau pour l'hameçonnage.
     //
-    // Limite assumée : l'adresse du jeton n'est pas nécessairement vérifiée,
-    // le site ne demandant pas encore de confirmer son adresse à l'inscription.
-    // Quelqu'un peut donc créer un compte avec l'adresse d'un tiers et lui
-    // faire parvenir jusqu'à un courriel par sortie au catalogue. Le plafond
-    // est bas et le contenu est fixe ; le jour où la vérification d'adresse
-    // sera en place, il suffira d'ajouter `request.auth.token.email_verified`.
+    // La limite qui restait — une adresse de jeton non vérifiée, permettant
+    // de créer un compte avec l'adresse d'un tiers et de lui faire parvenir un
+    // courriel — est levée : le site envoie désormais un lien de confirmation
+    // à l'inscription, et `email_verified` est exigé ci-dessous. Une adresse
+    // inventée pour passer le formulaire ne recevra donc rien.
     match /mail/{courrielId} {
 
       // La file contient les adresses des membres et l'état des envois.
@@ -167,6 +170,7 @@ service cloud.firestore {
       allow read: if false;
 
       allow create: if connecte()
+                    && request.auth.token.email_verified == true
                     && request.resource.data.to == request.auth.token.email
                     && courrielId == 'confirmation-' + request.resource.data.activiteId + '_' + moi()
                     && inscritA(request.resource.data.activiteId)

@@ -650,6 +650,95 @@ select {
 
 .champ__lien:hover { color: var(--primaire-fort); }
 
+/* Le bandeau de confirmation d'adresse. Ni alarme ni félicitation : une
+   information à traiter. Il prend donc le lavis orange du sigle — la même
+   teinte que le cadeau d'une sortie — et non le rouge des erreurs, qui
+   laisserait croire à une panne. */
+.bandeau-verif {
+  margin-bottom: var(--e-5);
+  padding: var(--e-4) var(--e-5);
+  border-radius: var(--r-md);
+  border: 1px solid color-mix(in srgb, var(--dps-orange) 35%, var(--bordure));
+  background: color-mix(in srgb, var(--dps-orange) 12%, var(--surface));
+}
+
+.bandeau-verif__titre {
+  margin: 0 0 var(--e-1);
+  font-family: var(--police-titre);
+  font-weight: 700;
+  font-size: var(--t-md);
+  color: var(--texte);
+}
+
+.bandeau-verif__texte {
+  margin: 0 0 var(--e-3);
+  font-size: var(--t-sm);
+  line-height: 1.55;
+  color: var(--texte);
+}
+
+.bandeau-verif__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--e-2);
+}
+
+/* La liste des exigences du mot de passe. Une puce vide tant que la règle
+   n'est pas tenue, une coche quand elle l'est : on voit ce qui reste à faire
+   plutôt que de se le faire dire après l'envoi.
+
+   La couleur ne porte pas seule l'information — la puce change de forme en
+   même temps que de teinte. Un rouge et un vert seuls seraient indéchiffrables
+   pour une part non négligeable des visiteurs. */
+.exigences {
+  list-style: none;
+  margin: var(--e-2) 0 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.exigence {
+  display: flex;
+  align-items: center;
+  gap: var(--e-2);
+  font-size: var(--t-xs);
+  color: var(--texte-doux);
+  transition: color var(--transition);
+}
+
+.exigence__marque {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: var(--r-full);
+  border: 1.5px solid var(--bordure-forte);
+  background: transparent;
+  position: relative;
+  transition: border-color var(--transition), background-color var(--transition);
+}
+
+.exigence.est-tenue { color: var(--texte); }
+
+.exigence.est-tenue .exigence__marque {
+  border-color: var(--dps-teal);
+  background: var(--dps-teal);
+}
+
+/* La coche, tracée en bordures plutôt qu'en caractère : un « ✓ » de police
+   change de dessin d'un système à l'autre et se centre mal. */
+.exigence.est-tenue .exigence__marque::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 3.5px;
+  height: 7px;
+  border: solid #fff;
+  border-width: 0 1.7px 1.7px 0;
+  transform: rotate(45deg);
+}
+
 .champ__erreur {
   display: none;
   font-size: var(--t-xs);
@@ -1436,6 +1525,12 @@ select {
 .bulle:nth-of-type(3) { --teinte: var(--dps-bleu); }
 
 .bulle {
+  position: relative;
+  /* Sert de repère au filigrane, et lui donne son unité de mesure. */
+  container-type: inline-size;
+  /* Le filigrane est taillé pour tenir dedans, mais un disque a le droit de
+     ne rien laisser dépasser de son bord. */
+  overflow: hidden;
   display: grid;
   align-content: center;
   justify-items: center;
@@ -1499,6 +1594,44 @@ select {
 .bulle__icone svg {
   width: 26px;
   height: 26px;
+}
+
+/* L'icône et sa lettre, appariées sur une même ligne — la composition de la
+   référence, où chaque pictogramme surmonte la lettre qu'il illustre.
+
+   Côte à côte plutôt que l'une sous l'autre : la hauteur utile d'un disque est
+   celle de son carré inscrit, et une lettre empilée chasserait le texte hors
+   du cercle. Un premier essai la posait en filigrane derrière le contenu ;
+   elle y était trop pâle pour se lire, et trop grande pour ne pas gêner. */
+.bulle__marque {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--e-3);
+}
+
+/* La lettre est du même corps que le disque voisin : les deux se lisent comme
+   un couple, non comme un signe et sa légende. */
+.bulle__lettre {
+  font-family: var(--police-titre);
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  /* La teinte à peine creusée vers la prune. L'orange du sigle ne donne que
+     2,8:1 sur la surface d'une bulle, sous le seuil de 3:1 qui vaut pour le
+     grand texte ; 94 % suffisent à le franchir sans qu'on voie la différence.
+     Les deux autres passaient déjà — la formule est écrite une fois pour les
+     trois plutôt que réservée à l'orange, pour qu'un changement de teinte ne
+     rouvre pas le problème. */
+  color: color-mix(in srgb, var(--teinte) 94%, var(--prune-900));
+  user-select: none;
+}
+
+/* Sur fond sombre le rapport s'inverse : c'est le bleu du S qui devient
+   illisible, et c'est vers le blanc qu'il faut aller. */
+[data-theme="dark"] .bulle__lettre {
+  color: color-mix(in srgb, var(--teinte) 58%, #ffffff);
 }
 
 /* Le mot est ce qui doit rester : c'est lui qui épelle le sigle. Il passe de

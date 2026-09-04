@@ -553,10 +553,16 @@ function gabaritFormulaire(activite) {
 
     ${
       membreConnecte()
-        ? `<p class="champ__aide" style="margin-bottom:var(--e-5)">
-             La confirmation part par e-mail à l’adresse de votre compte, avec le
-             lieu, le tarif et le déroulé.
-           </p>`
+        ? (Comptes.emailVerifie()
+            ? `<p class="champ__aide" style="margin-bottom:var(--e-5)">
+                 La confirmation part par e-mail à l’adresse de votre compte, avec le
+                 lieu, le tarif et le déroulé.
+               </p>`
+            : `<p class="champ__aide" style="margin-bottom:var(--e-5)">
+                 Votre adresse n’est pas encore confirmée : le récapitulatif ne pourra
+                 pas vous être envoyé. Ouvrez le lien reçu à l’inscription, ou
+                 <a href="compte.html">renvoyez-le depuis votre compte</a>.
+               </p>`)
         : `<p class="champ__aide" style="margin-bottom:var(--e-5)">
              Votre inscription est enregistrée sur cet appareil. Pour recevoir la
              confirmation par e-mail et retrouver vos sorties ailleurs,
@@ -860,9 +866,18 @@ async function enregistrerReservation(activite, participant) {
   const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
 
   rendreGrille();
-  notifier(compte
-    ? `Réservation confirmée. Le récapitulatif part vers ${compte.email}.`
-    : `Réservation confirmée : ${activite.titre}`);
+  const adresseConfirmee =
+    typeof Comptes === 'undefined' || !compte ? false : Comptes.emailVerifie();
+
+  notifier(
+    !compte
+      ? `Réservation confirmée : ${activite.titre}`
+      : adresseConfirmee
+        ? `Réservation confirmée. Le récapitulatif part vers ${compte.email}.`
+        // Le récapitulatif ne partira pas : les règles refusent d'écrire vers
+        // une adresse non confirmée. Le taire laisserait attendre un courriel
+        // qui n'arrivera jamais.
+        : 'Réservation confirmée. Confirmez votre adresse depuis votre compte pour recevoir le récapitulatif.');
 
   // Membre connecté : direction le groupe, sans étape intermédiaire. La modale
   // est refermée d'abord — dans la version fichier unique, rien ne recharge la

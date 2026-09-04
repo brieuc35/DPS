@@ -28,6 +28,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  sendEmailVerification,
+  reload,
   signOut,
   updateProfile,
   onAuthStateChanged,
@@ -56,6 +58,11 @@ function versProfil(utilisateur) {
     prenom: morceaux[0] || 'Membre',
     nom: morceaux.slice(1).join(' '),
     email: utilisateur.email || '',
+    /* Firebase ne considère une adresse comme vérifiée qu'après un clic sur le
+       lien envoyé. C'est ce drapeau qui sépare une adresse réelle d'un
+       « 0@0.com » saisi pour passer le formulaire, et c'est lui que les règles
+       Firestore consultent avant d'autoriser un envoi de courriel. */
+    emailVerifie: Boolean(utilisateur.emailVerified),
     couleur: couleurDe(utilisateur.uid),
   };
 }
@@ -123,6 +130,13 @@ try {
         const { user } = await createUserWithEmailAndPassword(auth, email.trim(), motDePasse);
         await updateProfile(user, { displayName: `${prenom.trim()} ${nom.trim()}`.trim() });
 
+        // Le lien de vérification part tout de suite. On n'attend pas et on
+        // n'échoue pas dessus : le compte est créé, et un envoi manqué se
+        // rattrape depuis l'espace membre, qui propose de le renvoyer.
+        sendEmailVerification(user).catch((erreur) => {
+          console.warn('Lien de vérification non envoyé.', erreur);
+        });
+
         // `updateProfile` ne rejoue pas onAuthStateChanged : on rafraîchit le
         // profil nous-mêmes pour que le prénom soit là immédiatement.
         pont.profil = versProfil(auth.currentUser);
@@ -155,6 +169,35 @@ try {
         return { ok: true };
       } catch (erreur) {
         if (erreur && erreur.code === 'auth/user-not-found') return { ok: true };
+        return { ok: false, motif: motifDe(erreur) };
+      }
+    },
+
+    /** Renvoie le lien de vérification à l'adresse du compte en cours. */
+    async renvoyerVerification() {
+      if (!auth.currentUser) return { ok: false, motif: 'session' };
+      try {
+        await sendEmailVerification(auth.currentUser);
+        return { ok: true };
+      } catch (erreur) {
+        return { ok: false, motif: motifDe(erreur) };
+      }
+    },
+
+    /**
+     * Relit l'utilisateur auprès de Firebase. Le clic sur le lien de
+     * vérification se fait dans un autre onglet : rien ne le signale à
+     * celui-ci, dont le jeton continue d'affirmer que l'adresse n'est pas
+     * vérifiée jusqu'à ce qu'on aille le redemander.
+     */
+    async rafraichirSession() {
+      if (!auth.currentUser) return { ok: false, motif: 'session' };
+      try {
+        await reload(auth.currentUser);
+        pont.profil = versProfil(auth.currentUser);
+        annoncer();
+        return { ok: true, verifie: pont.profil.emailVerifie };
+      } catch (erreur) {
         return { ok: false, motif: motifDe(erreur) };
       }
     },

@@ -7,6 +7,26 @@
 
 const EMAIL_VALIDE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+/* Les trois exigences du mot de passe, dans l'ordre où elles s'affichent sous
+   le champ. Une seule source : la vérification à l'envoi et la liste que le
+   visiteur voit cocher lisent le même tableau, et ne peuvent donc pas
+   diverger.
+
+   Huit caractères ne suffisaient pas : « aaaaaaaaa » passait. Un chiffre et
+   une majuscule écartent la ligne de touches répétée sans rien exiger
+   d'impraticable — ce n'est pas un coffre-fort de banque, et une règle trop
+   sévère pousse à noter le mot de passe sur un papier. */
+const EXIGENCES_MOT_DE_PASSE = [
+  { cle: 'longueur', libelle: 'Au moins 8 caractères', tenue: (v) => v.length >= 8 },
+  { cle: 'chiffre', libelle: 'Au moins un chiffre', tenue: (v) => /[0-9]/.test(v) },
+  { cle: 'majuscule', libelle: 'Au moins une majuscule', tenue: (v) => /[A-ZÀ-ÖØ-Þ]/.test(v) },
+];
+
+/** Le mot de passe satisfait-il les trois exigences ? */
+function motDePasseSolide(valeur) {
+  return EXIGENCES_MOT_DE_PASSE.every((exigence) => exigence.tenue(valeur));
+}
+
 /* ==========================================================================
    Onglets
    ========================================================================== */
@@ -105,6 +125,69 @@ let profilBranche = false;
 let desabonnerSorties = null;
 
 /**
+ * Le bandeau qui réclame la confirmation d'adresse.
+ *
+ * Il ne bloque rien : on peut réserver, écrire, tout faire. Ce qu'une adresse
+ * non confirmée coûte, c'est le courriel de confirmation — les règles Firestore
+ * refusent de l'expédier vers une adresse dont rien ne prouve qu'elle
+ * appartient à la personne. Le bandeau le dit dans ces termes, plutôt que
+ * d'agiter une menace vague.
+ */
+function afficherVerification(compte) {
+  const bandeau = $('[data-verification]');
+  if (!bandeau) return;
+
+  // Hors connexion, aucun courriel n'existe : il n'y a rien à confirmer.
+  if (!Comptes.verificationDisponible() || Comptes.emailVerifie()) {
+    bandeau.hidden = true;
+    return;
+  }
+
+  bandeau.hidden = false;
+  bandeau.innerHTML = `
+    <p class="bandeau-verif__titre">Confirmez votre adresse</p>
+    <p class="bandeau-verif__texte">
+      Un lien vient d’être envoyé à <strong>${echapper(compte.email)}</strong>.
+      Tant qu’il n’est pas ouvert, nous ne pouvons pas vous envoyer les
+      récapitulatifs de vos inscriptions : rien ne prouve encore que cette
+      adresse est la vôtre. Le reste du site fonctionne normalement.
+    </p>
+    <div class="bandeau-verif__actions">
+      <button type="button" class="btn btn--fantome btn--petit" data-renvoyer-verif>
+        Renvoyer le lien
+      </button>
+      <button type="button" class="btn btn--discret btn--petit" data-verif-faite>
+        J’ai cliqué sur le lien
+      </button>
+    </div>`;
+
+  $('[data-renvoyer-verif]', bandeau).addEventListener('click', async (evenement) => {
+    const bouton = evenement.currentTarget;
+    bouton.disabled = true;
+    const resultat = await Comptes.renvoyerVerification();
+    bouton.disabled = false;
+    notifier(resultat.ok
+      ? `Lien renvoyé à ${compte.email}.`
+      : 'Envoi impossible pour le moment. Réessayez dans un instant.');
+  });
+
+  // Le lien s'ouvre dans un autre onglet : celui-ci n'en sait rien tant qu'il
+  // n'est pas allé redemander la session à Firebase.
+  $('[data-verif-faite]', bandeau).addEventListener('click', async (evenement) => {
+    const bouton = evenement.currentTarget;
+    bouton.disabled = true;
+    const resultat = await Comptes.rafraichirSession();
+    bouton.disabled = false;
+    if (resultat.ok && resultat.verifie) {
+      bandeau.hidden = true;
+      notifier('Adresse confirmée. Merci !');
+      return;
+    }
+    notifier('L’adresse n’est pas encore confirmée. Ouvrez le lien reçu par e-mail.');
+  });
+}
+
+/**
  * Rejouable : le profil est réaffiché chaque fois que la session ou le fil de
  * données change, faute de quoi une reconnexion dans la version fichier unique
  * n'y remettrait pas à jour la liste des sorties.
@@ -115,6 +198,8 @@ function afficherProfil(compte) {
 
   $('[data-membre-bonjour]').textContent = `Bonjour ${compte.prenom}`;
   $('[data-membre-email]').textContent = compte.email;
+
+  afficherVerification(compte);
 
   const distant = baseSorties();
 
@@ -331,9 +416,42 @@ function initMotDePasseOublie(formulaireConnexion) {
   });
 }
 
+/**
+ * La liste des exigences sous le champ, cochée au fil de la frappe.
+ *
+ * Montrer ce qui manque plutôt que refuser après coup : un message d'erreur
+ * qui arrive à l'envoi oblige à deviner laquelle des trois règles a manqué.
+ */
+function initExigencesMotDePasse(formulaire) {
+  const liste = $('[data-exigences]', formulaire);
+  const champ = formulaire.elements.motDePasse;
+  if (!liste || !champ) return;
+
+  liste.innerHTML = EXIGENCES_MOT_DE_PASSE.map((exigence) => `
+    <li class="exigence" data-exigence="${exigence.cle}">
+      <span class="exigence__marque" aria-hidden="true"></span>
+      ${exigence.libelle}
+    </li>`).join('');
+
+  const rafraichir = () => {
+    EXIGENCES_MOT_DE_PASSE.forEach((exigence) => {
+      const ligne = $(`[data-exigence="${exigence.cle}"]`, liste);
+      const tenue = exigence.tenue(champ.value);
+      ligne.classList.toggle('est-tenue', tenue);
+      // Le lecteur d'écran doit entendre l'état, que la coche ne lui dit pas.
+      ligne.setAttribute('aria-label', `${exigence.libelle} : ${tenue ? 'rempli' : 'à compléter'}`);
+    });
+  };
+
+  champ.addEventListener('input', rafraichir);
+  rafraichir();
+}
+
 function initInscription() {
   const formulaire = $('[data-formulaire-inscription]');
   if (!formulaire) return;
+
+  initExigencesMotDePasse(formulaire);
 
   formulaire.addEventListener('input', (evenement) => {
     const champ = evenement.target.closest('.champ');
@@ -348,10 +466,10 @@ function initInscription() {
       [champs.prenom, champs.prenom.value.trim().length >= 2],
       [champs.nom, champs.nom.value.trim().length >= 2],
       [champs.email, EMAIL_VALIDE.test(champs.email.value.trim())],
-      [champs.motDePasse, champs.motDePasse.value.length >= 8],
+      [champs.motDePasse, motDePasseSolide(champs.motDePasse.value)],
       [
         champs.confirmation,
-        champs.confirmation.value.length >= 8 &&
+        champs.confirmation.value.length > 0 &&
           champs.confirmation.value === champs.motDePasse.value,
       ],
       [champs.charte, champs.charte.checked],

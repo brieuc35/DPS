@@ -194,6 +194,40 @@ const Comptes = {
   },
 
   /**
+   * Y a-t-il une vérification d'adresse en jeu ? Non hors connexion : il n'y a
+   * alors aucun courrier, donc rien à vérifier, et afficher un bandeau
+   * réclamant de confirmer une adresse à laquelle rien ne sera jamais envoyé
+   * serait mensonger.
+   */
+  verificationDisponible() {
+    return Boolean(pont());
+  },
+
+  /** L'adresse du compte a-t-elle été confirmée par un clic sur le lien ? */
+  emailVerifie() {
+    const compte = this.courant();
+    if (!compte) return false;
+    if (!pont()) return true;
+    return Boolean(compte.emailVerifie);
+  },
+
+  async renvoyerVerification() {
+    const distant = pont();
+    if (!distant) return { ok: false, motif: 'indisponible-local' };
+    return distant.renvoyerVerification();
+  },
+
+  /**
+   * Relit la session auprès de Firebase. Le lien de vérification s'ouvre dans
+   * un autre onglet : celui-ci ne l'apprend qu'en allant le redemander.
+   */
+  async rafraichirSession() {
+    const distant = pont();
+    if (!distant) return { ok: false, motif: 'indisponible-local' };
+    return distant.rafraichirSession();
+  },
+
+  /**
    * Supprime le compte définitivement. Le mot de passe est redemandé : il
    * confirme l'intention, et Firebase exige de toute façon une authentification
    * récente avant d'effacer un compte.
