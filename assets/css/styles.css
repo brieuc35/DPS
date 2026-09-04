@@ -1411,7 +1411,7 @@ select {
   .bulles { grid-template-columns: repeat(2, minmax(0, 300px)); }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 960px) {
   .bulles { grid-template-columns: repeat(3, minmax(0, 300px)); }
 }
 
@@ -1501,9 +1501,21 @@ select {
   height: 26px;
 }
 
+/* Le mot est ce qui doit rester : c'est lui qui épelle le sigle. Il passe de
+   1,25 rem à près du double au large, en Outfit — la géométrique déjà employée
+   par les titres, et celle qui répond aux lettres du logo.
+
+   Pas de police supplémentaire : le site sert lui-même ses deux fichiers pour
+   ne pas transmettre l'adresse IP du visiteur à Google avant tout consentement.
+   En ajouter une coûterait ce téléchargement et ce choix-là ; l'impact se
+   trouve ici dans le corps, la graisse et l'interlettrage, pas dans un
+   troisième caractère. */
 .bulle__titre {
-  margin: var(--e-2) 0 var(--e-1);
-  font-size: 1.25rem;
+  margin: var(--e-3) 0 var(--e-2);
+  font-size: clamp(1.45rem, 1.1rem + 1.1vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
 /* Un cran sous le corps courant : dans un disque, la place utile est celle du
@@ -1537,7 +1549,7 @@ select {
   display: none;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 960px) {
   .bulles--triangle {
     position: relative;
     /* L'espace restant est reporté sur l'écart entre les colonnes plutôt que
