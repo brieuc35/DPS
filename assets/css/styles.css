@@ -2634,6 +2634,93 @@ select {
   color: var(--texte-doux);
 }
 
+/* La pastille des non-lus. Elle remplace le total de messages quand il y a du
+   neuf : deux nombres côte à côte, l'un discret et l'autre vif, se seraient
+   disputé la même lecture.
+
+   Le rose du sigle plutôt que le rouge des erreurs : il y a quelque chose à
+   lire, il n'y a pas de problème. Assez sombre pour porter du blanc — le rose
+   plein n'y suffit pas. */
+.fil-onglet__pastille {
+  flex-shrink: 0;
+  min-width: 20px;
+  padding: 0 6px;
+  border-radius: var(--r-full);
+  background: var(--accent-fort);
+  color: var(--sur-accent);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* Sur l'onglet actif, dont le fond est déjà l'encre, la pastille s'inverse. */
+.fil-onglet.est-actif .fil-onglet__pastille {
+  background: var(--surface);
+  color: var(--texte);
+}
+
+/* La ligne qui explique le cœur, sous le titre du fil. Elle ne paraît que dans
+   le fil d'un groupe, et une seule fois : c'est une indication, pas un
+   avertissement. */
+.messagerie__astuce {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin: var(--e-2) 0 0;
+  font-size: var(--t-xs);
+  color: var(--texte-doux);
+}
+
+.messagerie__astuce .picto { color: var(--accent-fort); flex: none; }
+
+/* Le cœur d'un message : un accusé de lecture, pas un « j'aime ». Discret tant
+   qu'il n'est pas posé — un fil de vingt messages ne doit pas devenir vingt
+   boutons rouges — et franc dès qu'il l'est. */
+.coeur {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin-top: var(--e-2);
+  padding: 2px 8px 2px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--r-full);
+  background: transparent;
+  font: inherit;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--texte-doux);
+  cursor: pointer;
+  transition: color var(--transition), background-color var(--transition),
+    border-color var(--transition);
+}
+
+.coeur:hover:not(:disabled) {
+  color: var(--accent-fort);
+  background: var(--accent-doux);
+}
+
+.coeur:disabled { cursor: default; opacity: 0.5; }
+
+.coeur.est-pose {
+  color: var(--accent-fort);
+  background: var(--accent-doux);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.coeur__compte { font-variant-numeric: tabular-nums; }
+
+/* Dans une bulle qui est déjà à l'encre — les messages de soi — le cœur doit
+   s'éclaircir pour rester lisible. */
+.message--moi .coeur { color: rgba(255, 255, 255, 0.75); }
+.message--moi .coeur:hover:not(:disabled),
+.message--moi .coeur.est-pose {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 /* Hauteur bornée : le composeur doit rester visible sans faire défiler la
    page entière, comme dans une messagerie. */
 .fil-messages {
@@ -3142,15 +3229,22 @@ select {
   max-width: 34ch;
 }
 
+/* La manchette d'une colonne. Elle n'impose pas de couleur : elle hérite de
+   celle de son contexte, ce qui lui permet de servir aussi bien sur le pied de
+   page sombre que sur une carte claire. Deux titres — « Vos fils » et « Vos
+   sorties » — étaient invisibles pour avoir emprunté la version blanche. */
+.titre-colonne,
 .pied__titre {
   font-family: var(--police-texte);
   font-size: var(--t-xs);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #fff;
   margin-bottom: var(--e-3);
 }
+
+.titre-colonne { color: var(--texte-doux); }
+.pied__titre { color: #fff; }
 
 .pied__liste { list-style: none; padding: 0; margin: 0; font-size: var(--t-sm); }
 .pied__liste li + li { margin-top: var(--e-2); }

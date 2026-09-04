@@ -103,6 +103,44 @@ service cloud.firestore {
       allow delete: if connecte() && resource.data.auteurId == moi();
     }
 
+    // ------------------------------------------------- cœurs sur les messages
+    //
+    // Un cœur dit « j'ai vu » sans obliger à écrire « ok ». Il ne porte aucun
+    // texte : rien à modérer, rien à borner en longueur.
+    //
+    // `conversation` est recopiée ici depuis le message. Cette redondance est
+    // volontaire : elle permet à la règle de vérifier l'accès au fil sans aller
+    // lire le message, ce qu'une règle appliquée à une requête ne peut pas
+    // faire de toute façon.
+    match /reactions/{reactionId} {
+
+      function peutVoirFil(conversation) {
+        return conversation == 'general'
+            || (conversation.matches('groupe-.*') && inscritA(activiteDuFil(conversation)));
+      }
+
+      allow read: if connecte() && peutVoirFil(resource.data.conversation);
+
+      // L'identifiant est imposé — « message_uid » : on ne peut pas aimer deux
+      // fois le même message, ce qui dispense de tenir un compteur et rend le
+      // gonflage du nombre impossible.
+      allow create: if connecte()
+                    && request.resource.data.membreId == moi()
+                    && reactionId == request.resource.data.messageId + '_' + moi()
+                    && peutVoirFil(request.resource.data.conversation)
+                    // Trois champs, pas un de plus. Pas de date : un cœur se
+                    // compte, il ne se lit pas à la suite des autres — un
+                    // horodatage n'aurait servi à rien et aurait fait un champ
+                    // de plus à contrôler.
+                    && request.resource.data.keys().hasOnly(
+                         ['conversation', 'messageId', 'membreId']);
+
+      // Retirer son cœur reste possible ; le déplacer sur un autre message,
+      // non — ce serait récrire l'accusé de lecture de quelqu'un.
+      allow update: if false;
+      allow delete: if connecte() && resource.data.membreId == moi();
+    }
+
     // ---------------------------------------------------------- réservations
     match /reservations/{reservationId} {
 

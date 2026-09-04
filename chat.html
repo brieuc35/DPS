@@ -100,7 +100,7 @@
 
           <div class="messagerie">
             <aside class="messagerie__cote" aria-label="Vos fils de discussion">
-              <p class="pied__titre" style="margin-top:0">Vos fils</p>
+              <p class="titre-colonne" style="margin-top:0">Vos fils</p>
               <div class="fils" data-liste-conversations></div>
               <p class="champ__aide" style="margin-top:var(--e-4)">
                 Le fil d’une sortie apparaît ici dès que vous y avez réservé une place.
@@ -111,6 +111,10 @@
               <header class="messagerie__entete">
                 <h2 data-fil-titre style="font-size:1.15rem;margin:0">Le salon</h2>
                 <p data-fil-meta style="margin:0;font-size:var(--t-sm);color:var(--texte-doux)"></p>
+                <!-- Rempli par chat.js, et seulement dans le fil d'un groupe :
+                     c'est là que tombent les informations pratiques, donc là
+                     que l'accusé de lecture sert. -->
+                <p class="messagerie__astuce" data-fil-astuce hidden></p>
               </header>
 
               <div class="fil-messages" data-fil-messages role="log" aria-live="polite"></div>

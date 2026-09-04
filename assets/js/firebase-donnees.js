@@ -5,7 +5,7 @@
  * `chat.js` et `activites.js` s'en servent quand il est là, et retombent sur
  * leur stockage local sinon.
  *
- * Six collections, et une raison à chaque champ :
+ * Huit collections, et une raison à chaque champ :
  *
  *   /messages/{id}
  *     conversation  'general' ou 'groupe-<activité>' — sert au filtrage et aux
@@ -39,6 +39,17 @@
  *   /jaimes/{publication}_{uid}
  *     Même principe que les réservations : l'identifiant composé rend un
  *     double soutien impossible et se vérifie d'une seule lecture.
+ *
+ *   /reactions/{message}_{uid}
+ *     Le cœur posé sur un message de discussion — « j'ai vu », sans avoir à
+ *     écrire « ok ». `conversation` y est recopiée depuis le message : c'est
+ *     ce qui permet de borner la requête à un fil et aux règles d'en vérifier
+ *     l'accès sans lire le message. Aucune date : un cœur se compte, il ne se
+ *     lit pas à la suite.
+ *
+ *   /mail/confirmation-{activité}_{uid}
+ *     La file d'envoi que l'extension « Trigger Email » relève. Le site n'y
+ *     dépose qu'un nom de gabarit et des valeurs, jamais le texte du message.
  */
 
 import {
@@ -239,6 +250,58 @@ export function demarrerDonnees(application) {
         return { ok: true };
       } catch (erreur) {
         console.warn('Confirmation non mise en file.', erreur);
+        return { ok: false };
+      }
+    },
+
+    /* --------------------------------------------------- accusés de lecture */
+
+    /**
+     * Les cœurs posés sur les messages d'un fil.
+     *
+     * `conversation` est recopiée sur chaque cœur alors qu'elle se déduirait du
+     * message : c'est ce qui permet à la requête d'être bornée à un fil, et aux
+     * règles de vérifier l'accès sans aller lire le message — une règle ne sait
+     * pas faire de requête, et une lecture de plus par cœur affiché serait
+     * payée pour rien.
+     */
+    ecouterReactions(conversationId, rappel) {
+      const requete = query(
+        collection(base, 'reactions'),
+        where('conversation', '==', conversationId),
+        limit(500)
+      );
+
+      return onSnapshot(
+        requete,
+        (instantane) => {
+          rappel(instantane.docs.map((document) => ({ id: document.id, ...document.data() })));
+        },
+        (erreur) => {
+          console.warn('Lecture des cœurs impossible.', erreur);
+          rappel([]);
+        }
+      );
+    },
+
+    /**
+     * Pose ou retire son cœur. L'identifiant composé « message_uid » rend le
+     * doublon impossible : on ne peut pas aimer deux fois le même message, et
+     * il n'y a donc pas de compteur à tenir — le nombre se compte à
+     * l'affichage, sur les cœurs eux-mêmes.
+     */
+    async basculerReaction({ conversationId, messageId, membreId, actif }) {
+      const reference = doc(base, 'reactions', `${messageId}_${membreId}`);
+      try {
+        if (actif) {
+          // Trois champs seulement : un cœur se compte, il ne se date pas.
+          await setDoc(reference, { conversation: conversationId, messageId, membreId });
+        } else {
+          await deleteDoc(reference);
+        }
+        return { ok: true };
+      } catch (erreur) {
+        console.warn('Cœur non enregistré.', erreur);
         return { ok: false };
       }
     },
