@@ -6,13 +6,15 @@
 
    Le logo est franchement coloré — sept teintes relevées sur le fichier
    lui-même, de l'orange du D au bleu du S. L'interface, elle, se tait : un
-   gris très pâle tiré vers le violet, une encre prune presque noire, et les
-   couleurs du sigle réservées aux touches — pastilles, filets, lavis,
-   couvertures de cartes. Aucune section ne les porte toutes.
+   grège très pâle — un gris que la chaleur traverse sans qu'on la nomme —,
+   une encre prune presque noire, et les couleurs du sigle réservées aux
+   touches : pastilles, filets, lavis, couvertures de cartes. Aucune section
+   ne les porte toutes.
 
-   Le fond, l'encre et le geste appartiennent à la même famille violette. Les
-   couleurs chaudes du sigle s'y détachent d'autant mieux qu'elles ne s'y
-   noient plus, ce qu'un fond crème ne permettait pas.
+   Ce fond a connu trois états, et les deux premiers étaient des erreurs
+   mesurables : trop proche du blanc (ΔE 4, invisible), puis franchement crème
+   (chroma 6, qui date une page). Celui-ci tient les deux bouts — ΔE 6,4 du
+   blanc, chroma 1,7.
 
    Trois règles en découlent, valables partout dans ce fichier :
      · le geste principal porte l'indigo du P, seule couleur du sigle — avec
@@ -110,23 +112,22 @@
      la charte demandait précisément d'éviter.
 
      Le crème qui a suivi — #f5efe4, chroma 6,0 — corrigeait le premier défaut
-     mais lisait franchement beige, ce qui date une page. Celui-ci divise ce
-     beige par deux (chroma 3,2) en gardant l'écart au blanc (ΔE 6,7) : on ne
-     revient pas au champ indistinct, et la page cesse d'avoir l'air d'un
-     papier ancien.
+     mais lisait franchement beige, ce qui date une page. Un grège divise ce
+     beige par trois et demi (chroma 1,7) tout en gardant l'écart au blanc
+     (ΔE 6,4 contre 8,1) : la page ne redevient pas ce champ indistinct, et
+     elle cesse d'avoir l'air d'un papier ancien.
 
-     La teinte a changé de camp : elle n'est plus jaune mais violette, celle de
-     l'encre prune. Le fond, le texte et le geste principal appartiennent
-     désormais à la même famille, et les couleurs chaudes du sigle — l'orange
-     du D, le rose du P — s'y détachent d'autant mieux qu'elles ne s'y noient
-     plus.
+     Un gris violacé a été essayé entre les deux — plus tranchant, mais froid.
+     Celui-ci reste du côté chaud, à 85° de teinte, avec presque plus de
+     couleur : c'est un gris que la lumière traverse, pas une crème. La chaleur
+     se sent sans se nommer, ce qui était le but depuis le début.
 
      La page est nettement teintée, la surface des cartes à peine : c'est cet
      écart-là qui détache les cartes du papier. Le réduire à rien, comme au
      tout premier essai (ΔE 2,6 entre les deux), noie tout dans un même champ. */
-  --ivoire: #efedf3;
-  --ivoire-creux: #e6e3ec; /* bandes alternées, léger renfoncement */
-  --blanc-chaud: #fdfcff;  /* surfaces posées sur le fond */
+  --ivoire: #efedea;
+  --ivoire-creux: #e7e4df; /* bandes alternées, léger renfoncement */
+  --blanc-chaud: #fdfcfa;  /* surfaces posées sur le fond */
 
   /* --- Prune : la structure ------------------------------------------------
      Le marron-violet du site devient une vraie couleur porteuse. Ni noir ni
@@ -144,8 +145,8 @@
   --fond-alt: var(--ivoire-creux);
   --surface: var(--blanc-chaud);
   --surface-2: var(--ivoire-creux);
-  --bordure: #dedbe6;
-  --bordure-forte: #c2bdd0;
+  --bordure: #e0dcd5;
+  --bordure-forte: #c5bfb5;
   --texte: var(--prune-900);
   --texte-doux: var(--prune-400);
   --texte-inverse: var(--ivoire);
@@ -179,12 +180,11 @@
   --accent-doux: #f8dde2;
   --sur-accent: #ffffff;
 
-  /* Lueur du haut de page. Un premier essai l'a gardée chaude — l'orange du D
-     dilué — sur un fond devenu froid : les deux se rencontraient en une bande
-     terne, qui donnait à l'ouverture un air sali plutôt qu'une profondeur.
-     Elle prend donc l'indigo du geste principal, très éclairci : le haut de
-     page se lève dans la couleur de la marque au lieu de la contredire. */
-  --halo: #e2def2;
+  /* Lueur du haut de page : l'orange du D, très dilué. Elle avait dû passer à
+     l'indigo le temps d'un fond froid, où une lueur chaude rencontrait le gris
+     violacé en une bande terne. Le fond étant redevenu chaud, elle retrouve sa
+     teinte d'origine, qui s'y fond au lieu de s'y heurter. */
+  --halo: #f0e3d2;
 
   /* Terre brûlée pour les actions irréversibles, cousine du corail du sigle
      mais assez sombre pour porter du blanc. */
@@ -250,15 +250,15 @@
    et le bleu perdraient toute lisibilité sur un fond aussi profond. La teinte
    est conservée, seule la clarté change. */
 [data-theme="dark"] {
-  --fond: #15111d;
-  --fond-alt: #1c1726;
-  --surface: #1f1a2a;
-  --surface-2: #272134;
-  --bordure: #373046;
-  --bordure-forte: #4e4562;
-  --texte: #f2eff7;
-  --texte-doux: #b3abc4;
-  --texte-inverse: #15111d;
+  --fond: #17120f;
+  --fond-alt: #1e1815;
+  --surface: #221b17;
+  --surface-2: #2a231d;
+  --bordure: #3b322a;
+  --bordure-forte: #53473c;
+  --texte: #f5f1ec;
+  --texte-doux: #bdb2a6;
+  --texte-inverse: #17120f;
 
   /* Le bouton garde l'indigo, éclairci pour ressortir sur la nuit : à sa
      valeur d'origine il s'y fondrait. C'est le texte qui devient sombre. */
@@ -272,7 +272,7 @@
   --accent-fort: #fdc0d6;
   --accent-doux: #391a28;
   --sur-accent: #1c0b13;
-  --halo: #2b2036;
+  --halo: #2f2418;
   --danger: #f3a493;
   --danger-doux: #3a1d18;
   --sur-danger: #24100c;
@@ -1551,12 +1551,6 @@ select {
 .bulle:nth-of-type(3) { --teinte: var(--dps-bleu); }
 
 .bulle {
-  position: relative;
-  /* Sert de repère au filigrane, et lui donne son unité de mesure. */
-  container-type: inline-size;
-  /* Le filigrane est taillé pour tenir dedans, mais un disque a le droit de
-     ne rien laisser dépasser de son bord. */
-  overflow: hidden;
   display: grid;
   align-content: center;
   justify-items: center;
@@ -1620,44 +1614,6 @@ select {
 .bulle__icone svg {
   width: 26px;
   height: 26px;
-}
-
-/* L'icône et sa lettre, appariées sur une même ligne — la composition de la
-   référence, où chaque pictogramme surmonte la lettre qu'il illustre.
-
-   Côte à côte plutôt que l'une sous l'autre : la hauteur utile d'un disque est
-   celle de son carré inscrit, et une lettre empilée chasserait le texte hors
-   du cercle. Un premier essai la posait en filigrane derrière le contenu ;
-   elle y était trop pâle pour se lire, et trop grande pour ne pas gêner. */
-.bulle__marque {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--e-3);
-}
-
-/* La lettre est du même corps que le disque voisin : les deux se lisent comme
-   un couple, non comme un signe et sa légende. */
-.bulle__lettre {
-  font-family: var(--police-titre);
-  font-size: 2.6rem;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  /* La teinte à peine creusée vers la prune. L'orange du sigle ne donne que
-     2,8:1 sur la surface d'une bulle, sous le seuil de 3:1 qui vaut pour le
-     grand texte ; 94 % suffisent à le franchir sans qu'on voie la différence.
-     Les deux autres passaient déjà — la formule est écrite une fois pour les
-     trois plutôt que réservée à l'orange, pour qu'un changement de teinte ne
-     rouvre pas le problème. */
-  color: color-mix(in srgb, var(--teinte) 94%, var(--prune-900));
-  user-select: none;
-}
-
-/* Sur fond sombre le rapport s'inverse : c'est le bleu du S qui devient
-   illisible, et c'est vers le blanc qu'il faut aller. */
-[data-theme="dark"] .bulle__lettre {
-  color: color-mix(in srgb, var(--teinte) 58%, #ffffff);
 }
 
 /* Le mot est ce qui doit rester : c'est lui qui épelle le sigle. Il passe de
