@@ -5,15 +5,21 @@
    Direction artistique : le contraste entre le sigle et l'interface.
 
    Le logo est franchement coloré — sept teintes relevées sur le fichier
-   lui-même, de l'orange du D au bleu du S. L'interface, elle, se tait :
-   fond ivoire à peine chaud, encre prune presque noire, et les couleurs du
-   sigle réservées aux touches — pastilles, filets, lavis, couvertures de
-   cartes. Aucune section ne les porte toutes.
+   lui-même, de l'orange du D au bleu du S. L'interface, elle, se tait : un
+   gris très pâle tiré vers le violet, une encre prune presque noire, et les
+   couleurs du sigle réservées aux touches — pastilles, filets, lavis,
+   couvertures de cartes. Aucune section ne les porte toutes.
+
+   Le fond, l'encre et le geste appartiennent à la même famille violette. Les
+   couleurs chaudes du sigle s'y détachent d'autant mieux qu'elles ne s'y
+   noient plus, ce qu'un fond crème ne permettait pas.
 
    Trois règles en découlent, valables partout dans ce fichier :
-     · le geste principal est en prune, pas en couleur ;
-     · une couleur du sigle ne porte jamais de petit texte — seuls l'indigo
-       et le bleu atteignent 4,5:1 sur l'ivoire, les autres servent en aplat ;
+     · le geste principal porte l'indigo du P, seule couleur du sigle — avec
+       le bleu du S — qui supporte du blanc lisible en aplat ;
+     · une couleur du sigle ne porte jamais de petit texte : les chaudes
+       n'atteignent pas 4,5:1 sur le fond, et les descendre jusque-là les
+       transforme en bruns. Elles servent en aplat, en lavis, en filet ;
      · la photographie prime sur l'ornement : quand une image existe, elle
        occupe la place, et le motif de la porte ne la remplace qu'à défaut.
 
@@ -103,17 +109,24 @@
      nuancier sous les yeux. Le site se lisait donc simplement blanc, ce que
      la charte demandait précisément d'éviter.
 
-     Celui-ci est à ΔE 8 : le double d'écart, et toujours 14,8:1 avec l'encre.
-     C'est le point où la chaleur se ressent sans qu'on puisse nommer la
-     couleur — au-delà, vers ΔE 12, on entre dans le beige.
+     Le crème qui a suivi — #f5efe4, chroma 6,0 — corrigeait le premier défaut
+     mais lisait franchement beige, ce qui date une page. Celui-ci divise ce
+     beige par deux (chroma 3,2) en gardant l'écart au blanc (ΔE 6,7) : on ne
+     revient pas au champ indistinct, et la page cesse d'avoir l'air d'un
+     papier ancien.
+
+     La teinte a changé de camp : elle n'est plus jaune mais violette, celle de
+     l'encre prune. Le fond, le texte et le geste principal appartiennent
+     désormais à la même famille, et les couleurs chaudes du sigle — l'orange
+     du D, le rose du P — s'y détachent d'autant mieux qu'elles ne s'y noient
+     plus.
 
      La page est nettement teintée, la surface des cartes à peine : c'est cet
-     écart-là qui fait la chaleur, et c'est lui qui détache les cartes du
-     papier. Le réduire à rien, comme au premier essai (ΔE 2,6 entre les
-     deux), noie tout dans un même champ indistinct. */
-  --ivoire: #f5efe4;
-  --ivoire-creux: #ece4d5; /* bandes alternées, léger renfoncement */
-  --blanc-chaud: #fffdfa;  /* surfaces posées sur l'ivoire */
+     écart-là qui détache les cartes du papier. Le réduire à rien, comme au
+     tout premier essai (ΔE 2,6 entre les deux), noie tout dans un même champ. */
+  --ivoire: #efedf3;
+  --ivoire-creux: #e6e3ec; /* bandes alternées, léger renfoncement */
+  --blanc-chaud: #fdfcff;  /* surfaces posées sur le fond */
 
   /* --- Prune : la structure ------------------------------------------------
      Le marron-violet du site devient une vraie couleur porteuse. Ni noir ni
@@ -131,24 +144,33 @@
   --fond-alt: var(--ivoire-creux);
   --surface: var(--blanc-chaud);
   --surface-2: var(--ivoire-creux);
-  --bordure: #e2d7c4;
-  --bordure-forte: #cbbba2;
+  --bordure: #dedbe6;
+  --bordure-forte: #c2bdd0;
   --texte: var(--prune-900);
   --texte-doux: var(--prune-400);
   --texte-inverse: var(--ivoire);
 
-  /* Le geste principal est en prune, pas en couleur : sur une page ivoire,
-     un bouton presque noir est le plus désirable et le plus calme des deux.
-     La couleur, elle, reste disponible pour ce qui doit chanter. */
-  --encre-action: var(--prune-900);
-  --encre-action-fort: var(--prune-800);
+  /* Le geste principal porte l'indigo du P.
 
-  /* La seule couleur du logo qui tienne le petit texte : le bleu du S, à
-     6,6:1. C'est donc lui qui porte les liens, les bordures actives et les
-     anneaux de focus — une couleur de marque, pas un bleu de navigateur. */
-  --primaire: var(--dps-bleu);
-  --primaire-fort: #0a4a74;
-  --primaire-doux: #e4edf1;
+     Il était en prune — presque noir — ce qui était calme mais muet : rien
+     dans le bouton ne disait DPS. Des sept couleurs relevées sur le sigle,
+     l'indigo et le bleu du S sont les deux seules qui portent du blanc lisible
+     en aplat (7,4:1 et 7,1:1). Les chaudes n'y arrivent pas : ramener l'orange
+     à 4,5:1 demande de le descendre à 30 % de sa teinte, où il n'est plus
+     orange mais brun.
+
+     L'indigo plutôt que le bleu : plus vif, et il laisse au bleu du S son
+     emploi de couleur de thématique. */
+  --encre-action: var(--dps-indigo);
+  --encre-action-fort: #2a3f85;
+
+  /* Liens, bordures actives et anneaux de focus prennent le même indigo que
+     le bouton. Deux bleus voisins — l'indigo du P et le bleu du S — auraient
+     eu l'air d'une inadvertance plutôt que d'un système ; une seule couleur
+     d'action se retient mieux. 6,3:1 sur le fond. */
+  --primaire: var(--dps-indigo);
+  --primaire-fort: #2a3f85;
+  --primaire-doux: #e6e8f4;
 
   /* L'accent décoratif par défaut. Il ne porte jamais de texte : le texte
      posé dessus est en prune. */
@@ -157,8 +179,12 @@
   --accent-doux: #f8dde2;
   --sur-accent: #ffffff;
 
-  /* Lueur du haut de page — l'orange du D, très dilué. */
-  --halo: #f3d3b4;
+  /* Lueur du haut de page. Un premier essai l'a gardée chaude — l'orange du D
+     dilué — sur un fond devenu froid : les deux se rencontraient en une bande
+     terne, qui donnait à l'ouverture un air sali plutôt qu'une profondeur.
+     Elle prend donc l'indigo du geste principal, très éclairci : le haut de
+     page se lève dans la couleur de la marque au lieu de la contredire. */
+  --halo: #e2def2;
 
   /* Terre brûlée pour les actions irréversibles, cousine du corail du sigle
      mais assez sombre pour porter du blanc. */
@@ -224,29 +250,29 @@
    et le bleu perdraient toute lisibilité sur un fond aussi profond. La teinte
    est conservée, seule la clarté change. */
 [data-theme="dark"] {
-  --fond: #170d13;
-  --fond-alt: #1e1119;
-  --surface: #21141c;
-  --surface-2: #2a1a24;
-  --bordure: #3c2733;
-  --bordure-forte: #55394a;
-  --texte: #f7efe9;
-  --texte-doux: #c0a7b2;
-  --texte-inverse: #170d13;
+  --fond: #15111d;
+  --fond-alt: #1c1726;
+  --surface: #1f1a2a;
+  --surface-2: #272134;
+  --bordure: #373046;
+  --bordure-forte: #4e4562;
+  --texte: #f2eff7;
+  --texte-doux: #b3abc4;
+  --texte-inverse: #15111d;
 
-  /* Le geste principal s'inverse : l'ivoire devient le bouton, la prune le
-     texte qu'il porte. */
-  --encre-action: #f3e7dc;
-  --encre-action-fort: #ffffff;
+  /* Le bouton garde l'indigo, éclairci pour ressortir sur la nuit : à sa
+     valeur d'origine il s'y fondrait. C'est le texte qui devient sombre. */
+  --encre-action: #96a9e6;
+  --encre-action-fort: #b3c1f0;
 
-  --primaire: #8dc4e6;
-  --primaire-fort: #b0d8f2;
-  --primaire-doux: #16232d;
+  --primaire: #96a9e6;
+  --primaire-fort: #b3c1f0;
+  --primaire-doux: #1d2140;
   --accent: #f9a3c3;
   --accent-fort: #fdc0d6;
   --accent-doux: #391a28;
   --sur-accent: #1c0b13;
-  --halo: #3a2018;
+  --halo: #2b2036;
   --danger: #f3a493;
   --danger-doux: #3a1d18;
   --sur-danger: #24100c;
