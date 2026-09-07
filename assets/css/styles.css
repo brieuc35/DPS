@@ -432,9 +432,15 @@ select {
 
 /* Et la section précédente, symétriquement : les deux rembourrages
    s'additionnaient (96 + 96 px) pour un vide bien plus large qu'entre les
-   autres sections de la page. */
+   autres sections de la page.
+
+   Le resserrement était allé trop loin depuis que les mots des bulles ont
+   presque doublé de corps : il ne restait que 32 px sous des disques de
+   300 px, et la section suivante paraissait leur monter dessus. Un objet rond
+   demande d'ailleurs plus d'air qu'un bloc, sa masse s'arrêtant bien avant les
+   angles de sa boîte. */
 .section--suivie {
-  padding-bottom: var(--e-6);
+  padding-bottom: var(--e-8);
 }
 
 .section__entete {
