@@ -6,9 +6,9 @@
 
    Le logo est franchement coloré — sept teintes relevées sur le fichier
    lui-même, de l'orange du D au bleu du S. L'interface, elle, se tait : une
-   page en magenta très dilué, une encre prune presque noire — la même teinte,
-   à deux valeurs — et les couleurs du sigle réservées aux touches : pastilles,
-   filets, lavis, couvertures de cartes. Aucune section ne les porte toutes.
+   page en corail très dilué, une encre prune presque noire, et les couleurs
+   du sigle réservées aux touches : pastilles, filets, lavis, couvertures de
+   cartes. Aucune section ne les porte toutes.
 
    Ce fond a connu quatre états, dont deux erreurs mesurables : trop proche du
    blanc (ΔE 4, invisible en usage réel), puis franchement crème (chroma 6, ce
@@ -110,28 +110,26 @@
      nuancier sous les yeux. Le site se lisait donc simplement blanc, ce que
      la charte demandait précisément d'éviter.
 
-     Le fond est le magenta de la charte — #d7519c — dilué à 8 % dans du blanc.
+     Le fond est le corail de la charte — #fc8460 — dilué à 12 % dans du blanc.
      Aucune des six couleurs de la charte ne peut servir de fond en aplat : à
      pleine puissance, plus un texte ne s'y lit. Diluée jusqu'à n'être qu'un
      souffle, en revanche, une couleur donne à la page une teinte au lieu d'une
      absence de teinte.
 
-     Le magenta plutôt qu'une autre parce qu'il tombe, une fois dilué, à 342°
-     — la teinte exacte de l'encre prune du site. La page est donc la version
-     presque blanche de sa propre encre : deux valeurs d'une seule couleur, ce
-     qu'aucune des cinq autres ne permettait. Le corail en est à 55°, le violet
-     à 39°, l'orange à 104°, le turquoise à 131°.
+     Le corail tombe à 40° une fois dilué : chaud, mais du côté de l'abricot
+     et non du jaune. C'est ce qui le sépare du crème essayé plus tôt, à 85° —
+     celui-là lisait « papier ancien », celui-ci lit « lumière ».
 
-     Le dosage vise ΔE 6,5 du blanc — la même perceptibilité que les fonds
-     précédents. En dessous, la page redevient le champ indistinct du premier
-     essai ; au-dessus, elle cesse d'être un fond pour devenir une surface
-     colorée, et les couvertures de cartes s'y noient.
+     Le dosage vise ΔE 7 du blanc. En dessous, la page redevient le champ
+     indistinct du premier essai de cette série ; au-dessus, elle cesse d'être
+     un fond pour devenir une surface colorée, et les couvertures de cartes
+     s'y noient.
 
      La page est nettement teintée, la surface des cartes à peine : c'est cet
      écart-là qui détache les cartes du papier. */
-  --ivoire: #fbf0f6;
-  --ivoire-creux: #f3e4ee; /* bandes alternées, léger renfoncement */
-  --blanc-chaud: #fffcfe;  /* surfaces posées sur le fond */
+  --ivoire: #fff0ec;
+  --ivoire-creux: #fee3db; /* bandes alternées, léger renfoncement */
+  --blanc-chaud: #fffdfc;  /* surfaces posées sur le fond */
 
   /* --- Prune : la structure ------------------------------------------------
      Le marron-violet du site devient une vraie couleur porteuse. Ni noir ni
@@ -149,8 +147,8 @@
   --fond-alt: var(--ivoire-creux);
   --surface: var(--blanc-chaud);
   --surface-2: var(--ivoire-creux);
-  --bordure: #efe0e9;
-  --bordure-forte: #d6c1cf;
+  --bordure: #fbdcd2;
+  --bordure-forte: #d9a794;
   --texte: var(--prune-900);
   --texte-doux: var(--prune-400);
   --texte-inverse: var(--ivoire);
@@ -184,10 +182,10 @@
   --accent-doux: #f8dde2;
   --sur-accent: #ffffff;
 
-  /* Lueur du haut de page : le même magenta que le fond, un cran moins dilué.
+  /* Lueur du haut de page : le même corail que le fond, un cran moins dilué.
      Une lueur d'une autre teinte que la page se voit comme une tache ; de la
      même teinte, elle se lit comme une profondeur. */
-  --halo: #f6dcec;
+  --halo: #fee1d8;
 
   /* Terre brûlée pour les actions irréversibles, cousine du corail du sigle
      mais assez sombre pour porter du blanc. */
@@ -253,15 +251,15 @@
    et le bleu perdraient toute lisibilité sur un fond aussi profond. La teinte
    est conservée, seule la clarté change. */
 [data-theme="dark"] {
-  --fond: #180e14;
-  --fond-alt: #1f131b;
-  --surface: #231620;
-  --surface-2: #2b1c27;
-  --bordure: #3d2b36;
-  --bordure-forte: #553c4b;
-  --texte: #f7eff4;
-  --texte-doux: #c2aab6;
-  --texte-inverse: #180e14;
+  --fond: #1a120e;
+  --fond-alt: #211815;
+  --surface: #251b17;
+  --surface-2: #2e231d;
+  --bordure: #3f312a;
+  --bordure-forte: #58453b;
+  --texte: #f8f1ec;
+  --texte-doux: #c4b2a7;
+  --texte-inverse: #1a120e;
 
   /* Le bouton garde l'indigo, éclairci pour ressortir sur la nuit : à sa
      valeur d'origine il s'y fondrait. C'est le texte qui devient sombre. */
@@ -275,7 +273,7 @@
   --accent-fort: #fdc0d6;
   --accent-doux: #391a28;
   --sur-accent: #1c0b13;
-  --halo: #33202c;
+  --halo: #33241c;
   --danger: #f3a493;
   --danger-doux: #3a1d18;
   --sur-danger: #24100c;
