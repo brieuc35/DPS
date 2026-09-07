@@ -235,8 +235,8 @@ function rendreFil() {
     fil.innerHTML = `
       <div class="message-vide">
         <span class="message-vide__picto" aria-hidden="true">${picto(CERCLES[0] && CERCLES[0].icone, 34)}</span>
-        <h3>Le fil vient d’ouvrir</h3>
-        <p>Rien n’a encore été écrit ici. Une question sur une sortie à venir fera très bien l’affaire.</p>
+        <h3>Le fil d’actualité vient d’ouvrir</h3>
+        <p>Rien n’a encore été publié ici. Une idée d’activité fera très bien l’affaire.</p>
       </div>
     `;
     return;
@@ -756,7 +756,7 @@ function initPortail() {
     Stockage.ecrire(CLE_ADHESION, { motivation: reponse, creeLe: new Date().toISOString() });
     ouvrir();
     espace.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    notifier('Bienvenue — le fil est à vous');
+    notifier('Bienvenue — le fil d’actualité est à vous');
   });
 }
 

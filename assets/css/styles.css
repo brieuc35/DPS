@@ -1782,6 +1782,15 @@ select {
 
 .charte__intro { color: var(--texte-doux); margin-bottom: 0; }
 
+/* La phrase qui referme le paragraphe. Elle ne prend pas de couleur d'accent :
+   sur le panneau prune, l'accent servirait de lien et n'en est pas un. Elle
+   remonte simplement au blanc plein, là où l'intro reste en retrait. */
+.charte__signature {
+  margin: var(--e-4) 0 0;
+  color: var(--texte);
+  font-weight: 600;
+}
+
 .charte__liste {
   display: grid;
   gap: var(--e-3);

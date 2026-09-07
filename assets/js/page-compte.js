@@ -91,8 +91,8 @@ function gabaritSorties(reservations) {
   if (!reservations.length) {
     return `
       <p style="color:var(--texte-doux);font-size:var(--t-sm);margin:0">
-        Aucune sortie réservée pour l’instant. Le fil d’un groupe s’ouvre dès que
-        vous prenez une place.
+        Aucune sortie réservée pour l’instant. Le groupe d’une sortie s’ouvre dès
+        que vous y prenez une place.
       </p>
     `;
   }
@@ -109,7 +109,7 @@ function gabaritSorties(reservations) {
                 ${activite ? `<span style="color:var(--texte-doux)"> · ${formaterDateCourte(activite.date)}</span>` : ''}
               </span>
               <a class="btn btn--fantome btn--petit"
-                 href="${lienInterne('chat', `groupe-${echapper(reservation.activiteId)}`)}">Ouvrir le fil</a>
+                 href="${lienInterne('chat', `groupe-${echapper(reservation.activiteId)}`)}">Ouvrir le groupe</a>
             </li>
           `;
         })

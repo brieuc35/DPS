@@ -1002,7 +1002,7 @@ async function enregistrerReservation(activite, participant) {
       </div>
 
       <p style="font-size:var(--t-sm);color:var(--texte-doux)">
-        Le groupe a son fil de discussion : vous saurez qui vient, et vous ne
+        Chaque sortie a son groupe de discussion : vous saurez qui vient, et vous ne
         débarquerez pas devant des inconnus complets. Il faut un compte pour y entrer.
       </p>
 
