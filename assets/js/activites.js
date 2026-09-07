@@ -25,16 +25,86 @@ const ICONE_CADENAS =
   '<rect x="5" y="11" width="14" height="9" rx="1.6"/><path d="M8 11V7.5a4 4 0 0 1 8 0V11"/>';
 
 /**
+ * Une scène dessinée par sortie, en attendant les photographies.
+ *
+ * Le motif de la porte qui servait jusqu'ici était le même pour les quatre :
+ * il signait la marque mais ne disait rien de ce qu'on allait faire. Ces
+ * scènes-là montrent l'activité — une galerie de mine, une table de billard,
+ * des pommes et une bouteille, des cuves de brassage.
+ *
+ * Dessinées et non photographiées, et cela reste assumé : une image de banque
+ * ferait croire qu'on a visité le lieu. Le trait blanc sur la couleur de la
+ * thématique dit clairement « illustration », pas « voici l'endroit ».
+ *
+ * Repère commun : une boîte de 120 × 80, le rapport exact de la vignette, le
+ * sol vers y = 74 et le sujet centré autour de x = 60. Pour une nouvelle
+ * sortie, ajouter une entrée ici ; sans entrée, la carte retombe sur le motif
+ * de la porte, qui ne prétend rien.
+ */
+const SCENES = {
+  // Une galerie boisée qui s'enfonce, ses rails, sa lampe suspendue.
+  'mine-bleue': `
+    <path d="M0 66h120M0 73h120" stroke="rgba(255,255,255,.12)" stroke-width="1.4"/>
+    <path d="M46 76V54a14 12 0 0 1 28 0v22Z" fill="rgba(255,255,255,.16)"/>
+    <path d="M28 76V46a32 28 0 0 1 64 0v30" stroke="rgba(255,255,255,.55)" stroke-width="2.2" fill="none"/>
+    <path d="M35 76V50M85 76V50" stroke="rgba(255,255,255,.32)" stroke-width="2.4"/>
+    <path d="M45 76 57 57M75 76 63 57" stroke="rgba(255,255,255,.85)" stroke-width="1.8"/>
+    <path d="M49 70h22M54 63h12M58 58h4" stroke="rgba(255,255,255,.38)" stroke-width="1.2"/>
+    <path d="M60 18v9" stroke="rgba(255,255,255,.55)" stroke-width="1.4"/>
+    <circle cx="60" cy="32" r="4.6" fill="rgba(255,255,255,.92)"/>
+    <path d="M51 41l9-4 9 4" stroke="rgba(255,255,255,.3)" stroke-width="1.4" fill="none"/>`,
+
+  // La table vue de trois quarts, ses poches, trois boules et la queue.
+  'initiation-billard': `
+    <rect x="18" y="20" width="84" height="48" rx="8"
+          fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.55)" stroke-width="2.2"/>
+    <rect x="26" y="28" width="68" height="32" rx="4"
+          fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1.3"/>
+    <circle cx="26" cy="28" r="2.8" fill="rgba(255,255,255,.5)"/>
+    <circle cx="60" cy="28" r="2.8" fill="rgba(255,255,255,.5)"/>
+    <circle cx="94" cy="28" r="2.8" fill="rgba(255,255,255,.5)"/>
+    <circle cx="26" cy="60" r="2.8" fill="rgba(255,255,255,.5)"/>
+    <circle cx="60" cy="60" r="2.8" fill="rgba(255,255,255,.5)"/>
+    <circle cx="94" cy="60" r="2.8" fill="rgba(255,255,255,.5)"/>
+    <circle cx="70" cy="38" r="5" fill="rgba(255,255,255,.55)"/>
+    <circle cx="78" cy="48" r="5" fill="rgba(255,255,255,.75)"/>
+    <circle cx="52" cy="46" r="5.4" fill="rgba(255,255,255,.95)"/>
+    <path d="M12 66 44 50" stroke="rgba(255,255,255,.9)" stroke-width="2.4" stroke-linecap="round"/>`,
+
+  // Deux pommes et la bouteille qu'on en tire.
+  'cidrerie-loic-raison': `
+    <path d="M0 74h120" stroke="rgba(255,255,255,.14)" stroke-width="1.4"/>
+    <path d="M68 22h9v9l4 9v30a4 4 0 0 1-4 4h-9a4 4 0 0 1-4-4V40l4-9Z"
+          fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.8)" stroke-width="2.2"/>
+    <path d="M64 48h17M64 59h17" stroke="rgba(255,255,255,.45)" stroke-width="1.6"/>
+    <circle cx="38" cy="55" r="12" fill="rgba(255,255,255,.9)"/>
+    <path d="M38 43v-6" stroke="rgba(255,255,255,.55)" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M38 39c3-4 8-3 8-3s.5 5-3 5.5S38 39 38 39Z" fill="rgba(255,255,255,.5)"/>
+    <circle cx="53" cy="65" r="7.5" fill="rgba(255,255,255,.55)"/>`,
+
+  // Les cuves, leur tuyauterie, et le verre au bout.
+  'brasserie-athanor': `
+    <path d="M0 74h120" stroke="rgba(255,255,255,.14)" stroke-width="1.4"/>
+    <path d="M24 74V38a12 5.5 0 0 1 24 0v36Z"
+          fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.72)" stroke-width="2.2"/>
+    <ellipse cx="36" cy="38" rx="12" ry="5.5" fill="rgba(255,255,255,.34)"/>
+    <path d="M56 74V46a10 4.6 0 0 1 20 0v28Z"
+          fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.72)" stroke-width="2.2"/>
+    <ellipse cx="66" cy="46" rx="10" ry="4.6" fill="rgba(255,255,255,.34)"/>
+    <path d="M48 52h4a4 4 0 0 1 4 4" stroke="rgba(255,255,255,.6)" stroke-width="2" fill="none"/>
+    <path d="M76 58h8v5" stroke="rgba(255,255,255,.6)" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M78 65h12l-1.6 11h-8.8Z" fill="rgba(255,255,255,.88)"/>`,
+};
+
+/**
  * La couverture d'une carte.
  *
  * Une photographie quand il y en a une : c'est elle qui donne envie, et la
  * charte lui demande de peser autant qu'une petite affiche.
  *
- * Sinon, le motif de la marque — la porte du D, son soleil et sa volée de
- * marches — détouré sur la couleur de la thématique. Ce n'est pas un
- * remplissage : « l'activité est la porte d'entrée » est la phrase qui définit
- * DPS, et le sigle la dessine déjà. Un substitut assumé vaut mieux qu'une
- * image de banque qui ferait croire au lieu.
+ * À défaut, la scène dessinée de la sortie. Et si la sortie n'en a pas encore,
+ * le motif de la marque — la porte du D, son soleil et sa volée de marches —
+ * qui signe sans rien prétendre.
  */
 function couvertureDe(activite, theme) {
   if (activite.photo) {
@@ -42,18 +112,22 @@ function couvertureDe(activite, theme) {
                  alt="" width="600" height="400" loading="lazy" decoding="async">`;
   }
 
-  // Tout tient dans un seul SVG — porte, marches et pictogramme imbriqué —
-  // pour que les trois restent alignés quelle que soit la largeur de la
-  // carte. Deux éléments superposés en CSS auraient dérivé l'un par rapport
-  // à l'autre dès que le rapport de la vignette change.
+  const scene = SCENES[activite.id];
+
+  // Tout tient dans un seul SVG, au repère de la vignette : deux éléments
+  // superposés en CSS auraient dérivé l'un par rapport à l'autre dès que le
+  // rapport de la couverture change.
   return `
     <span class="carte-activite__motif" aria-hidden="true" style="background:${theme.degrade}">
       <svg viewBox="0 0 120 80" preserveAspectRatio="xMidYMid meet" fill="none">
-        <path d="M22 80v-7h9v7Zm9 0V69h9v11Zm9 0V64h6v16Z" fill="rgba(255,255,255,.1)"/>
-        <path d="M46 80V50a14 14 0 0 1 28 0v30Z" fill="rgba(255,255,255,.15)"/>
-        <svg x="48" y="38" width="24" height="24" viewBox="0 0 24 24" fill="none"
-             stroke="rgba(255,255,255,.85)" stroke-width="1.6"
-             stroke-linecap="round" stroke-linejoin="round">${theme.icone}</svg>
+        ${
+          scene ||
+          `<path d="M22 80v-7h9v7Zm9 0V69h9v11Zm9 0V64h6v16Z" fill="rgba(255,255,255,.1)"/>
+           <path d="M46 80V50a14 14 0 0 1 28 0v30Z" fill="rgba(255,255,255,.15)"/>
+           <svg x="48" y="38" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="rgba(255,255,255,.85)" stroke-width="1.6"
+                stroke-linecap="round" stroke-linejoin="round">${theme.icone}</svg>`
+        }
       </svg>
     </span>`;
 }
