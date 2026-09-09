@@ -207,6 +207,63 @@ function activitesAvenir() {
   return ACTIVITES.filter((activite) => !activiteEstPassee(activite));
 }
 
+/* Le délai au-delà duquel une annulation n'ouvre plus droit au remboursement.
+   C'est celui qu'annoncent les conditions de réservation : passé ce cap, les
+   frais ont pu être engagés auprès du prestataire. Annuler reste possible dans
+   tous les cas — c'est le remboursement qui ne l'est plus, et le groupe a
+   besoin de savoir qu'une place se libère. */
+const HEURES_ANNULATION_LIBRE = 48;
+
+/**
+ * L'annulation est-elle encore libre de frais ?
+ *
+ * Vrai tant que la sortie n'a pas de date : rien n'a pu être engagé pour un
+ * jour qui n'existe pas encore. C'est aujourd'hui le cas de toutes les
+ * sorties du catalogue — la règle est écrite pour le jour où elles seront
+ * calées, pas pour un cas de figure imaginaire.
+ */
+function annulationEstRemboursable(activite) {
+  if (!activiteEstDatee(activite)) return true;
+  const depart = new Date(activite.date).getTime();
+  return depart - Date.now() > HEURES_ANNULATION_LIBRE * 3600 * 1000;
+}
+
+/**
+ * Retire l'inscription du membre à une sortie.
+ *
+ * Deux chemins, comme pour la réservation : la base partagée quand un compte
+ * est ouvert — la place doit redevenir disponible pour tout le monde, pas
+ * seulement dans ce navigateur — et le stockage local sinon.
+ *
+ * Côté Firestore, la suppression et la baisse du compteur tiennent dans une
+ * seule transaction : une annulation interrompue à mi-chemin laisserait la
+ * sortie affichée complète alors que la place est libre.
+ *
+ * @returns {Promise<{ok: boolean, motif?: string}>}
+ */
+async function annulerInscription(activiteId) {
+  const distant = window.DPS_DB && window.DPS_DB.disponible ? window.DPS_DB : null;
+  const membre = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
+
+  if (distant && membre) {
+    return distant.annulerReservation({ activiteId, membreId: membre.id });
+  }
+
+  const restantes = Stockage.lire('dps.reservations', []).filter(
+    (reservation) => reservation.activiteId !== activiteId
+  );
+  Stockage.ecrire('dps.reservations', restantes);
+
+  // Le bandeau de bienvenue du fil du groupe s'appuie sur cette clé : le
+  // laisser en place ferait fêter une inscription qui vient d'être retirée.
+  const derniere = Stockage.lire('dps.derniereReservation', null);
+  if (derniere && derniere.activiteId === activiteId) {
+    Stockage.effacer('dps.derniereReservation');
+  }
+
+  return { ok: true };
+}
+
 /* Cercles de discussion du réseau social. */
 const CERCLES = [
   { id: 'tous',        nom: 'Tout le fil',          icone: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z"/>' },

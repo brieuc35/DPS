@@ -106,16 +106,72 @@ function gabaritSorties(reservations) {
             <li>
               <span>
                 <strong>${echapper(reservation.titre)}</strong>
-                ${activite ? `<span style="color:var(--texte-doux)"> · ${formaterDateCourte(activite.date)}</span>` : ''}
+                ${
+                  // Sans date, `formaterDateCourte(null)` affichait « 1 janv. » :
+                  // l'époque Unix présentée comme le jour de la sortie.
+                  activite && activiteEstDatee(activite)
+                    ? `<span style="color:var(--texte-doux)"> · ${formaterDateCourte(activite.date)}</span>`
+                    : '<span style="color:var(--texte-doux)"> · date à venir</span>'
+                }
               </span>
-              <a class="btn btn--fantome btn--petit"
-                 href="${lienInterne('chat', `groupe-${echapper(reservation.activiteId)}`)}">Ouvrir le groupe</a>
+              <span class="liste-sorties__actions">
+                <a class="btn btn--fantome btn--petit"
+                   href="${lienInterne('chat', `groupe-${echapper(reservation.activiteId)}`)}">Ouvrir le groupe</a>
+                <button type="button" class="btn btn--annuler btn--petit"
+                        data-annuler="${echapper(reservation.activiteId)}">Annuler</button>
+              </span>
             </li>
           `;
         })
         .join('')}
     </ul>
   `;
+}
+
+/**
+ * Annulation depuis l'espace membre. Même question posée et même écriture que
+ * depuis la grille des activités : c'est la fonction partagée `annulerInscription`
+ * (donnees.js) qui décide entre Firestore et le stockage local.
+ *
+ * Le titre affiché vient du catalogue quand il s'y trouve encore, de la
+ * réservation sinon : une sortie retirée du catalogue laisse une inscription
+ * qu'il faut pouvoir annuler quand même.
+ */
+async function annulerDepuisLeCompte(activiteId) {
+  const activite = ACTIVITES.find((element) => element.id === activiteId);
+  const remboursable = !activite || annulationEstRemboursable(activite);
+
+  const accepte = await demanderConfirmation({
+    surTitre: 'Annuler ma place',
+    titre: activite ? activite.titre : 'Cette sortie',
+    texte:
+      'Votre place sera rendue au groupe, et vous n’aurez plus accès à sa discussion. ' +
+      'Vous pourrez vous réinscrire tant qu’il reste de la place.',
+    note: remboursable
+      ? ''
+      : `Le départ a lieu dans moins de ${HEURES_ANNULATION_LIBRE} h : l’annulation n’ouvre plus droit au remboursement, les frais ayant pu être engagés auprès du lieu.`,
+    valider: 'Annuler ma place',
+    garder: 'Garder ma place',
+  });
+  if (!accepte) return;
+
+  const resultat = await annulerInscription(activiteId);
+
+  if (!resultat.ok) {
+    notifier(
+      resultat.motif === 'absente'
+        ? 'Cette inscription n’existe plus.'
+        : 'Annulation impossible. Vérifiez votre connexion.'
+    );
+    return;
+  }
+
+  // En mode partagé, l'abonnement Firestore réécrit la liste tout seul. En
+  // local, personne ne prévient : on la redessine depuis le stockage.
+  if (!baseSorties()) {
+    $('[data-membre-sorties]').innerHTML = gabaritSorties(Stockage.lire('dps.reservations', []));
+  }
+  notifier('Votre place a été annulée.');
 }
 
 /** Les écouteurs ne se posent qu'une fois, même si le profil est réaffiché. */
@@ -216,6 +272,14 @@ function afficherProfil(compte) {
 
   if (profilBranche) return;
   profilBranche = true;
+
+  // Écouteur posé sur la liste et non sur chaque bouton : elle est réécrite à
+  // chaque changement de réservation, ce qui emporterait les écouteurs posés
+  // sur son contenu.
+  $('[data-membre-sorties]').addEventListener('click', (evenement) => {
+    const bouton = evenement.target.closest('[data-annuler]');
+    if (bouton) annulerDepuisLeCompte(bouton.dataset.annuler);
+  });
 
   $('[data-deconnexion]').addEventListener('click', async () => {
     await Comptes.deconnecter();

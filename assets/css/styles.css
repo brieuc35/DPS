@@ -590,6 +590,30 @@ select {
   color: var(--texte);
 }
 
+/* Se retirer d'une sortie. Au repos, un bouton discret : c'est une porte de
+   sortie, elle n'a pas à se signaler plus fort que l'action principale. Le
+   corail de la charte n'apparaît qu'au survol et au focus, quand la main est
+   déjà dessus — et dans une version assombrie à 72 %, le corail pur ne tenant
+   que 2,8:1 sur l'ivoire là où il en faut 4,5. Sur fond sombre il est déjà à
+   5,9:1 : il y sert tel quel. */
+.btn--annuler {
+  background: transparent;
+  border-color: var(--bordure-forte);
+  color: var(--texte-doux);
+  --encre-annuler: #c3504a;
+}
+
+[data-theme="dark"] .btn--annuler {
+  --encre-annuler: var(--dps-corail);
+}
+
+.btn--annuler:hover:not(:disabled),
+.btn--annuler:focus-visible {
+  background: transparent;
+  border-color: var(--encre-annuler);
+  color: var(--encre-annuler);
+}
+
 .btn--discret {
   background: transparent;
   color: var(--texte-doux);
@@ -1437,6 +1461,38 @@ select {
   font-size: var(--t-base);
 }
 
+/* Une fois la place prise, le pied porte deux boutons : l'état, inactif et
+   large, et l'annulation, active et compacte. Le second ne prend que ce dont
+   son mot a besoin — il doit rester une porte de sortie, pas une invitation. */
+.carte-activite__pied--inscrit {
+  display: flex;
+  gap: var(--e-2);
+  align-items: stretch;
+}
+
+/* Deux boutons dans la largeur d'une carte de grille : le rembourrage
+   généreux du bouton unique ne tient plus. */
+.carte-activite__pied--inscrit .btn {
+  padding: 0.8em 0.9em;
+  font-size: var(--t-sm);
+}
+
+.carte-activite__pied--inscrit .btn--bloc {
+  flex: 1;
+  min-width: 0;
+}
+
+.carte-activite__pied--inscrit .btn--annuler {
+  flex: 0 0 auto;
+}
+
+/* L'espace membre range les deux mêmes actions côte à côte. */
+.liste-sorties__actions {
+  display: flex;
+  gap: var(--e-2);
+  flex-wrap: wrap;
+}
+
 .message-vide {
   grid-column: 1 / -1;
   text-align: center;
@@ -2128,6 +2184,33 @@ select {
 }
 
 /* Écran de confirmation */
+/* Une question fermée tient dans moins de place qu'un formulaire : la boîte
+   se resserre pour que les deux boutons restent sous les yeux. */
+.modale__boite--etroite { width: min(440px, 100%); }
+
+/* Le rappel des 48 h. Encadré, mais sans couleur d'alerte : il informe d'une
+   conséquence, il ne signale pas une erreur. */
+.confirmation__note {
+  margin: var(--e-4) 0 0;
+  padding: var(--e-3) var(--e-4);
+  border-left: 3px solid var(--dps-orange);
+  border-radius: var(--r-sm);
+  background: var(--fond-alt);
+  font-size: var(--t-sm);
+  color: var(--texte-doux);
+}
+
+/* La validation d'abord dans l'ordre de lecture, mais le focus va sur
+   « garder » (voir `demanderConfirmation`, app.js). */
+.confirmation__actions {
+  display: flex;
+  gap: var(--e-3);
+  flex-wrap: wrap;
+  margin-top: var(--e-5);
+}
+
+.confirmation__actions .btn { flex: 1 1 auto; }
+
 .confirmation { text-align: center; padding: var(--e-6) 0; }
 
 .confirmation__pastille {

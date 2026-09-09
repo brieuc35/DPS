@@ -342,14 +342,17 @@ function gabaritCarte(activite) {
           ${badgeConfirmation ? `<p class="carte-activite__confirmation">${badgeConfirmation}</p>` : ''}
         </div>
 
-        <div class="carte-activite__pied">
+        <div class="carte-activite__pied${inscrit ? ' carte-activite__pied--inscrit' : ''}">
           <button type="button"
                   class="btn btn--bloc ${complet || inscrit ? 'btn--fantome' : 'btn--primaire'}"
                   data-reserver="${activite.id}"
                   ${complet || inscrit ? 'disabled' : ''}>
             ${
+              // Le mot se raccourcit quand « Annuler » vient à côté : la
+              // phrase entière passait à deux lignes dans une carte de grille,
+              // coupée entre « Vous êtes » et « inscrit·e ».
               inscrit
-                ? picto('<path d="M20 6 9 17l-5-5"/>', 15) + ' Vous êtes inscrit·e'
+                ? picto('<path d="M20 6 9 17l-5-5"/>', 15) + ' Inscrit·e'
                 : complet
                   ? 'Complet'
                   : activiteEstDatee(activite)
@@ -357,6 +360,11 @@ function gabaritCarte(activite) {
                     : 'Ça m’intéresse'
             }
           </button>
+          ${
+            inscrit
+              ? `<button type="button" class="btn btn--annuler" data-annuler="${activite.id}">Annuler</button>`
+              : ''
+          }
         </div>
       </div>
     </article>
@@ -1014,6 +1022,57 @@ async function enregistrerReservation(activite, participant) {
   `;
 }
 
+/* ==========================================================================
+   Annulation d'une inscription
+   ========================================================================== */
+
+/**
+ * Demande confirmation, puis rend la place.
+ *
+ * Le passage par une question posée est délibéré : le bouton est posé juste à
+ * côté de « Vous êtes inscrit·e », et une annulation déclenchée par mégarde
+ * libère une place que quelqu'un d'autre peut prendre dans la seconde.
+ */
+async function demanderAnnulation(activiteId) {
+  const activite = ACTIVITES.find((element) => element.id === activiteId);
+  if (!activite || !estInscrit(activiteId)) return;
+
+  const remboursable = annulationEstRemboursable(activite);
+  const accepte = await demanderConfirmation({
+    surTitre: 'Annuler ma place',
+    titre: activite.titre,
+    texte:
+      'Votre place sera rendue au groupe, et vous n’aurez plus accès à sa discussion. ' +
+      'Vous pourrez vous réinscrire tant qu’il reste de la place.',
+    // Les conditions de réservation posent ce délai : il serait déloyal de
+    // laisser annuler sans le rappeler au moment où il s'applique.
+    note: remboursable
+      ? ''
+      : `Le départ a lieu dans moins de ${HEURES_ANNULATION_LIBRE} h : l’annulation n’ouvre plus droit au remboursement, les frais ayant pu être engagés auprès du lieu.`,
+    valider: 'Annuler ma place',
+    garder: 'Garder ma place',
+  });
+  if (!accepte) return;
+
+  const resultat = await annulerInscription(activiteId);
+
+  if (!resultat.ok) {
+    notifier(
+      resultat.motif === 'absente'
+        ? 'Cette inscription n’existe plus.'
+        : 'Annulation impossible. Vérifiez votre connexion.'
+    );
+    return;
+  }
+
+  // Hors connexion, aucun écouteur ne préviendra du changement : on relit la
+  // liste locale, qui vient d'être réécrite, et on redessine.
+  reservations = Stockage.lire(CLE_RESERVATIONS, []);
+  mesInscriptions.delete(activiteId);
+  rendreGrille();
+  notifier('Votre place a été annulée.');
+}
+
 /**
  * Le pont vers le fil de la communauté : chaque activité du catalogue y
  * obtient une annonce, créée par le premier membre connecté qui charge cette
@@ -1137,6 +1196,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   grilles.forEach((grille) => {
     grille.addEventListener('click', (evenement) => {
+      const annulation = evenement.target.closest('[data-annuler]');
+      if (annulation) {
+        demanderAnnulation(annulation.dataset.annuler);
+        return;
+      }
+
       const bouton = evenement.target.closest('[data-reserver]');
       if (!bouton || bouton.disabled) return;
       ouvrirModale(bouton.dataset.reserver, bouton);

@@ -306,6 +306,104 @@ function notifier(message) {
 }
 
 /* ==========================================================================
+   Demande de confirmation
+   ========================================================================== */
+
+/**
+ * Pose une question fermée dans une modale et renvoie la réponse.
+ *
+ * Elle emprunte l'habillage de la modale de réservation — mêmes classes, donc
+ * aucune feuille de style supplémentaire — mais vit dans son propre élément :
+ * une annulation peut être demandée depuis l'espace membre, où le script des
+ * activités n'est pas chargé.
+ *
+ * Rien de natif ici : `window.confirm` bloque le fil d'exécution, ignore le
+ * thème et, sur mobile, s'affiche comme une alerte de navigateur — l'inverse
+ * de ce que le reste du site fait.
+ *
+ * @returns {Promise<boolean>} vrai si la personne a validé.
+ */
+function demanderConfirmation({ surTitre, titre, texte, note = '', valider, garder }) {
+  return new Promise((resoudre) => {
+    const declencheur = document.activeElement;
+
+    const modale = document.createElement('div');
+    modale.className = 'modale';
+    modale.setAttribute('role', 'dialog');
+    modale.setAttribute('aria-modal', 'true');
+    modale.setAttribute('aria-labelledby', 'confirmation-titre');
+    modale.hidden = false;
+    modale.innerHTML = `
+      <div class="modale__voile" data-refuser></div>
+      <div class="modale__boite modale__boite--etroite">
+        <div class="modale__entete">
+          <button type="button" class="modale__fermer" data-refuser aria-label="Fermer">✕</button>
+          <p class="sur-titre">${echapper(surTitre)}</p>
+          <h2 class="modale__titre" id="confirmation-titre">${echapper(titre)}</h2>
+        </div>
+        <div class="modale__corps">
+          <p>${echapper(texte)}</p>
+          ${note ? `<p class="confirmation__note">${echapper(note)}</p>` : ''}
+          <div class="confirmation__actions">
+            <button type="button" class="btn btn--primaire" data-accepter>${echapper(valider)}</button>
+            <button type="button" class="btn btn--fantome" data-refuser data-garder>${echapper(garder)}</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modale);
+    document.body.style.overflow = 'hidden';
+    // Reflow forcé pour que le fondu joue depuis l'état initial, puis classe
+    // posée dans la foulée : `.modale` est en `visibility: hidden` tant qu'elle
+    // n'est pas ouverte, et un bouton invisible n'accepte pas le focus. La
+    // poser dans une frame d'animation la laissait masquée au moment où le
+    // focus était demandé — il restait alors sur le bouton d'origine.
+    void modale.offsetWidth;
+    modale.classList.add('est-ouverte');
+
+    function fermer(reponse) {
+      document.removeEventListener('keydown', auClavier);
+      modale.remove();
+      document.body.style.overflow = '';
+      // Le bouton d'origine a pu disparaître avec le réaffichage qui suit une
+      // réponse positive : on ne lui rend le focus que s'il est encore là.
+      if (declencheur && document.contains(declencheur)) declencheur.focus();
+      resoudre(reponse);
+    }
+
+    function auClavier(evenement) {
+      if (evenement.key === 'Escape') {
+        fermer(false);
+        return;
+      }
+      // Piège à focus : le tabulateur ne sort pas de la question posée.
+      if (evenement.key !== 'Tab') return;
+      const focusables = $$('button', modale);
+      const premier = focusables[0];
+      const dernier = focusables[focusables.length - 1];
+      if (evenement.shiftKey && document.activeElement === premier) {
+        evenement.preventDefault();
+        dernier.focus();
+      } else if (!evenement.shiftKey && document.activeElement === dernier) {
+        evenement.preventDefault();
+        premier.focus();
+      }
+    }
+
+    modale.addEventListener('click', (evenement) => {
+      if (evenement.target.closest('[data-accepter]')) fermer(true);
+      else if (evenement.target.closest('[data-refuser]')) fermer(false);
+    });
+    document.addEventListener('keydown', auClavier);
+
+    // Le focus part sur « garder » et non sur la validation : une entrée
+    // frappée par réflexe ne doit pas annuler une inscription.
+    $('[data-garder]', modale).focus();
+  });
+}
+
+/* ==========================================================================
    Flèches du triangle « Comment ça marche »
    ========================================================================== */
 

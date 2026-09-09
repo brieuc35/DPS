@@ -220,6 +220,46 @@ export function demarrerDonnees(application) {
     },
 
     /**
+     * L'inverse de `reserver` : la réservation disparaît et sa place revient au
+     * compteur, dans une seule transaction. Séparer les deux écritures
+     * laisserait, en cas d'interruption, soit une sortie affichée complète
+     * alors qu'une place est libre, soit une place rendue deux fois.
+     *
+     * Le compteur n'est touché que si sa valeur change réellement : la règle
+     * de sécurité exige `placesPrises != resource.data.placesPrises`, et une
+     * écriture à l'identique — compteur déjà à zéro — ferait échouer toute la
+     * transaction, donc aussi la suppression.
+     */
+    async annulerReservation({ activiteId, membreId }) {
+      const compteur = doc(base, 'activites', activiteId);
+      const reservation = doc(base, 'reservations', `${activiteId}_${membreId}`);
+
+      try {
+        await runTransaction(base, async (transaction) => {
+          // Les lectures d'abord : une transaction Firestore refuse de lire
+          // après avoir écrit.
+          const etat = await transaction.get(compteur);
+          const inscription = await transaction.get(reservation);
+
+          if (!inscription.exists()) throw new Error('absente');
+
+          const prises = etat.exists() ? etat.data().placesPrises || 0 : 0;
+          const restantes = Math.max(0, prises - (inscription.data().places || 1));
+          if (restantes !== prises) {
+            transaction.set(compteur, { placesPrises: restantes }, { merge: true });
+          }
+          transaction.delete(reservation);
+        });
+
+        return { ok: true };
+      } catch (erreur) {
+        const attendue = erreur && erreur.message === 'absente';
+        if (!attendue) console.warn('Annulation impossible.', erreur);
+        return { ok: false, motif: attendue ? 'absente' : 'echec' };
+      }
+    },
+
+    /**
      * Met la confirmation d'inscription dans la file d'envoi. Un site statique
      * ne peut pas expédier de courrier lui-même, et la clé Brevo ne peut pas
      * vivre dans la page — elle serait lisible par tout le monde. C'est donc
@@ -495,11 +535,13 @@ export function demarrerDonnees(application) {
         await runTransaction(base, async (transaction) => {
           const etat = await transaction.get(compteur);
           const prises = etat.exists() ? etat.data().placesPrises || 0 : 0;
-          transaction.set(
-            compteur,
-            { placesPrises: Math.max(0, prises - (donnees.places || 0)) },
-            { merge: true }
-          );
+          const restantes = Math.max(0, prises - (donnees.places || 0));
+          // Même précaution que dans `annulerReservation` : une écriture qui
+          // ne change rien est refusée par la règle, et emporterait avec elle
+          // la suppression de l'inscription.
+          if (restantes !== prises) {
+            transaction.set(compteur, { placesPrises: restantes }, { merge: true });
+          }
           transaction.delete(inscription.ref);
         });
       }
