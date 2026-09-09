@@ -1723,6 +1723,11 @@ select {
     justify-content: space-between;
     /* Dégage la place que prend la bulle centrale en s'élevant. */
     padding-top: var(--e-7);
+    /* Gouttière plus large qu'en pile : entre 960 et 1100 px, les colonnes
+       ne sont plus bornées par le plafond mais par la place disponible, et
+       les disques se retrouvaient à 37 px l'un de l'autre — de quoi loger la
+       flèche, mais pas de quoi la laisser respirer. */
+    gap: var(--e-7);
   }
 
   /* `margin`, pas `transform` : l'apparition au défilement (plus bas dans ce
@@ -1753,9 +1758,8 @@ select {
   .bulles__fleche {
     display: block;
     position: absolute;
-    width: 8%;
+    width: 5%;
     aspect-ratio: 100 / 46;
-    animation: fleche-respire 2600ms ease-in-out infinite;
   }
 
   .bulles__fleche svg { width: 100%; height: 100%; display: block; overflow: visible; }
@@ -1771,17 +1775,7 @@ select {
     left: 66%;
     top: 18%;
     filter: drop-shadow(0 4px 10px rgba(6, 92, 144, 0.35));
-    animation-delay: 260ms;
   }
-}
-
-/* Un souffle discret plutôt qu'un simple élément statique — de quoi remarquer
-   le sens de lecture sans distraire du contenu. Neutralisé comme toutes les
-   animations du site pour qui préfère moins de mouvement (règle globale plus
-   bas dans ce fichier). */
-@keyframes fleche-respire {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.08); }
 }
 
 /* --- Charte de bienveillance --- */

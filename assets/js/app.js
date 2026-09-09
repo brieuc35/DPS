@@ -309,15 +309,29 @@ function notifier(message) {
    Flèches du triangle « Comment ça marche »
    ========================================================================== */
 
+/* Le dessin de la flèche occupe 90,5 des 100 unités de large de son cadre :
+   83,5 pour le segment lui-même (√(80² + 24²), du point de départ à la pointe)
+   et le rayon d'un bout arrondi — la moitié des 7 unités d'épaisseur — à
+   chaque extrémité. C'est ce rapport qui traduit une longueur voulue, en
+   pixels, en largeur de boîte à poser. */
+const PROPORTION_TRACE_FLECHE = 0.905;
+
+/* L'air laissé entre la pointe et le disque, de chaque côté. Ramené à 18 % de
+   l'espace libre quand celui-ci se resserre : mieux vaut une flèche courte
+   avec une marge réduite qu'une flèche qui mord sur les bulles. */
+const MARGE_FLECHE = 12;
+
 /**
- * Centre les deux flèches exactement entre les bulles qu'elles relient.
+ * Dimensionne et centre les deux flèches dans l'espace libre entre les bulles.
  *
  * Un pourcentage fixe en CSS ne le permettrait pas : la bulle est plafonnée à
- * 300 px (`.bulle { max-width: 300px }`) mais sa colonne, elle, continue de
+ * 340 px (`.bulle { max-width: 340px }`) mais sa colonne, elle, continue de
  * grandir avec la largeur de l'écran — l'écart entre deux bulles n'est donc
- * pas une fraction constante de la largeur totale. On mesure à la place les
- * positions réelles, et on pose chaque flèche au milieu du segment qui joint
- * les centres des deux bulles qu'elle relie — exactement sur la droite que la
+ * pas une fraction constante de la largeur totale. Les 8 % qu'elles faisaient
+ * auparavant les faisaient d'ailleurs mordre sur les disques : de 15 px au
+ * large, de 40 px vers 1100 px. On mesure à la place les positions réelles, on
+ * en déduit la place disponible, et on pose chaque flèche au milieu du segment
+ * qui joint les centres des deux bulles — exactement sur la droite que la
  * flèche est censée dessiner.
  */
 function initFlechesTriangle() {
@@ -341,13 +355,20 @@ function initFlechesTriangle() {
     fleches.forEach(({ element, depart, arrivee }) => {
       const a = depart.getBoundingClientRect();
       const b = arrivee.getBoundingClientRect();
-      const milieuX = (a.left + a.width / 2 + b.left + b.width / 2) / 2;
-      const milieuY = (a.top + a.height / 2 + b.top + b.height / 2) / 2;
-      const largeur = element.getBoundingClientRect().width;
-      const hauteur = element.getBoundingClientRect().height;
+      const centreA = { x: a.left + a.width / 2, y: a.top + a.height / 2 };
+      const centreB = { x: b.left + b.width / 2, y: b.top + b.height / 2 };
 
-      element.style.left = `${milieuX - cadre.left - largeur / 2}px`;
-      element.style.top = `${milieuY - cadre.top - hauteur / 2}px`;
+      // La place réellement libre entre les deux disques, mesurée le long du
+      // segment qui joint leurs centres — c'est là que la flèche est posée.
+      const entreCentres = Math.hypot(centreB.x - centreA.x, centreB.y - centreA.y);
+      const libre = entreCentres - a.width / 2 - b.width / 2;
+      const marge = Math.min(MARGE_FLECHE, libre * 0.18);
+      element.style.width = `${Math.max(0, libre - marge * 2) / PROPORTION_TRACE_FLECHE}px`;
+
+      // Relu après coup : la hauteur découle de la largeur (`aspect-ratio`).
+      const boite = element.getBoundingClientRect();
+      element.style.left = `${(centreA.x + centreB.x) / 2 - cadre.left - boite.width / 2}px`;
+      element.style.top = `${(centreA.y + centreB.y) / 2 - cadre.top - boite.height / 2}px`;
     });
   }
 
