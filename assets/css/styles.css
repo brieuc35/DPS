@@ -1505,7 +1505,7 @@ select {
    dans le carré inscrit quelle que soit la taille de la bulle ; un
    rembourrage en pixels laisserait les lignes déborder sur les bords
    arrondis dès que le disque rétrécit. */
-/* La colonne est plafonnée à 300 px, exactement comme la bulle : le
+/* La colonne est plafonnée à 340 px, exactement comme la bulle : le
    rembourrage de celle-ci est en pourcentage, or un pourcentage de
    rembourrage se résout sur la largeur de la *colonne*, pas de l'élément.
    Une colonne plus large que la bulle donnait un rembourrage surdimensionné
@@ -1513,13 +1513,14 @@ select {
 
    Le nombre de colonnes est déclaré par paliers plutôt que laissé à
    `auto-fit` : celui-ci compte ses colonnes d'après le maximum de `minmax`
-   dès qu'il est fixe, et plafonner à 300 px faisait tomber 890 px de trois
-   colonnes à deux. Les paliers garantissent en prime des colonnes toujours
-   au-dessus de 260 px, en deçà desquels le texte déborderait du cercle. */
+   dès qu'il est fixe, et plafonner faisait tomber certaines largeurs de
+   trois colonnes à deux. Le corps du texte suivant désormais le disque et
+   non la fenêtre, une colonne étroite ne fait plus déborder le cercle : elle
+   ne fait que réduire l'ensemble. */
 .bulles {
   display: grid;
   gap: var(--e-5);
-  grid-template-columns: minmax(0, 300px);
+  grid-template-columns: minmax(0, 340px);
   justify-content: center;
   justify-items: center;
 
@@ -1530,11 +1531,12 @@ select {
 }
 
 @media (min-width: 640px) {
-  .bulles { grid-template-columns: repeat(2, minmax(0, 300px)); }
+  .bulles { grid-template-columns: repeat(2, minmax(0, 340px)); }
 }
 
+/* 3 × 340 + 2 gouttières = 1068 px, sous les 1132 px utiles du conteneur. */
 @media (min-width: 960px) {
-  .bulles { grid-template-columns: repeat(3, minmax(0, 300px)); }
+  .bulles { grid-template-columns: repeat(3, minmax(0, 340px)); }
 }
 
 [data-theme="dark"] .bulles {
@@ -1563,10 +1565,22 @@ select {
   justify-items: center;
   text-align: center;
   width: 100%;
-  max-width: 300px;
+  max-width: 340px;
   aspect-ratio: 1;
-  padding: 14%;
+  /* 12,5 % au lieu de 14 % : le mot ayant grandi, c'est la largeur utile qui
+     manquait. Le carré inscrit dans le disque fait 70,7 % du diamètre ; à
+     12,5 % de part et d'autre il en reste 75 %, soit une marge de sécurité de
+     quatre points sur la ligne la plus large, qui tombe au milieu du disque —
+     là où le cercle est le plus large. */
+  padding: 12.5%;
   border-radius: 50%;
+
+  /* Le texte se mesure sur le disque, pas sur la fenêtre. Avec des `vw`, à
+     960 px le disque retombait à 288 px pendant que le corps, lui, continuait
+     de suivre l'écran : la phrase passait à trois lignes et frôlait le bord.
+     En unités de conteneur, la proportion mot/disque est la même partout, et
+     la marge intérieure cesse de dépendre du palier de grille. */
+  container-type: inline-size;
 
   /* Le halo teinté part du haut et s'éteint avant le centre : le texte reste
      sur la surface franche, jamais sur de la couleur. Il est passé de 20 %
@@ -1608,8 +1622,8 @@ select {
 .bulle__icone {
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
+  width: clamp(44px, 22.7cqw, 58px);
+  height: clamp(44px, 22.7cqw, 58px);
   border-radius: var(--r-full);
   background: var(--teinte);
   color: #fff;
@@ -1619,13 +1633,13 @@ select {
 }
 
 .bulle__icone svg {
-  width: 26px;
-  height: 26px;
+  width: clamp(22px, 11.4cqw, 29px);
+  height: clamp(22px, 11.4cqw, 29px);
 }
 
-/* Le mot est ce qui doit rester : c'est lui qui épelle le sigle. Il passe de
-   1,25 rem à près du double au large, en Outfit — la géométrique déjà employée
-   par les titres, et celle qui répond aux lettres du logo.
+/* Le mot est ce qui doit rester : c'est lui qui épelle le sigle. Il dépasse
+   désormais le titre de section qui le surplombe, en Outfit — la géométrique
+   déjà employée par les titres, et celle qui répond aux lettres du logo.
 
    Pas de police supplémentaire : le site sert lui-même ses deux fichiers pour
    ne pas transmettre l'adresse IP du visiteur à Google avant tout consentement.
@@ -1634,24 +1648,43 @@ select {
    troisième caractère. */
 .bulle__titre {
   margin: var(--e-3) 0 var(--e-2);
-  font-size: clamp(1.45rem, 1.1rem + 1.1vw, 2rem);
+  /* 28 → 48 px, contre 23 → 32 px auparavant : le mot devient l'objet de la
+     bulle, l'icône son accompagnement.
+
+     Attention à l'unité : `cqw` se résout sur la boîte de contenu du
+     conteneur, rembourrage déduit — soit 255 px pour un disque de 340, et non
+     340. Les 18,8 % valent donc 14 % du diamètre. Cette proportion est tenue
+     à tous les paliers, et c'est elle qui garde la même marge intérieure
+     quand le disque change de taille.
+
+     L'interlettrage se resserre à mesure : à 48 px, l'espacement dessiné pour
+     du texte courant écarte les lettres d'un mot que l'on doit lire d'un seul
+     bloc. Et l'interligne descend à 1, un mot n'ayant qu'une ligne. */
+  font-size: clamp(1.75rem, 18.8cqw, 3.1rem);
   font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
-/* Un cran sous le corps courant : dans un disque, la place utile est celle du
-   carré inscrit — environ 70 % de la largeur.
+/* La phrase remonte au corps courant, et un peu au-dessus au large : elle
+   restait en dessous du texte du site alors qu'elle en dit l'essentiel. Ce
+   que la place perdue exige, les phrases l'ont rendu en se raccourcissant —
+   trois lignes chacune au lieu de cinq.
 
-   La hauteur minimale vaut cinq lignes, celle du texte le plus long — en
-   `em`, donc toujours cinq lignes de ce texte-là quel que soit le corps
-   choisi ici. Sans elle, le contenu étant centré verticalement, chaque bulle
-   placerait son icône à une hauteur différente selon la longueur de sa
-   phrase. */
+   La hauteur minimale vaut ces trois lignes, en `em` donc toujours trois
+   lignes de ce texte-là quel que soit le corps. Sans elle, le contenu étant
+   centré verticalement, chaque bulle placerait son icône à une hauteur
+   différente selon la longueur de sa phrase. */
 .bulle__texte {
   margin: 0;
-  min-height: 7.25em;
-  font-size: var(--t-sm);
+  /* La hauteur réservée vaut trois lignes, mais la phrase n'en occupe que
+     deux au large. Sans ce centrage, les lignes se calaient en haut de leur
+     boîte et toute la masse du disque remontait, laissant un croissant vide
+     en bas. */
+  display: grid;
+  align-content: center;
+  min-height: 4.35em;
+  font-size: clamp(0.92rem, 7.25cqw, 1.2rem);
   line-height: 1.45;
   color: var(--texte-doux);
 }
@@ -1675,7 +1708,7 @@ select {
   .bulles--triangle {
     position: relative;
     /* L'espace restant est reporté sur l'écart entre les colonnes plutôt que
-       sur leur largeur, que le plafond de 300 px fige. */
+       sur leur largeur, que le plafond de 340 px fige. */
     justify-content: space-between;
     /* Dégage la place que prend la bulle centrale en s'élevant. */
     padding-top: var(--e-7);
@@ -1704,7 +1737,7 @@ select {
      Cette fonction mesure ensuite la position réelle des bulles et resserre
      chaque flèche exactement sur le segment qui joint leurs deux centres, en
      écrasant ces valeurs par un style en ligne — un pourcentage fixe ne le
-     pourrait pas, la bulle étant plafonnée à 300 px alors que sa colonne
+     pourrait pas, la bulle étant plafonnée à 340 px alors que sa colonne
      continue de s'élargir avec l'écran. */
   .bulles__fleche {
     display: block;
