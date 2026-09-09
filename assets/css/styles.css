@@ -1617,24 +1617,35 @@ select {
     0 8px 18px -10px rgba(42, 22, 34, 0.24);
 }
 
-/* Le disque de l'icône est le seul aplat plein de la bulle : c'est là que la
-   couleur du sigle se pose franchement, en une pastille et rien de plus. */
+/* Les illustrations apportent leurs propres couleurs et leur propre disque :
+   la pastille pleine qui leur servait de fond ferait double emploi, et son
+   aplat de couleur écraserait les leurs. La couleur du sigle continue de
+   tenir la bulle par ailleurs — filet, halo, ombre portée.
+
+   Le dessin est donc posé nu, et à une taille bien supérieure à celle de
+   l'ancien pictogramme : il a des détails — un sourire, quatre aplats dans un
+   verre de loupe — qu'une pastille de 58 px aurait réduits en bouillie.
+
+   `color` porte les traits sombres du dessin et `--icone-fond` son disque :
+   les deux changent avec le thème, sinon l'aubergine se perdrait dans une
+   bulle sombre et le crème y ferait une tache. */
 .bulle__icone {
   display: grid;
   place-items: center;
-  width: clamp(44px, 22.7cqw, 58px);
-  height: clamp(44px, 22.7cqw, 58px);
-  border-radius: var(--r-full);
-  background: var(--teinte);
-  color: #fff;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 8px 16px -8px color-mix(in srgb, var(--teinte) 60%, transparent);
+  width: clamp(62px, 31cqw, 80px);
+  height: clamp(62px, 31cqw, 80px);
+  color: var(--prune-800);
+  --icone-fond: #fdf5e8;
+}
+
+[data-theme="dark"] .bulle__icone {
+  color: #f4ebe5;
+  --icone-fond: rgba(255, 255, 255, 0.07);
 }
 
 .bulle__icone svg {
-  width: clamp(22px, 11.4cqw, 29px);
-  height: clamp(22px, 11.4cqw, 29px);
+  width: 100%;
+  height: 100%;
 }
 
 /* Le mot est ce qui doit rester : c'est lui qui épelle le sigle. Il dépasse
