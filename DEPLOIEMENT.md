@@ -5,6 +5,15 @@ d'API publiée dans les pages n'autorise rien par elle-même. Toute modification
 ce fichier reste sans effet tant qu'elle n'est pas **publiée** sur le projet
 Firebase `dps-collective`.
 
+> **À publier sans attendre.** Les règles en ligne empêchent actuellement toute
+> inscription à une sortie, ainsi que le premier soutien à une publication du
+> fil. En cause : une règle qui lisait `resource.data` sur un document *absent*.
+> Firestore répondait alors « permission refusée » là où le site attendait
+> « non trouvé », et la transaction entière échouait — le message affiché,
+> « Réservation impossible. Vérifiez votre connexion », envoyait chercher au
+> mauvais endroit. Corrigé dans ce fichier ; il faut le republier pour que la
+> correction s'applique.
+
 ## Le plus simple : la console
 
 1. https://console.firebase.google.com/project/dps-collective/firestore/rules
@@ -36,12 +45,14 @@ a pas de `firebase init` à lancer.
 Dans la console, l'onglet **Règles** affiche la date de la dernière publication.
 Côté site, deux tests qui comptent :
 
+- **s'inscrire à deux sorties différentes depuis le même compte.** C'est le
+  test qui échouait : la seconde inscription était refusée. Les deux doivent
+  passer, et les deux jauges monter d'une place ;
 - supprimer un compte qui avait une inscription, puis vérifier que la place
   est bien revenue dans la jauge de la sortie ;
-- depuis un compte connecté, publier un message dans le fil de la communauté
-  et vérifier qu'il apparaît — c'est le signe que les collections
-  `publications`, `reponses` et `jaimes` sont bien couvertes par les règles
-  publiées.
+- depuis un compte connecté, publier un message dans le fil d'actualité et le
+  soutenir — c'est le signe que les collections `publications`, `reponses` et
+  `jaimes` sont bien couvertes par les règles publiées.
 
 ---
 

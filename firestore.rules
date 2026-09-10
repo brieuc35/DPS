@@ -54,6 +54,29 @@ service cloud.firestore {
       return conversation.split('groupe-')[1];
     }
 
+    // Les identifiants composés — « <activité>_<uid> », « <publication>_<uid> »
+    // — se terminent par l'uid de leur propriétaire. Ce test le vérifie sur le
+    // chemin demandé, sans lire le document.
+    //
+    // Il sert à autoriser la lecture d'un document *absent*. Une règle qui
+    // touche `resource.data` est en effet fausse quand le document n'existe
+    // pas : `resource` vaut alors null, et la déréférencer produit une erreur,
+    // donc un refus. Le client reçoit « permission refusée » là où il attendait
+    // « non trouvé », et l'opération entière échoue.
+    //
+    // C'est ce qui empêchait toute inscription : `reserver()` commence par lire
+    // sa propre réservation pour vérifier qu'elle n'existe pas encore.
+    //
+    // Le test porte sur l'identifiant et non sur le contenu : sans lui, il
+    // faudrait autoriser la lecture de tout document absent, et l'on pourrait
+    // alors deviner qui est inscrit où — un refus signalant la présence, un
+    // « non trouvé » son absence. Le site promet exactement le contraire.
+    function cheminQuiMappartient(identifiant) {
+      return identifiant.size() > moi().size() + 1
+          && identifiant[(identifiant.size() - moi().size() - 1) : identifiant.size()]
+             == '_' + moi();
+    }
+
     function texteAcceptable(donnees) {
       return donnees.texte is string
           && donnees.texte.size() > 0
@@ -146,7 +169,15 @@ service cloud.firestore {
 
       // Chacun voit les siennes. Personne ne consulte la liste des inscrits
       // d'une sortie : ce serait publier qui va où.
-      allow read: if connecte() && resource.data.membreId == moi();
+      //
+      // `get` et `list` sont séparés à dessein. Une requête ne rend que des
+      // documents existants, `resource` y est donc toujours là. Une lecture
+      // directe, elle, peut viser un document absent — et c'est le cas normal
+      // au début d'une inscription. Voir `cheminQuiMappartient` plus haut.
+      allow get: if connecte()
+                 && cheminQuiMappartient(reservationId)
+                 && (resource == null || resource.data.membreId == moi());
+      allow list: if connecte() && resource.data.membreId == moi();
 
       // L'identifiant est imposé : il vaut « <activité>_<uid> ». C'est ce qui
       // rend la double réservation impossible et permet aux règles des messages
@@ -318,7 +349,14 @@ service cloud.firestore {
       // Chacun ne voit que les siens : le compteur public suffit à tout le
       // monde, savoir précisément qui a soutenu quoi ne regarde que l'auteur
       // du soutien.
-      allow read: if connecte() && resource.data.membreId == moi();
+      //
+      // Même partage `get` / `list` que pour les réservations, et pour la même
+      // raison : `basculerJaime()` lit son propre soutien avant de le poser,
+      // et ce document n'existe pas encore la première fois.
+      allow get: if connecte()
+                 && cheminQuiMappartient(jaimeId)
+                 && (resource == null || resource.data.membreId == moi());
+      allow list: if connecte() && resource.data.membreId == moi();
 
       // Même principe que les réservations : l'identifiant composé
       // « <publication>_<uid> » rend un double soutien impossible sans

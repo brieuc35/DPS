@@ -214,8 +214,13 @@ export function demarrerDonnees(application) {
         return { ok: true, restantes };
       } catch (erreur) {
         const attendue = erreur && ['complet', 'deja-inscrit'].includes(erreur.message);
-        if (!attendue) console.warn('Réservation impossible.', erreur);
-        return { ok: false, motif: attendue ? erreur.message : 'echec' };
+        if (attendue) return { ok: false, motif: erreur.message };
+
+        // Un refus des règles n'est pas une panne de réseau, et le dire ainsi
+        // envoie chercher au mauvais endroit : c'est une règle de sécurité qui
+        // a dit non, et cela se répare dans la console Firebase.
+        console.warn('Réservation impossible.', erreur);
+        return { ok: false, motif: erreur && erreur.code === 'permission-denied' ? 'refus' : 'echec' };
       }
     },
 
@@ -253,9 +258,10 @@ export function demarrerDonnees(application) {
 
         return { ok: true };
       } catch (erreur) {
-        const attendue = erreur && erreur.message === 'absente';
-        if (!attendue) console.warn('Annulation impossible.', erreur);
-        return { ok: false, motif: attendue ? 'absente' : 'echec' };
+        if (erreur && erreur.message === 'absente') return { ok: false, motif: 'absente' };
+
+        console.warn('Annulation impossible.', erreur);
+        return { ok: false, motif: erreur && erreur.code === 'permission-denied' ? 'refus' : 'echec' };
       }
     },
 

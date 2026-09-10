@@ -888,6 +888,7 @@ async function enregistrerReservation(activite, participant) {
       const messages = {
         complet: 'Quelqu’un vient de prendre la dernière place.',
         'deja-inscrit': 'Vous êtes déjà inscrit·e à cette sortie.',
+        refus: 'Inscription refusée par le serveur. Signalez-le au collectif, ce n’est pas de votre fait.',
         echec: 'Réservation impossible. Vérifiez votre connexion.',
       };
       notifier(messages[resultat.motif] || messages.echec);
@@ -1058,9 +1059,10 @@ async function demanderAnnulation(activiteId) {
 
   if (!resultat.ok) {
     notifier(
-      resultat.motif === 'absente'
-        ? 'Cette inscription n’existe plus.'
-        : 'Annulation impossible. Vérifiez votre connexion.'
+      {
+        absente: 'Cette inscription n’existe plus.',
+        refus: 'Annulation refusée par le serveur. Signalez-le au collectif, ce n’est pas de votre fait.',
+      }[resultat.motif] || 'Annulation impossible. Vérifiez votre connexion.'
     );
     return;
   }

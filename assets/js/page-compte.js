@@ -159,9 +159,10 @@ async function annulerDepuisLeCompte(activiteId) {
 
   if (!resultat.ok) {
     notifier(
-      resultat.motif === 'absente'
-        ? 'Cette inscription n’existe plus.'
-        : 'Annulation impossible. Vérifiez votre connexion.'
+      {
+        absente: 'Cette inscription n’existe plus.',
+        refus: 'Annulation refusée par le serveur. Signalez-le au collectif, ce n’est pas de votre fait.',
+      }[resultat.motif] || 'Annulation impossible. Vérifiez votre connexion.'
     );
     return;
   }
