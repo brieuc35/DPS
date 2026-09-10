@@ -221,6 +221,9 @@ function lectures() {
 /** Marque un fil comme lu à l'instant. */
 function marquerLu(conversationId) {
   Stockage.ecrire(CLE_LECTURES, { ...lectures(), [conversationId]: new Date().toISOString() });
+  // La pastille de l'en-tête compte les non-lus de tous les fils : elle doit
+  // retomber au moment où l'on en ouvre un, pas au prochain chargement.
+  if (window.Notifications) window.Notifications.rafraichir();
 }
 
 /**

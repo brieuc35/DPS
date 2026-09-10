@@ -274,6 +274,19 @@ function initEnteteCompte() {
 
   const compte = Comptes.courant();
 
+  // Le compteur de non-lus est tenu par notifications.js. La dépendance est
+  // souple : sans ce script, l'entrée s'affiche simplement sans pastille.
+  const nonLus = window.Notifications ? window.Notifications.total() : 0;
+  const pastille = nonLus
+    ? `<span class="nav__pastille">${nonLus > 99 ? '99+' : nonLus}</span>`
+    : '';
+  // Le nombre est répété en toutes lettres pour les lectures d'écran : « 3 »
+  // collé à « Discussions » s'y annoncerait « Discussions 3 », sans dire de
+  // quoi il s'agit.
+  const annonce = nonLus
+    ? ` aria-label="Discussions, ${nonLus} message${nonLus > 1 ? 's' : ''} non lu${nonLus > 1 ? 's' : ''}"`
+    : '';
+
   const contenu = compte
     ? `
       <a class="nav__lien nav__lien--compte" href="compte.html">
@@ -282,7 +295,7 @@ function initEnteteCompte() {
         )}</span>
         ${echapper(compte.prenom)}
       </a>
-      <a class="nav__lien nav__lien--compte" href="chat.html">Discussions</a>
+      <a class="nav__lien nav__lien--compte nav__lien--discussions" href="chat.html"${annonce}>Discussions${pastille}</a>
     `
     : `
       <a class="nav__lien nav__lien--compte" href="compte.html#connexion">Se connecter</a>
@@ -294,6 +307,19 @@ function initEnteteCompte() {
   zones.forEach((zone) => {
     zone.innerHTML = contenu;
   });
+
+  // Sous 900 px, l'entrée « Discussions » est rangée dans le menu replié : sa
+  // pastille ne se voit qu'une fois le menu ouvert, ce qui ne prévient
+  // personne. Le bouton du menu porte donc un point tant qu'il reste quelque
+  // chose à lire — c'est le seul repère visible sur un téléphone.
+  const burger = $('.burger');
+  if (burger) {
+    burger.classList.toggle('burger--alerte', nonLus > 0);
+    burger.setAttribute(
+      'aria-label',
+      nonLus > 0 ? `Ouvrir le menu — ${nonLus} message${nonLus > 1 ? 's' : ''} non lu${nonLus > 1 ? 's' : ''}` : 'Ouvrir le menu'
+    );
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -303,3 +329,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Firebase répond après coup : chaque changement de session redessine l'en-tête.
 window.addEventListener('dps:session', initEnteteCompte);
+// Et le compteur de non-lus quand il bouge — c'est l'en-tête qui l'affiche.
+window.addEventListener('dps:non-lus', initEnteteCompte);

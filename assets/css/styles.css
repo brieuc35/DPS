@@ -933,6 +933,28 @@ select {
   transition: background-color var(--transition), color var(--transition);
 }
 
+/* L'entrée « Discussions » porte le compteur de non-lus : elle passe en ligne
+   flexible pour que la pastille se pose contre le mot sans le décaler. */
+.nav__lien--discussions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+/* Même pastille que sur les onglets de fils, en plus petit : ici elle est
+   posée dans une barre de navigation, pas dans une liste. */
+.nav__pastille {
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: var(--r-full);
+  background: var(--accent-fort);
+  color: var(--sur-accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+
 .nav__lien:hover {
   background: var(--surface-2);
   color: var(--texte);
@@ -954,6 +976,7 @@ select {
 .burger {
   display: none;
   place-items: center;
+  position: relative;
   width: 40px;
   height: 40px;
   padding: 0;
@@ -962,6 +985,24 @@ select {
   background: var(--surface);
   color: var(--texte);
   cursor: pointer;
+}
+
+/* Le point des messages non lus. Un point et non un nombre : le bouton fait
+   40 px, un chiffre lisible y mangerait le trait des trois barres. Le compte
+   exact est juste derrière, sur l'entrée « Discussions » du menu.
+
+   Le liseré couleur fond détache le point du bouton quel que soit le thème,
+   sans lui dessiner un contour qui en ferait une pastille de plus. */
+.burger--alerte::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--r-full);
+  background: var(--accent-fort);
+  border: 2px solid var(--fond);
 }
 
 @media (max-width: 900px) {
