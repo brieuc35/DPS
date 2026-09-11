@@ -110,15 +110,20 @@
      nuancier sous les yeux. Le site se lisait donc simplement blanc, ce que
      la charte demandait précisément d'éviter.
 
-     Le fond est le corail de la charte — #fc8460 — dilué à 12 % dans du blanc.
-     Aucune des six couleurs de la charte ne peut servir de fond en aplat : à
-     pleine puissance, plus un texte ne s'y lit. Diluée jusqu'à n'être qu'un
-     souffle, en revanche, une couleur donne à la page une teinte au lieu d'une
-     absence de teinte.
+     Le fond est le corail du sigle — #fa675c, relevé sur le fichier du logo —
+     dilué à 12 % dans du blanc. Aucune des couleurs du sigle ne peut servir de
+     fond en aplat : à pleine puissance, plus un texte ne s'y lit. Diluée
+     jusqu'à n'être qu'un souffle, en revanche, une couleur donne à la page une
+     teinte au lieu d'une absence de teinte.
 
-     Le corail tombe à 40° une fois dilué : chaud, mais du côté de l'abricot
-     et non du jaune. C'est ce qui le sépare du crème essayé plus tôt, à 85° —
+     Le corail tombe à 29° une fois dilué : chaud, du côté de la pêche et non
+     du jaune. C'est ce qui le sépare du crème essayé plus tôt, à 85° —
      celui-là lisait « papier ancien », celui-ci lit « lumière ».
+
+     Ces valeurs ont d'abord été tirées du corail de la charte imprimée
+     (#fc8460). Le logo faisant foi, elles sont recalculées depuis le sien, à
+     dilution identique : le déplacement va de ΔE 0,7 à 5 selon le jeton, soit
+     rien de visible, mais la palette n'a plus qu'une source.
 
      Le dosage vise ΔE 7 du blanc. En dessous, la page redevient le champ
      indistinct du premier essai de cette série ; au-dessus, elle cesse d'être
@@ -127,9 +132,9 @@
 
      La page est nettement teintée, la surface des cartes à peine : c'est cet
      écart-là qui détache les cartes du papier. */
-  --ivoire: #fff0ec;
-  --ivoire-creux: #fee3db; /* bandes alternées, léger renfoncement */
-  --blanc-chaud: #fffdfc;  /* surfaces posées sur le fond */
+  --ivoire: #feedeb;
+  --ivoire-creux: #feddda; /* bandes alternées, léger renfoncement */
+  --blanc-chaud: #fffcfc;  /* surfaces posées sur le fond */
 
   /* --- Prune : la structure ------------------------------------------------
      Le marron-violet du site devient une vraie couleur porteuse. Ni noir ni
@@ -147,7 +152,7 @@
   --fond-alt: var(--ivoire-creux);
   --surface: var(--blanc-chaud);
   --surface-2: var(--ivoire-creux);
-  --bordure: #fbdcd2;
+  --bordure: #fed6d3;
   --bordure-forte: #d9a794;
   --texte: var(--prune-900);
   --texte-doux: var(--prune-400);
@@ -185,7 +190,7 @@
   /* Lueur du haut de page : le même corail que le fond, un cran moins dilué.
      Une lueur d'une autre teinte que la page se voit comme une tache ; de la
      même teinte, elle se lit comme une profondeur. */
-  --halo: #fee1d8;
+  --halo: #fedad7;
 
   /* Terre brûlée pour les actions irréversibles, cousine du corail du sigle
      mais assez sombre pour porter du blanc. */
@@ -1906,8 +1911,8 @@ select {
   --bordure: rgba(255, 255, 255, 0.22);
   --bordure-forte: rgba(255, 255, 255, 0.4);
   --surface-2: rgba(255, 255, 255, 0.12);
-  --primaire: #b0d8f2;
-  --primaire-fort: #d3ebfa;
+  --primaire: #bcd5f5;
+  --primaire-fort: #dbe9fc;
   color: var(--texte);
 }
 
@@ -2008,7 +2013,7 @@ select {
 .avatar--terre { background: color-mix(in srgb, var(--dps-rose) 16%, var(--fond));   color: var(--accent-fort); }
 
 [data-theme="dark"] .avatar--ambre { color: #feaf73; }
-[data-theme="dark"] .avatar--ciel  { color: #76a5c2; }
+[data-theme="dark"] .avatar--ciel  { color: #85a2c5; }
 [data-theme="dark"] .avatar--prune { color: #909fcf; }
 [data-theme="dark"] .avatar--terre { color: #f9a3c3; }
 
