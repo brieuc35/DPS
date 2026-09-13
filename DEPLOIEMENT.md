@@ -5,14 +5,11 @@ d'API publiée dans les pages n'autorise rien par elle-même. Toute modification
 ce fichier reste sans effet tant qu'elle n'est pas **publiée** sur le projet
 Firebase `dps-collective`.
 
-> **À publier sans attendre.** Les règles en ligne empêchent actuellement toute
-> inscription à une sortie, ainsi que le premier soutien à une publication du
-> fil. En cause : une règle qui lisait `resource.data` sur un document *absent*.
-> Firestore répondait alors « permission refusée » là où le site attendait
-> « non trouvé », et la transaction entière échouait — le message affiché,
-> « Réservation impossible. Vérifiez votre connexion », envoyait chercher au
-> mauvais endroit. Corrigé dans ce fichier ; il faut le republier pour que la
-> correction s'applique.
+> **À republier.** Le salon général a été retiré du site : ces règles ferment
+> sa porte à leur tour. Sans cette publication, rien ne casse — la collection
+> reste simplement ouverte aux membres alors que plus aucune page n'y mène.
+> Les messages qui y ont été écrits restent lisibles par leur auteur, pour
+> qu'une suppression de compte puisse encore les effacer.
 
 ## Le plus simple : la console
 

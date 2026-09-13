@@ -95,12 +95,17 @@ service cloud.firestore {
     // -------------------------------------------------------------- messages
     match /messages/{messageId} {
 
-      // Le salon est ouvert à tous les membres ; le fil d'une sortie ne l'est
-      // qu'à ses inscrits. C'est la traduction technique de la promesse « ce
-      // qui se dit dans le groupe y reste ».
+      // Le fil d'une sortie n'est ouvert qu'à ses inscrits. C'est la traduction
+      // technique de la promesse « ce qui se dit dans le groupe y reste ».
+      //
+      // Le salon général, ouvert à tous les membres, a été retiré du site : sa
+      // porte est refermée ici aussi. Les messages qui y ont été écrits
+      // restent lisibles par leur auteur — c'est la seconde branche de la
+      // règle de lecture, plus bas — pour qu'une suppression de compte puisse
+      // encore les effacer.
       function peutVoir(conversation) {
-        return conversation == 'general'
-            || (conversation.matches('groupe-.*') && inscritA(activiteDuFil(conversation)));
+        return conversation.matches('groupe-.*')
+            && inscritA(activiteDuFil(conversation));
       }
 
       // Deux cas de lecture : les messages d'un fil auquel on a accès, et les
@@ -138,8 +143,8 @@ service cloud.firestore {
     match /reactions/{reactionId} {
 
       function peutVoirFil(conversation) {
-        return conversation == 'general'
-            || (conversation.matches('groupe-.*') && inscritA(activiteDuFil(conversation)));
+        return conversation.matches('groupe-.*')
+            && inscritA(activiteDuFil(conversation));
       }
 
       allow read: if connecte() && peutVoirFil(resource.data.conversation);

@@ -1,9 +1,9 @@
 /**
  * DPS — Discussions
  * ---------------------------------------------------------------------------
- * Un salon général ouvert à tous les membres, et un fil par sortie réservé à
- * ses inscrits. Réservé aux comptes : sans session ouverte, la page propose de
- * se connecter ou de s'inscrire.
+ * Un fil par sortie, réservé à ses inscrits — et rien d'autre : le salon
+ * général a été retiré. Réservé aux comptes : sans session ouverte, la page
+ * propose de se connecter ou de s'inscrire.
  *
  * ATTENTION — comme les comptes, les messages ne quittent pas le navigateur.
  * Deux personnes sur deux appareils ne se voient pas : ce sont deux copies
@@ -23,7 +23,9 @@ const CLE_LECTURES = 'dps.luJusqua';
 const CLE_COEURS = 'dps.coeurs';
 const LIMITE_MESSAGE = 600;
 
-let conversationActive = 'general';
+/* Le fil affiché. Nul tant qu'aucun groupe n'est ouvert — ce qui est l'état
+   normal d'un membre sans réservation, le salon général n'existant plus. */
+let conversationActive = null;
 
 /* Messages par fil, tenus par les écouteurs Firestore — tous les fils
    visibles, et non le seul fil affiché : sans cela, aucun onglet ne pourrait
@@ -81,16 +83,17 @@ function groupesReserves() {
 }
 
 /**
- * Les fils visibles : le salon, plus les groupes des sorties réservées. Un
+ * Les fils visibles : les groupes des sorties réservées, et eux seuls. Un
  * groupe auquel on n'est pas inscrit n'apparaît pas — c'est la contrepartie de
  * la promesse « ce qui se dit dans le groupe y reste », et les règles de
  * sécurité Firestore l'imposent de leur côté.
+ *
+ * Sans réservation, la liste est donc vide : c'est un état normal, que la page
+ * doit savoir présenter.
  */
 function conversationsVisibles() {
   const reserves = groupesReserves();
-  return CONVERSATIONS.filter(
-    (conversation) => conversation.id === 'general' || reserves.includes(conversation.id)
-  );
+  return CONVERSATIONS.filter((conversation) => reserves.includes(conversation.id));
 }
 
 function trouverConversation(id) {
@@ -256,10 +259,16 @@ function suivreReservations() {
   desabonnerReservations = distant.ecouterMesReservations(compte.id, (reservations) => {
     reservationsDistantes = reservations;
     // La liste des fils accessibles vient de changer : il faut suivre les
-    // nouveaux et lâcher ceux qu'on a quittés.
+    // nouveaux et lâcher ceux qu'on a quittés. Et choisir un fil à afficher —
+    // les réservations arrivent après le premier rendu, où la liste était
+    // encore vide et aucun groupe n'avait pu être ouvert.
+    const avant = conversationActive;
+    appliquerAncreChat();
     suivreFils();
     suivreCoeurs();
+    if (conversationActive && conversationActive !== avant) marquerLu(conversationActive);
     rendreListe();
+    rendreFilDiscussion();
   });
 }
 
@@ -356,22 +365,46 @@ function rendreFilDiscussion() {
 
   const conversation = trouverConversation(conversationActive);
   const compte = Comptes.courant();
+  const astuce = $('[data-fil-astuce]');
+  const composeur = $('[data-composeur-chat]');
+
+  // Aucun groupe ouvert : le membre n'a réservé aucune sortie. Il n'y a rien à
+  // lire et rien à écrire — on le dit, et on retire le champ de saisie plutôt
+  // que de le laisser pointer dans le vide.
+  if (!conversation) {
+    if (titre) titre.textContent = 'Aucun groupe pour l’instant';
+    if (meta) meta.textContent = '';
+    if (astuce) astuce.hidden = true;
+    if (composeur) composeur.hidden = true;
+    zone.innerHTML = `
+      <div class="message-vide">
+        <h3>Vos groupes vous attendent ici</h3>
+        <p>
+          Chaque sortie réservée ouvre son groupe : vous y retrouverez le point de
+          rendez-vous, l’horaire, et les autres participants.
+        </p>
+        <p style="margin-top:var(--e-4)">
+          <a class="btn btn--primaire" href="activites.html">Voir les sorties</a>
+        </p>
+      </div>`;
+    return;
+  }
+
+  if (composeur) composeur.hidden = false;
+
   const messages = messagesDe(conversationActive);
 
-  if (titre) titre.textContent = conversation ? conversation.nom : 'Discussion';
-  if (meta) meta.textContent = conversation ? conversation.description : '';
+  if (titre) titre.textContent = conversation.nom;
+  if (meta) meta.textContent = conversation.description;
 
-  // L'astuce ne s'affiche que dans le fil d'un groupe : c'est là que tombent
-  // le point de rendez-vous, l'horaire, ce qu'il faut prévoir — les messages
-  // auxquels on doit répondre quelque chose, et pour lesquels un cœur suffit.
-  const astuce = $('[data-fil-astuce]');
+  // C'est dans un groupe que tombent le point de rendez-vous, l'horaire, ce
+  // qu'il faut prévoir — les messages auxquels on doit répondre quelque chose,
+  // et pour lesquels un cœur suffit. Tous les fils étant désormais des
+  // groupes, l'astuce vaut partout.
   if (astuce) {
-    const dansUnGroupe = conversationActive !== 'general';
-    astuce.hidden = !dansUnGroupe;
-    if (dansUnGroupe) {
-      astuce.innerHTML = `${picto(ICONE_COEUR, 13)} Un cœur sur un message suffit à dire
-        « j’ai vu » — inutile de répondre « ok » ou « merci ».`;
-    }
+    astuce.hidden = false;
+    astuce.innerHTML = `${picto(ICONE_COEUR, 13)} Un cœur sur un message suffit à dire
+      « j’ai vu » — inutile de répondre « ok » ou « merci ».`;
   }
 
   const enAttente = Boolean(base()) && filsDistants[conversationActive] === undefined;
@@ -404,12 +437,26 @@ function choisirConversation(id) {
   history.replaceState(null, '', lienInterne('chat', id));
 }
 
-/** `#groupe-mine-bleue` ouvre directement le fil correspondant. */
+/**
+ * `#groupe-mine-bleue` ouvre directement le fil correspondant.
+ *
+ * À défaut, on ouvre le premier groupe de la liste : il n'y a plus de salon
+ * pour servir de fil par défaut, et arriver sur une page vide alors qu'on a
+ * des groupes serait absurde. La liste peut évoluer après coup — les
+ * réservations arrivent de Firestore — d'où le recalcul à chaque passage tant
+ * que le fil courant n'est plus (ou pas encore) visible.
+ */
 function appliquerAncreChat() {
+  const visibles = conversationsVisibles();
   const demande = (window.location.hash || '').replace(/^#\/?(chat\/)?/, '');
-  if (demande && conversationsVisibles().some((c) => c.id === demande)) {
+
+  if (demande && visibles.some((c) => c.id === demande)) {
     conversationActive = demande;
     return true;
+  }
+
+  if (!visibles.some((c) => c.id === conversationActive)) {
+    conversationActive = visibles.length ? visibles[0].id : null;
   }
   return false;
 }
@@ -516,8 +563,9 @@ function preparerChat() {
   appliquerAncreChat();
   suivreFils();
   suivreCoeurs();
-  // Ouvrir le fil, c'est le lire.
-  marquerLu(conversationActive);
+  // Ouvrir le fil, c'est le lire. Il peut n'y en avoir aucun : sans salon
+  // général, un membre qui n'a rien réservé arrive sur une page sans fil.
+  if (conversationActive) marquerLu(conversationActive);
   rendreListe();
   rendreFilDiscussion();
   afficherBandeauArrivee();

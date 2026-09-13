@@ -51,13 +51,12 @@
     return typeof Comptes !== 'undefined' ? Comptes.courant() : null;
   }
 
-  /** Les fils accessibles : le salon, plus le groupe de chaque sortie réservée. */
+  /** Les fils accessibles : le groupe de chaque sortie réservée, et eux seuls. */
   function conversationsVisibles() {
     const reservations = base()
       ? reservationsDistantes || []
       : Stockage.lire('dps.reservations', []);
-    const groupes = [...new Set(reservations.map((r) => `groupe-${r.activiteId}`))];
-    return ['general', ...groupes];
+    return [...new Set(reservations.map((r) => `groupe-${r.activiteId}`))];
   }
 
   function messagesDe(conversationId) {

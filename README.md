@@ -14,7 +14,7 @@ et après la sortie.
 | `communaute.html` | Fil social : cercles de discussion, composeur, réactions et réponses |
 | `vision.html` | Le projet : la vision, le concept, la vie de la communauté, l'ambition et la promesse |
 | `compte.html` | Espace membre : onglets « Se connecter » / « Créer un compte », puis profil et sorties réservées |
-| `chat.html` | Discussions : le salon général et le fil de chaque sortie réservée |
+| `chat.html` | Discussions : le groupe de chaque sortie réservée |
 | `mentions-legales.html` | Éditeur, hébergeur, propriété intellectuelle |
 | `confidentialite.html` | Données collectées, base légale, durées, droits RGPD |
 | `conditions.html` | Conditions d'utilisation : compte, inscription, annulation, comportement |
@@ -57,8 +57,9 @@ et après la sortie.
 - Inscription validée champ par champ : prénom, nom, adresse, mot de passe de
   huit caractères confirmé, adhésion à la charte. Le mot de passe n'est jamais
   conservé en clair (empreinte SHA-256 salée).
-- Deux niveaux de fils : **le salon**, ouvert à tous les membres, et **le
-  groupe d'une sortie**, visible de ses seuls inscrits.
+- Un fil par sortie : **le groupe d'une sortie**, visible de ses seuls
+  inscrits. Il n'y a pas de salon général — ce qui concerne le collectif se
+  publie sur le fil d'actualité de la communauté.
 - Réserver une place emmène directement dans le groupe de la sortie, où un
   bandeau confirme la réservation. Sans compte, la réservation aboutit quand
   même : l'écran de confirmation propose alors d'en créer un pour entrer dans
@@ -166,7 +167,7 @@ qui a la main sur le navigateur a la main sur ces comptes-là.
 Messages et réservations sont partagés par **Firestore**
 (`assets/js/firebase-donnees.js`) :
 
-- **Le salon et les fils de groupe** sont en temps réel — un message envoyé
+- **Les fils de groupe** sont en temps réel — un message envoyé
   apparaît chez les autres sans rechargement. En mode partagé, les échanges
   d'exemple ne s'affichent plus : ce sont des décors de démonstration, et
   répondre à quelqu'un qui n'existe pas serait une mauvaise surprise.

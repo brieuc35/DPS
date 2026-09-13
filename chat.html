@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Discussions — DPS Collective</title>
-  <meta name="description" content="Le salon des membres de DPS Collective et le groupe de chaque expérience à laquelle vous participez.">
+  <meta name="description" content="Le groupe de discussion de chaque expérience DPS Collective à laquelle vous participez.">
   <meta name="theme-color" content="#fff0ec" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1a120e" media="(prefers-color-scheme: dark)">
 
@@ -79,9 +79,9 @@
           <p class="sur-titre">Discussions</p>
           <h1>Les fils sont réservés aux membres</h1>
           <p class="plomb">
-            Le salon général réunit tous les membres ; chaque sortie réservée ouvre en plus
-            son propre fil, visible de ses seuls inscrits. C’est ce qui permet d’écrire
-            tranquillement : rien ne sort du groupe.
+            Chaque sortie réservée ouvre son propre groupe, visible de ses seuls
+            inscrits. C’est ce qui permet d’écrire tranquillement : rien ne sort du
+            groupe.
           </p>
           <div style="display:flex;gap:var(--e-3);flex-wrap:wrap;margin-top:var(--e-5)">
             <a class="btn btn--primaire btn--large" href="compte.html#inscription">Créer un compte</a>
@@ -109,11 +109,10 @@
 
             <div class="messagerie__principal">
               <header class="messagerie__entete">
-                <h2 data-fil-titre style="font-size:1.15rem;margin:0">Le salon</h2>
+                <h2 data-fil-titre style="font-size:1.15rem;margin:0">Vos groupes</h2>
                 <p data-fil-meta style="margin:0;font-size:var(--t-sm);color:var(--texte-doux)"></p>
-                <!-- Rempli par chat.js, et seulement dans le fil d'un groupe :
-                     c'est là que tombent les informations pratiques, donc là
-                     que l'accusé de lecture sert. -->
+                <!-- Rempli par chat.js. Masqué tant qu'aucun groupe n'est
+                     ouvert : l'accusé de lecture n'a rien à accuser. -->
                 <p class="messagerie__astuce" data-fil-astuce hidden></p>
               </header>
 

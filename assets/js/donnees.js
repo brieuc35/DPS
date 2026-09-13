@@ -284,21 +284,19 @@ const CERCLES = [
 const PUBLICATIONS = [];
 
 /* ==========================================================================
-   Conversations d'exemple
+   Conversations
    --------------------------------------------------------------------------
-   « general » est le salon ouvert à tous les membres ; « groupe-<activité> »
-   réunit les inscrits d'une sortie. Ces messages sont le décor : ils tiennent
-   lieu d'historique pour que le salon n'accueille pas les nouveaux venus sur
-   une page vide. Les messages écrits depuis le site s'y ajoutent.
+   Un fil par sortie — « groupe-<activité> » — réunissant ses inscrits, et
+   rien d'autre.
+
+   Le salon général, ouvert à tous les membres, a été retiré : la discussion
+   du site a deux endroits et pas trois. Ce qui concerne une sortie se dit
+   dans son groupe ; ce qui concerne le collectif se publie sur le fil
+   d'actualité de la communauté. Un troisième lieu sans objet propre n'aurait
+   fait que disperser.
    ========================================================================== */
 
 const CONVERSATIONS = [
-  {
-    id: 'general',
-    nom: 'Le salon',
-    icone: '<path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2Z"/>',
-    description: 'Tous les membres, toutes les sorties. On y dit bonjour, on y pose ses questions.',
-  },
   ...ACTIVITES.map((activite) => ({
     id: `groupe-${activite.id}`,
     nom: activite.titre,
