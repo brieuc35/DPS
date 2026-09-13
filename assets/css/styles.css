@@ -148,9 +148,32 @@
   --prune-400: #6f5462;
   --prune-100: #e6dcdf;
 
-  /* Rôles sémantiques — surchargés en thème sombre */
-  --fond: var(--ivoire);
-  --fond-alt: var(--ivoire-creux);
+  /* --- Le fond : un dégradé d'un bout à l'autre de la page ------------------
+     Il part de l'orange du sigle et arrive à son bleu — les deux extrémités du
+     logo, dans son ordre de lecture.
+
+     Les deux teintes sont diluées séparément jusqu'à tomber à la *même*
+     distance du blanc (ΔE 7,1, celle de l'ivoire qui servait de fond jusqu'ici)
+     plutôt qu'au même pourcentage : à dilution égale, le bleu serait nettement
+     plus sombre que l'orange, et la page s'assombrirait en descendant. À
+     distance égale, il ne reste que le glissement de teinte — 2,5 points de L*
+     d'écart entre le haut et le bas, soit un contraste du texte qui va de
+     15,6:1 à 14,6:1. Autant dire qu'il ne bouge pas.
+
+     Le voyage complet vaut ΔE 10 : assez pour qu'on voie une page teintée,
+     trop peu pour qu'on lui trouve deux couleurs. */
+  --fond-haut: #fff3ea;   /* orange du sigle, dilué à 8 %  */
+  --fond-bas: #e7eff4;    /* bleu du sigle, dilué à 10 %   */
+
+  /* Le milieu du dégradé, en aplat. Il sert de repli, et surtout de base aux
+     `color-mix()` — une variable de couleur ne peut pas contenir un dégradé. */
+  --fond: #f3f1ef;
+
+  /* Le creux des sections alternées est un voile et non plus un aplat : posé
+     sur un dégradé, un aplat ferait une bande plate au milieu du glissement.
+     4,7 % de prune reproduisent le creux d'avant (ΔE 5) et suivent la page
+     partout où elle en est de son voyage. */
+  --fond-alt: rgba(42, 22, 34, 0.047);
   --surface: var(--blanc-chaud);
   --surface-2: var(--ivoire-creux);
   --bordure: #fbdcd2;
@@ -257,8 +280,14 @@
    et le bleu perdraient toute lisibilité sur un fond aussi profond. La teinte
    est conservée, seule la clarté change. */
 [data-theme="dark"] {
-  --fond: #1a120e;
-  --fond-alt: #211815;
+  /* Le même voyage, en négatif. Les deux bouts sont calés sur la clarté du
+     fond sombre d'origine, puis ramenés à mi-chemin du neutre : à pleine
+     teinte, l'écart montait à ΔE 23, là où le thème clair en fait 10. Un
+     dégradé doit rester la même idée dans les deux thèmes. */
+  --fond-haut: #1f1107;
+  --fond-bas: #0e1418;
+  --fond: #171310;
+  --fond-alt: rgba(255, 255, 255, 0.026);
   --surface: #251b17;
   --surface-2: #2e231d;
   --bordure: #3f312a;
@@ -308,13 +337,28 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* La couleur sur `html` et le dégradé sur `body`, à dessein.
+   Un fond posé sur `body` seul est « propagé » au canevas par le navigateur,
+   et se retrouve alors dimensionné sur la boîte de `html` — le dégradé ne
+   couvrirait plus la page mais la fenêtre. Donner sa propre couleur à `html`
+   coupe cette propagation : le dégradé reste dans la boîte de `body`, donc
+   sur toute la hauteur du document. */
+html {
+  background-color: var(--fond);
+}
+
 body {
   margin: 0;
+  /* Au moins la fenêtre : sur une page courte, le dégradé doit tout de même
+     aller jusqu'en bas de l'écran. */
+  min-height: 100vh;
   font-family: var(--police-texte);
   font-size: var(--t-base);
   line-height: 1.65;
   color: var(--texte);
   background-color: var(--fond);
+  background-image: linear-gradient(180deg, var(--fond-haut) 0%, var(--fond-bas) 100%);
+  background-repeat: no-repeat;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -865,7 +909,11 @@ select {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: color-mix(in srgb, var(--fond) 88%, transparent);
+  /* Le haut du dégradé, et non son milieu : au repos la barre est posée là,
+     et c'est là qu'on la voit le plus longtemps. Une fois collée en défilant,
+     le flou et la saturation la font lire comme un verre dépoli qui a sa
+     propre matière — l'écart avec le fond qu'elle survole ne se remarque pas. */
+  background: color-mix(in srgb, var(--fond-haut) 88%, transparent);
   backdrop-filter: saturate(180%) blur(12px);
   -webkit-backdrop-filter: saturate(180%) blur(12px);
   border-bottom: 1px solid transparent;
@@ -1008,7 +1056,10 @@ select {
   height: 9px;
   border-radius: var(--r-full);
   background: var(--accent-fort);
-  border: 2px solid var(--fond);
+  /* La couleur du bouton, pas celle de la page : c'est sur le bouton que le
+     point est posé, et le fond est désormais un dégradé dont ce coin-là ne
+     vaut plus le milieu. */
+  border: 2px solid var(--surface);
 }
 
 @media (max-width: 900px) {
@@ -1073,10 +1124,13 @@ select {
   position: relative;
   overflow: hidden;
   padding-block: var(--e-9) var(--e-8);
+  /* Le halo est posé *sur* le dégradé de la page, et non mélangé à un aplat de
+     fond : sans cela, il recouvrirait le haut du dégradé d'une couleur fixe et
+     le voyage commencerait sous le hero. */
   background: linear-gradient(
     186deg,
-    color-mix(in srgb, var(--halo) 34%, var(--fond)) 0%,
-    var(--fond) 62%
+    color-mix(in srgb, var(--halo) 34%, transparent) 0%,
+    transparent 62%
   );
 }
 
