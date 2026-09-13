@@ -1152,11 +1152,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const distant = baseActivites();
     const compte = typeof Comptes !== 'undefined' ? Comptes.courant() : null;
     const id = compte ? compte.id : null;
-    if (id === membreSuivi) return;
+
+    // Déjà abonné pour ce membre : ne pas relancer une lecture complète.
+    //
+    // Le garde-fou tenait auparavant au seul identifiant, et il figeait l'état
+    // dans une course : quand la session était rétablie avant que Firestore
+    // n'ait fini de démarrer, ce premier passage retenait le membre comme
+    // « suivi » puis renonçait faute de base. L'événement `dps:donnees-pretes`
+    // rappelait bien la fonction une fois la base prête, mais l'identifiant
+    // n'avait pas changé : elle repartait aussitôt, l'abonnement n'était jamais
+    // posé, et les cartes restaient sur « Ça m'intéresse » alors que la
+    // réservation existait bel et bien.
+    //
+    // On ne considère donc le membre comme suivi que lorsqu'un abonnement a
+    // réellement été posé — ou qu'il n'y a personne à suivre.
+    if (id === membreSuivi && (desabonnerInscriptions || !id)) return;
 
     if (desabonnerInscriptions) desabonnerInscriptions();
     desabonnerInscriptions = null;
-    membreSuivi = id;
+    membreSuivi = distant ? id : null;
 
     // À la déconnexion, les inscriptions de l'ancien membre ne doivent plus
     // marquer les cartes.

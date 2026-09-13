@@ -125,11 +125,16 @@
     const distant = base();
     const moi = compte();
     const id = moi ? moi.id : null;
-    if (id === membreSuivi) return;
+
+    // Même garde-fou que dans activites.js, et pour la même raison : retenir le
+    // membre alors que la base n'était pas encore prête empêchait le second
+    // passage — celui déclenché par `dps:donnees-pretes` — de poser
+    // l'abonnement. Le compteur restait alors bloqué à zéro.
+    if (id === membreSuivi && (desabonnerReservations || !id)) return;
 
     if (desabonnerReservations) desabonnerReservations();
     desabonnerReservations = null;
-    membreSuivi = id;
+    membreSuivi = distant ? id : null;
 
     // Déconnexion : plus rien à compter, et les fils de l'ancien membre ne
     // doivent surtout pas rester écoutés.
