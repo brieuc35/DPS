@@ -21,6 +21,11 @@ croire à un lieu que personne n'a photographié.
 
 Rien d'autre à modifier. La carte bascule d'elle-même du motif à l'image.
 
+Les deux gestes vont ensemble. Renseigner le chemin sans déposer le fichier
+ne casse pas l'affichage — l'image se retire et le dessin reparaît — mais le
+navigateur réclame quand même un fichier absent à chaque chargement, et
+récolte un 404 dans la console. Autant faire les deux d'un coup.
+
 ## Format
 
 - **Cadrage 3:2** (par exemple 1200 × 800). La vignette recadre au centre,

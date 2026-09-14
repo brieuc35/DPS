@@ -108,6 +108,8 @@ const ACTIVITES = [
     id: 'initiation-billard',
     titre: 'Initiation au billard',
     thematique: 'loisir',
+    // Déposer `assets/img/activites/initiation-billard.jpg`, puis remplacer
+    // ce `null` par le chemin : la carte bascule alors du dessin à la photo.
     photo: null,
     lieu: 'Vitré, Ille-et-Vilaine',
     date: null,

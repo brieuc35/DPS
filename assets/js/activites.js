@@ -107,17 +107,12 @@ const SCENES = {
  * qui signe sans rien prétendre.
  */
 function couvertureDe(activite, theme) {
-  if (activite.photo) {
-    return `<img class="carte-activite__photo" src="${echapper(activite.photo)}"
-                 alt="" width="600" height="400" loading="lazy" decoding="async">`;
-  }
-
   const scene = SCENES[activite.id];
 
   // Tout tient dans un seul SVG, au repère de la vignette : deux éléments
   // superposés en CSS auraient dérivé l'un par rapport à l'autre dès que le
   // rapport de la couverture change.
-  return `
+  const motif = `
     <span class="carte-activite__motif" aria-hidden="true" style="background:${theme.degrade}">
       <svg viewBox="0 0 120 80" preserveAspectRatio="xMidYMid meet" fill="none">
         ${
@@ -130,6 +125,18 @@ function couvertureDe(activite, theme) {
         }
       </svg>
     </span>`;
+
+  if (!activite.photo) return motif;
+
+  // La photo est posée *par-dessus* le dessin, les deux occupant la même
+  // cellule de grille. Si le fichier manque — il est déposé à la main dans
+  // `assets/img/activites/`, et le champ `photo` peut être renseigné avant —
+  // l'image se retire d'elle-même et le dessin réapparaît. Une vignette
+  // cassée serait le pire des trois états.
+  return `${motif}
+    <img class="carte-activite__photo" src="${echapper(activite.photo)}"
+         alt="" width="600" height="400" loading="lazy" decoding="async"
+         onerror="this.remove()">`;
 }
 
 /* ==========================================================================
