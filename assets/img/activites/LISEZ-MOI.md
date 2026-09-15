@@ -35,10 +35,29 @@ récolte un 404 dans la console. Autant faire les deux d'un coup.
   donc le sujet doit y être ; les bords peuvent être rognés.
 - **1200 px de large** suffisent : au-delà, on fait payer au visiteur des
   pixels qu'il ne verra pas.
-- **JPEG** pour une photographie, à 80-85 % de qualité.
+- **JPEG** pour une photographie, à 80-85 % de qualité, en progressif.
+- **Autour de 150 Kio.** Une photo sortie d'un téléphone en pèse souvent le
+  double sans rien montrer de plus : la carte l'affiche dans 270 px de large,
+  et c'est un visiteur en 4G qui paie la différence.
 - Des situations réelles, en lumière naturelle, des gens en train de faire
   quelque chose. Une photo du lieu vide est moins désirable qu'un détail
   vivant.
+
+Pour ramener une image au format, sans rien installer de plus :
+
+```sh
+python3 -c "
+from PIL import Image
+p = 'assets/img/activites/xxx.jpg'
+im = Image.open(p); im.load()
+im.convert('RGB').save(p, 'JPEG', quality=82, optimize=True,
+                       progressive=True, subsampling=2,
+                       icc_profile=im.info.get('icc_profile'))"
+```
+
+Le profil de couleur est repris tel quel — sans lui, les verts d'un tapis de
+billard dérivent. Les données d'appareil, elles, disparaissent au passage, ce
+qui est tant mieux : une photo prise sur place peut porter ses coordonnées.
 
 ## Droits
 
