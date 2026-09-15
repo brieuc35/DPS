@@ -1872,14 +1872,30 @@ select {
   display: none;
 }
 
+/* Le chapeau de la section respire déjà de `--e-7`, comme partout ailleurs.
+   Les bulles en demandent davantage : ce sont des disques, leur masse s'arrête
+   avant les angles de leur boîte, et l'écart mesuré paraît toujours plus étroit
+   qu'il ne l'est. Ce supplément leur est propre — les autres sections gardent
+   le rythme commun. */
+.bulles--triangle {
+  padding-top: var(--e-5);
+}
+
 @media (min-width: 960px) {
   .bulles--triangle {
     position: relative;
     /* L'espace restant est reporté sur l'écart entre les colonnes plutôt que
        sur leur largeur, que le plafond de 340 px fige. */
     justify-content: space-between;
-    /* Dégage la place que prend la bulle centrale en s'élevant. */
-    padding-top: var(--e-7);
+    /* Dégage la place que prend la bulle centrale en s'élevant, et le même
+       supplément qu'en pile par-dessus.
+
+       Sans ce doublement l'écart se refermait à 21 px sur un grand écran,
+       contre 48 px sur mobile : la bulle du milieu remonte de 22 % de sa
+       colonne, soit environ 75 px à pleine largeur, et reprenait donc plus que
+       ce que la réserve lui accordait. Le rendu était d'autant plus serré que
+       l'écran était large — l'inverse de ce qu'on attend. */
+    padding-top: calc(var(--e-7) * 2);
     /* Gouttière plus large qu'en pile : entre 960 et 1100 px, les colonnes
        ne sont plus bornées par le plafond mais par la place disponible, et
        les disques se retrouvaient à 37 px l'un de l'autre — de quoi loger la
