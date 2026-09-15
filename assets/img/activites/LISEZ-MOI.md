@@ -2,6 +2,9 @@
 
 Ce dossier reçoit la photographie de couverture de chaque sortie.
 
+Une seule est renseignée à ce jour : `initiation-billard.jpg`. Les trois
+autres sorties affichent encore le motif de la marque.
+
 La direction artistique repose dessus : sur une page volontairement sobre,
 c'est l'image qui donne envie, le texte ne fait que confirmer. Tant qu'une
 activité n'a pas de photo, sa carte affiche le motif de la marque — la porte
