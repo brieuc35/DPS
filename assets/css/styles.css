@@ -535,6 +535,18 @@ select {
   margin-bottom: 0;
 }
 
+/* Deux phrases dans un même chapeau : la césure doit tomber entre elles, pas
+   au milieu de la seconde. Chaque phrase devient une boîte que la ligne ne
+   peut pas scinder — elle passe entière à la ligne suivante, ou elle reste.
+
+   `inline-block` plutôt qu'un `<br>` : le retour forcé serait juste sur un
+   grand écran et ridicule sur un téléphone, où la première phrase occupe
+   déjà deux lignes. Ici, quand la place manque vraiment, la boîte se replie
+   sur elle-même et le texte coule normalement. */
+.phrase {
+  display: inline-block;
+}
+
 .grille {
   display: grid;
   gap: var(--e-5);
