@@ -213,17 +213,19 @@ function rendreCalendrier() {
   // comme une contradiction. Quand des sorties attendent leur date, on le dit
   // ici plutôt que de laisser le visiteur conclure qu'il n'y a rien.
   const sansDate = activitesAvenir().filter((activite) => !activiteEstDatee(activite)).length;
+  // Le mois et le compte sont lus sur le catalogue à chaque rendu : la note
+  // reste juste quand une date est renseignée ou qu'une sortie est ajoutée.
   const note = calMoisOccupe(parJour)
     ? ''
-    : `<p class="cal-vide">Aucune sortie n’est calée en ${echapper(
+    : `<p class="cal-vide">Aucune sortie n’est prévue en ${echapper(
         calNomDuMois(etatCalendrier.mois).toLowerCase()
-      )}.${
+      )}.</p>${
         sansDate
-          ? ` ${sansDate} sortie${sansDate > 1 ? 's sont' : ' est'} proposée${
-              sansDate > 1 ? 's' : ''
-            } sans date fixée — <a href="activites.html">voir le programme</a>.`
+          ? `<p class="cal-vide cal-vide--suite">${sansDate} expérience${
+              sansDate > 1 ? 's sont' : ' est'
+            } actuellement proposée${sansDate > 1 ? 's' : ''} sans date fixée.</p>`
           : ''
-      }</p>`;
+      }`;
 
   conteneurs.forEach((conteneur) => {
     conteneur.innerHTML = `

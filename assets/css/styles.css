@@ -3286,6 +3286,13 @@ select {
   font-size: var(--t-sm);
 }
 
+/* La seconde phrase répond à la première — ce qui manque au mois, puis ce qui
+   attend ailleurs. Un écart moindre qu'au-dessus du bloc les tient ensemble
+   tout en les laissant se lire séparément. */
+.cal-vide--suite {
+  margin-top: var(--e-2);
+}
+
 /* --- Écran étroit ---
    La même grille, réduite. Elle garde une largeur minimale sous laquelle les
    noms d'activités cesseraient d'être lisibles : en dessous, c'est le
