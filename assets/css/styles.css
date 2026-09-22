@@ -556,11 +556,27 @@ select {
   .grille--2 { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Les cartes d'activité étant compactes, la grille en loge autant que la
-   largeur le permet au lieu d'imposer un nombre de colonnes fixe. */
+/* La grille loge autant de colonnes que la largeur le permet, mais le plancher
+   de chaque colonne décide en réalité de leur nombre. À 238 px, un grand écran
+   en tenait quatre et la photographie tombait à 269 × 179 — la taille d'une
+   vignette de catalogue, quand c'est elle qui doit donner envie. À 300 px il
+   en tient trois, et la photographie passe à 359 × 239, soit 78 % de surface
+   gagnée. Une sortie de moins par rangée, mais chacune vaut le regard.
+
+   La gouttière suit : un écart de 16 px entre des cartes de cette taille les
+   ferait lire comme un bloc unique. */
 .grille--activites {
-  grid-template-columns: repeat(auto-fill, minmax(238px, 1fr));
-  gap: var(--e-4);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--e-5);
+}
+
+/* Sous 720 px la colonne unique s'impose d'elle-même — le plancher de 300 px
+   ne tient plus qu'une fois. Entre les deux, deux colonnes. */
+@media (min-width: 620px) and (max-width: 719px) {
+  .grille--activites {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--e-4);
+  }
 }
 
 @media (min-width: 900px) {
@@ -1286,20 +1302,24 @@ select {
 }
 
 /* --- Carte activité --- */
+/* Le rayon passe au cran supérieur et l'ombre de repos à `md` : à 361 px de
+   large, l'arrondi de 16 px paraissait serré et l'ombre la plus fine laissait
+   la carte à plat sur le fond. Une carte qui a cette taille doit se détacher
+   un peu — sinon c'est une zone coloriée, pas un objet. */
 .carte-activite {
   display: flex;
   flex-direction: column;
   background: var(--surface);
   border: 1px solid var(--bordure);
-  border-radius: var(--r-lg);
+  border-radius: var(--r-xl);
   overflow: hidden;
-  box-shadow: var(--ombre-sm);
+  box-shadow: var(--ombre-md);
   transition: transform var(--transition), box-shadow var(--transition),
     border-color var(--transition);
 }
 
 .carte-activite:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   box-shadow: var(--ombre-lg);
   border-color: color-mix(in srgb, var(--primaire) 35%, var(--bordure));
 }
@@ -1363,9 +1383,9 @@ select {
 
 .carte-activite__etiquettes {
   position: absolute;
-  top: var(--e-2);
-  left: var(--e-2);
-  right: var(--e-2);
+  top: var(--e-3);
+  left: var(--e-3);
+  right: var(--e-3);
   z-index: 2;
   display: flex;
   justify-content: space-between;
@@ -1388,8 +1408,8 @@ select {
 /* La disponibilité descend en bas du visuel, pour laisser le haut au tarif. */
 .carte-activite__dispo {
   position: absolute;
-  left: var(--e-2);
-  bottom: var(--e-2);
+  left: var(--e-3);
+  bottom: var(--e-3);
   z-index: 2;
 }
 
@@ -1398,8 +1418,8 @@ select {
    modale — ici, un simple repère à remarquer sur la grille. */
 .carte-activite__cadeau {
   position: absolute;
-  right: var(--e-2);
-  bottom: var(--e-2);
+  right: var(--e-3);
+  bottom: var(--e-3);
   z-index: 2;
   background: rgba(255, 255, 255, 0.94);
   color: var(--prune-900);
@@ -1410,31 +1430,40 @@ select {
    la taille d'une icône. Le mot, lui, reste en encre. */
 .carte-activite__cadeau .picto { color: var(--dps-orange); }
 
+/* Les étiquettes ne servent que sur cette carte, et elles y flottent sur la
+   photographie. Sur une couverture de 359 px, 0,68 rem posés à 8 px du bord
+   se lisaient comme une surimpression accidentelle ; un cran de corps et un
+   retrait plus franc les posent sur l'image au lieu de les y coller. */
 .etiquette-flottante {
-  padding: 0.25em 0.6em;
+  padding: 0.3em 0.7em;
   border-radius: var(--r-full);
   background: rgba(255, 255, 255, 0.92);
   color: var(--prune-900);
-  font-size: 0.68rem;
+  font-size: var(--t-xs);
   font-weight: 600;
   backdrop-filter: blur(4px);
   box-shadow: var(--ombre-sm);
 }
 
+/* La marge intérieure suit la largeur de la carte : à 16 px, le texte venait
+   buter contre le bord d'une carte de 361 px et toute l'économie du bloc se
+   lisait comme un remplissage. */
 .carte-activite__corps {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: var(--e-4);
+  padding: var(--e-5);
 }
 
+/* 0,72 rem faisaient 11,5 px : lisible de près, mais c'est la taille d'une
+   mention légale, et elle tirait la carte entière vers le bas de gamme. */
 .carte-activite__meta {
   display: flex;
   flex-wrap: wrap;
   gap: var(--e-3);
-  font-size: 0.72rem;
+  font-size: var(--t-xs);
   color: var(--texte-doux);
-  margin-bottom: var(--e-2);
+  margin-bottom: var(--e-3);
 }
 
 .carte-activite__meta span {
@@ -1452,10 +1481,13 @@ select {
 .carte-activite__attente .picto { color: var(--dps-orange); }
 [data-theme="dark"] .carte-activite__attente .picto { color: #feaf73; }
 
+/* Le titre est le seul élément de la carte qui porte un nom propre — la
+   Mine Bleue, la Brasserie Athanor. Il monte d'un cran au-dessus de `--t-md`,
+   assez pour tenir tête à la photographie sans prendre deux lignes de plus. */
 .carte-activite__titre {
-  font-size: var(--t-md);
-  line-height: 1.22;
-  letter-spacing: -0.015em;
+  font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.35rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   margin-bottom: var(--e-3);
   /* Le titre occupe l'espace libre : les pieds de carte restent alignés
      entre eux quel que soit le nombre de lignes. */
