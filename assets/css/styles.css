@@ -566,7 +566,11 @@ select {
    La gouttière suit : un écart de 16 px entre des cartes de cette taille les
    ferait lire comme un bloc unique. */
 .grille--activites {
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  /* `min(300px, 100%)` et non `300px` : un plancher rigide reste large de
+     300 px même quand le conteneur est plus étroit, et la carte déborde alors
+     de la fenêtre. Aucun téléphone courant ne descend sous 320 px, mais un
+     zoom de page ou une fenêtre réduite y mènent, et le remède ne coûte rien. */
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
   gap: var(--e-5);
 }
 
