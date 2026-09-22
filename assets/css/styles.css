@@ -1171,10 +1171,19 @@ select {
 }
 
 /* Échelle propre au titre d'ouverture : plus contenue que l'échelle des h1,
-   parce que la phrase de marque est longue et doit tenir en trois lignes.
-   `balance` répartit les lignes au lieu d'en laisser une orpheline. */
+   parce que la phrase de marque est longue. `balance` répartit les lignes au
+   lieu d'en laisser une orpheline.
+
+   Les trois valeurs ont été choisies sur le nombre de lignes rendues, pas sur
+   les pixels. Le plancher s'arrête à 2,1 rem parce que c'est le dernier cran
+   qui tienne en trois lignes sur un écran de 320 px : à 2,2 rem, la phrase en
+   prend une quatrième. Le plafond monte à 3,5 rem, soit 56 px au lieu de 49
+   sur un grand écran.
+
+   Le découpage ne bouge donc nulle part : trois lignes sur un téléphone, deux
+   dès 540 px, exactement comme avant. La phrase grandit sans se réorganiser. */
 .hero__titre {
-  font-size: clamp(2rem, 1.35rem + 2.2vw, 3.05rem);
+  font-size: clamp(2.1rem, 1.4rem + 2.5vw, 3.5rem);
   text-wrap: balance;
   margin-bottom: var(--e-4);
 }
