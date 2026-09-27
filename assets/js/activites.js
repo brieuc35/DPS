@@ -684,7 +684,7 @@ function gabaritFormulaire(activite) {
       <div class="champ">
         <label class="champ__label" for="res-email">Adresse e-mail</label>
         <input class="saisie" id="res-email" name="email" type="email" autocomplete="email" required>
-        <span class="champ__aide">Sert à vous reconnaître le jour de la sortie.</span>
+        <span class="champ__aide">Elle nous permettra de vous envoyer les informations concernant l’expérience.</span>
         <span class="champ__erreur">Cette adresse e-mail ne semble pas valide.</span>
       </div>
 
