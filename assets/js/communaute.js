@@ -175,11 +175,60 @@ function gabaritZoneReponses(publication) {
   `;
 }
 
+/* ==========================================================================
+   Signalements
+   ==========================================================================
+
+   Un signalement n'est pas une réaction : il n'a pas à s'afficher, ni à être
+   compté en public. Il part vers une collection que le site ne relit jamais
+   — seul le collectif la consulte depuis la console Firebase.
+
+   Ce qui reste visible, c'est l'état du bouton pour celui qui a signalé :
+   sans cela, il ne sait pas si son geste a porté et recommence. La trace
+   locale sert uniquement à cela ; elle ne dit rien aux autres membres. */
+
+const CLE_SIGNALEMENTS = 'dps.signalements';
+
+function estSignalee(publicationId) {
+  return Boolean(Stockage.lire(CLE_SIGNALEMENTS, {})[publicationId]);
+}
+
+function marquerSignalee(publicationId) {
+  const tous = Stockage.lire(CLE_SIGNALEMENTS, {});
+  tous[publicationId] = new Date().toISOString();
+  Stockage.ecrire(CLE_SIGNALEMENTS, tous);
+}
+
+async function enregistrerSignalement(publicationId) {
+  const identite = identiteRequise();
+  if (!identite) {
+    notifier('Un compte est nécessaire pour signaler une publication.');
+    return;
+  }
+  if (estSignalee(publicationId)) return;
+
+  const distant = base();
+  if (distant && typeof distant.signaler === 'function') {
+    const resultat = await distant.signaler({ publicationId, membreId: identite.id, motif: '' });
+    if (!resultat || !resultat.ok) {
+      // Promettre une relecture alors que rien n'a été enregistré serait pire
+      // que de ne rien dire : la personne croirait le problème pris en charge.
+      notifier('Le signalement n’a pas pu être envoyé. Réessayez dans un instant.');
+      return;
+    }
+  }
+
+  marquerSignalee(publicationId);
+  rendreFil();
+  notifier('Merci, un modérateur bénévole va relire ce message.');
+}
+
 function gabaritPublication(publication) {
   const cercle = CERCLES.find((element) => element.id === publication.cercle);
   const aime = estAimee(publication.id);
   const compteJaimes = compteSoutiens(publication);
   const nombreReponses = reponsesDe(publication).length;
+  const dejaSignale = estSignalee(publication.id);
 
   return `
     <article class="publication apparait" data-publication="${publication.id}">
@@ -204,8 +253,10 @@ function gabaritPublication(publication) {
         <button type="button" class="action-pub" data-repondre="${publication.id}" aria-expanded="false">
           ${picto('<path d="M20 15a2 2 0 0 1-2 2H8l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2Z"/>', 16)} ${nombreReponses} réponse${nombreReponses > 1 ? 's' : ''}
         </button>
-        <button type="button" class="action-pub" data-signaler="${publication.id}">
-          ${picto('<path d="M12 3l7 3v5c0 4.4-3 8.3-7 10-4-1.7-7-5.6-7-10V6Z"/>', 16)} Signaler
+        <button type="button" class="action-pub ${dejaSignale ? 'est-actif' : ''}"
+                data-signaler="${publication.id}" ${dejaSignale ? 'disabled' : ''}>
+          ${picto('<path d="M12 3l7 3v5c0 4.4-3 8.3-7 10-4-1.7-7-5.6-7-10V6Z"/>', 16)} ${
+            dejaSignale ? 'Signalé' : 'Signaler'}
         </button>
       </div>
 
@@ -616,8 +667,8 @@ function initInteractions() {
     }
 
     const boutonSignaler = evenement.target.closest('[data-signaler]');
-    if (boutonSignaler) {
-      notifier('Merci, un modérateur bénévole va relire ce message.');
+    if (boutonSignaler && !boutonSignaler.disabled) {
+      void enregistrerSignalement(boutonSignaler.dataset.signaler);
     }
   });
 

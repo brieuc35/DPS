@@ -374,6 +374,34 @@ service cloud.firestore {
       allow delete: if connecte() && resource.data.membreId == moi();
     }
 
+    // ---------------------------------------------------------- signalements
+    match /signalements/{signalementId} {
+
+      // Personne ne relit cette collection depuis le site, pas même celui qui
+      // a signalé : un signalement consultable se retournerait contre lui. La
+      // liste ne se consulte que dans la console Firebase, par le collectif.
+      allow read: if false;
+
+      // L'identifiant composé « publication_uid » fait qu'un même membre ne
+      // signale qu'une fois la même publication. Le nombre de documents dit
+      // alors combien de personnes distinctes se sont manifestées — la seule
+      // chose qu'un modérateur ait besoin de savoir avant d'aller lire.
+      allow create: if connecte()
+                    && request.resource.data.membreId == moi()
+                    && signalementId == request.resource.data.publicationId + '_' + moi()
+                    && request.resource.data.publicationId is string
+                    && request.resource.data.date == request.time
+                    && request.resource.data.motif is string
+                    && request.resource.data.motif.size() <= 300
+                    && request.resource.data.keys().hasOnly(
+                         ['publicationId', 'membreId', 'motif', 'date']);
+
+      // Un signalement ne se réécrit pas, et ne se retire pas : l'effacer
+      // permettrait de signaler puis de faire disparaître sa trace, ce qui
+      // ouvre la porte au harcèlement par signalements répétés.
+      allow update, delete: if false;
+    }
+
     // Tout le reste est fermé.
     match /{document=**} {
       allow read, write: if false;

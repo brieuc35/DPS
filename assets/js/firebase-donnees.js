@@ -511,6 +511,32 @@ export function demarrerDonnees(application) {
     },
 
     /**
+     * Enregistre un signalement. L'identifiant composé « publication_uid »
+     * fait qu'un même membre ne signale qu'une fois la même publication : le
+     * compte des signalements dit alors combien de personnes distinctes se
+     * sont manifestées, ce qui est la seule chose utile à un modérateur.
+     *
+     * Personne ne peut relire la collection depuis le site, pas même l'auteur
+     * du signalement : la liste ne se consulte que dans la console Firebase.
+     * Un signalement lisible se retournerait contre celui qui l'a posé.
+     */
+    async signaler({ publicationId, membreId, motif }) {
+      const reference = doc(base, 'signalements', `${publicationId}_${membreId}`);
+      try {
+        await setDoc(reference, {
+          publicationId,
+          membreId,
+          motif: motif || '',
+          date: serverTimestamp(),
+        });
+        return { ok: true };
+      } catch (erreur) {
+        console.warn('Signalement non enregistré.', erreur);
+        return { ok: false };
+      }
+    },
+
+    /**
      * Efface tout ce qui rattache un membre au site : ses messages, ses
      * inscriptions, et les places qu'il occupait — rendues au compteur dans une
      * transaction, sans quoi une sortie resterait affichée complète alors que
