@@ -740,6 +740,13 @@ function libellePlaces(nombre) {
   return `${nombre} place${nombre > 1 ? 's' : ''} restante${nombre > 1 ? 's' : ''}`;
 }
 
+/** « 1 participant inscrit » / « 3 participants inscrits ».
+ *  Le premier inscrit voit toujours ce libellé, et c'est justement celui qui
+ *  lisait « 1 participants inscrits ». */
+function libelleInscrits(nombre) {
+  return `${nombre} participant${nombre > 1 ? 's' : ''} inscrit${nombre > 1 ? 's' : ''}`;
+}
+
 function ouvrirModale(activiteId, declencheur) {
   const activite = ACTIVITES.find((element) => element.id === activiteId);
   // Le garde-fou vaut aussi pour une sortie passée : la grille et le
@@ -991,15 +998,18 @@ async function enregistrerReservation(activite, participant) {
   const adresseConfirmee =
     typeof Comptes === 'undefined' || !compte ? false : Comptes.emailVerifie();
 
+  // « Enregistrée » et non « confirmée » : l'écran qui suit explique que la
+  // participation ne sera confirmée qu'une fois le seuil atteint, et la date
+  // arrêtée. Annoncer ici une confirmation la démentirait dans la seconde.
   notifier(
     !compte
-      ? `Réservation confirmée : ${activite.titre}`
+      ? `Inscription enregistrée : ${activite.titre}`
       : adresseConfirmee
-        ? `Réservation confirmée. Le récapitulatif part vers ${compte.email}.`
+        ? `Inscription enregistrée. Le récapitulatif part vers ${compte.email}.`
         // Le récapitulatif ne partira pas : les règles refusent d'écrire vers
         // une adresse non confirmée. Le taire laisserait attendre un courriel
         // qui n'arrivera jamais.
-        : 'Réservation confirmée. Confirmez votre adresse depuis votre compte pour recevoir le récapitulatif.');
+        : 'Inscription enregistrée. Confirmez votre adresse depuis votre compte pour recevoir le récapitulatif.');
 
   // Membre connecté : direction le groupe, sans étape intermédiaire. La modale
   // est refermée d'abord — dans la version fichier unique, rien ne recharge la
@@ -1028,21 +1038,25 @@ async function enregistrerReservation(activite, participant) {
         ? `C’est réservé, ${echapper(participant.prenom)} !`
         : `C’est noté, ${echapper(participant.prenom)} !`}</h3>
       <p style="color:var(--texte-doux)">
-        ${activiteEstDatee(activite)
-          ? `Votre place pour <strong>${echapper(activite.titre)}</strong> est confirmée
-             le ${formaterDate(activite.date)}.`
-          : `Votre place pour <strong>${echapper(activite.titre)}</strong> est retenue.
-             La date n’est pas encore calée avec le lieu : elle le sera dès que le
-             groupe sera au complet, et vous la recevrez avant tout le monde.`}
+        Votre demande de participation à <strong>${echapper(activite.titre)}</strong>
+        est bien enregistrée.
         <br>
-        Votre inscription est gardée sur cet appareil.
+        ${activiteEstDatee(activite)
+          ? `Elle aura lieu le ${formaterDate(activite.date)}.`
+          : `La date n’est pas encore fixée avec le lieu. Nous la définirons lorsque
+             le groupe sera suffisamment constitué, puis vous la communiquerons avant
+             la sortie.`}
+        <br>
+        Aucun paiement n’est demandé à ce stade. La participation sera confirmée
+        définitivement une fois ${activiteEstDatee(activite) ? '' : 'la date fixée et '}le
+        nombre minimum de participants atteint.
       </p>
 
       <div class="recap" style="text-align:left">
         <div>
           <p class="recap__libelle" style="margin:0">Votre groupe</p>
           <p style="margin:0;font-size:var(--t-sm)">
-            ${activite.placesTotal - restantes} participants inscrits ·
+            ${libelleInscrits(activite.placesTotal - restantes)} ·
             ${libellePlaces(restantes)}
           </p>
         </div>
@@ -1050,12 +1064,16 @@ async function enregistrerReservation(activite, participant) {
       </div>
 
       <p style="font-size:var(--t-sm);color:var(--texte-doux)">
-        Chaque sortie a son groupe de discussion : vous saurez qui vient, et vous ne
-        débarquerez pas devant des inconnus complets. Il faut un compte pour y entrer.
+        Chaque expérience dispose de son propre groupe de discussion. Vous pourrez y
+        retrouver les autres participants, échanger si vous le souhaitez et retrouver
+        les informations utiles avant le jour venu.
+        <br>
+        Créez votre compte pour rejoindre le groupe de l’activité.
       </p>
 
       <div style="display:flex;gap:var(--e-3);flex-wrap:wrap;justify-content:center">
-        <a class="btn btn--primaire" href="compte.html#inscription">Créer mon compte</a>
+        <a class="btn btn--primaire" href="compte.html#inscription">Créer un compte</a>
+        <a class="btn btn--fantome" href="compte.html#connexion">Se connecter</a>
         <button type="button" class="btn btn--fantome" data-fermer-modale>Plus tard</button>
       </div>
     </div>
