@@ -118,8 +118,10 @@ const ACTIVITES = [
     placesPrises: 0,
     niveau: 'Débutant bienvenu',
     hote: { nom: 'DPS Collective', initiales: 'DP', couleur: 'avatar--prune' },
-    cadeau: 'Une offre pour 4 heures de billard vous est offerte à l’issue de l’initiation.',
-    resume: 'Les bases de la queue et du placement, sans aucun prérequis.',
+    cadeau:
+      'Et pour prolonger le plaisir, 4 heures de billard vous sont offertes à l’issue de l’initiation.',
+    resume:
+      'Une initiation accessible à tous pour découvrir le billard et apprendre les premiers gestes pour bien jouer. Aucun prérequis nécessaire.',
     programme: [
       'Présentation du groupe autour des tables',
       'Prise en main : tenue, visée, effets simples',

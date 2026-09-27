@@ -299,7 +299,7 @@ function gabaritCarte(activite) {
     ? ''
     : confirmation.confirmee
       ? `<span class="badge badge--accent">${picto('<path d="M20 6 9 17l-5-5"/>', 13)} Sortie confirmée</span>`
-      : `<span class="badge badge--petit">${picto(ICONE_CADENAS, 12)} Encore ${confirmation.manquants} participant${confirmation.manquants > 1 ? 's' : ''} pour débloquer</span>`;
+      : `<span class="badge badge--petit">${picto(ICONE_CADENAS, 12)} Encore ${confirmation.manquants} participant${confirmation.manquants > 1 ? 's' : ''} pour confirmer</span>`;
 
   const etiquetteCadeau = activite.cadeau
     ? `<span class="etiquette-flottante carte-activite__cadeau" title="${echapper(activite.cadeau)}">
@@ -334,7 +334,7 @@ function gabaritCarte(activite) {
           <div class="jauge__piste">
             <div class="jauge__barre" role="img"
                  aria-label="${occupees} participants sur ${activite.placesTotal}${
-    confirmation ? `, ${confirmation.minimum} nécessaires pour débloquer la sortie` : ''
+    confirmation ? `, ${confirmation.minimum} nécessaires pour confirmer l’expérience` : ''
   }">
               <div class="jauge__remplissage${presqueComplet || complet ? ' est-presque-complet' : ''}"
                    style="width:${pourcentage}%"></div>
@@ -606,13 +606,21 @@ function gabaritFormulaire(activite) {
     : confirmation.confirmee
       ? `<p class="note-confirmation note-confirmation--acquise">
            ${picto('<path d="M20 6 9 17l-5-5"/>', 15)}
-           Cette sortie est déjà confirmée : elle aura lieu quoi qu’il arrive.
+           Cette expérience est déjà confirmée : elle aura lieu quoi qu’il arrive.
          </p>`
-      : `<p class="note-confirmation">
+      : // Le texte est enveloppé dans un `span` : la note est une boîte flex,
+        // et un `strong` posé nu y deviendrait un élément de flux à part,
+        // placé à côté du reste de la phrase au lieu d'y être enchâssé.
+        `<p class="note-confirmation">
            ${picto(ICONE_CADENAS, 15)}
-           Encore ${confirmation.manquants} participant${confirmation.manquants > 1 ? 's' : ''}
-           pour débloquer cette sortie — en dessous de
-           ${confirmation.minimum} participants, elle peut être annulée ou reportée.
+           <span>
+             <strong>Encore ${confirmation.manquants} participant${
+               confirmation.manquants > 1 ? 's' : ''
+             } pour confirmer cette expérience.</strong>
+             En dessous de ${confirmation.minimum} participant${
+               confirmation.minimum > 1 ? 's' : ''
+             }, elle peut être annulée ou reportée.
+           </span>
          </p>`;
 
   const noteCadeau = activite.cadeau
