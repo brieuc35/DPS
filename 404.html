@@ -9,8 +9,12 @@
   <meta name="robots" content="noindex, follow">
   <meta name="theme-color" content="#fff3ea" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1f1107" media="(prefers-color-scheme: dark)">
-
+  <!-- `favicon.ico` à la racine est celui que les navigateurs anciens vont
+       chercher d'eux-mêmes, sans lire le HTML. Le PNG sert aux autres, et
+       l'icône Apple à l'écran d'accueil d'un iPhone. -->
+  <link rel="icon" href="/DPS/favicon.ico" sizes="any">
   <link rel="icon" href="/DPS/assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="/DPS/assets/img/apple-touch-icon.png">
   <link rel="preload" href="/DPS/assets/fonts/outfit.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/DPS/assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/DPS/assets/css/styles.css">
@@ -35,8 +39,8 @@
   <header class="entete">
     <div class="conteneur entete__interieur">
       <a class="logo" href="/DPS/index.html" aria-label="DPS Collective, accueil">
-        <img class="logo__marque" src="/DPS/assets/img/logo.png" alt=""
-             width="388" height="181" decoding="async">
+        <img class="logo__marque" src="/DPS/assets/img/logo-entete.png" alt=""
+             width="192" height="90" decoding="async">
         <span class="logo__collective">Collective</span>
       </a>
 
@@ -120,8 +124,8 @@
       <div class="pied__grille">
         <div>
           <a class="logo" href="/DPS/index.html">
-            <img class="logo__marque" src="/DPS/assets/img/logo.png" alt=""
-                 width="388" height="181" decoding="async" loading="lazy">
+            <img class="logo__marque" src="/DPS/assets/img/logo-entete.png" alt=""
+                 width="192" height="90" decoding="async" loading="lazy">
             <span class="logo__collective">Collective</span>
           </a>
           <p class="pied__texte">

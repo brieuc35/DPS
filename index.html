@@ -4,18 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DPS Collective — Des expériences à vivre autour de Vitré</title>
-  <meta name="description" content="DPS Collective propose des activités autour de Vitré, en Ille-et-Vilaine : visites de lieux, savoir-faire locaux, moments à partager. Choisissez celle qui vous donne envie.">
+  <meta name="description" content="Des activités autour de Vitré, en Ille-et-Vilaine : lieux à visiter, savoir-faire locaux, moments à partager. Choisissez celle qui vous donne envie.">
   <meta name="theme-color" content="#fff3ea" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1f1107" media="(prefers-color-scheme: dark)">
 
-  <meta property="og:title" content="DPS Collective — Des expériences à vivre autour de Vitré">
-  <meta property="og:description" content="Des activités près de chez vous, à vivre aux côtés d’autres personnes qui ont fait le même choix.">
-  <meta property="og:type" content="website">
-  <!-- Les aperçus de partage exigent une URL absolue : celle de GitHub Pages. -->
-  <meta property="og:url" content="https://brieuc35.github.io/DPS/">
-  <meta property="og:image" content="https://brieuc35.github.io/DPS/assets/img/logo-complet.png">
+  <!-- Adresse de référence de la page : elle évite qu'un moteur traite
+       `/DPS/` et `/DPS/index.html`, ou une adresse suffixée de paramètres,
+       comme autant de pages distinctes au contenu identique. -->
+  <link rel="canonical" href="https://brieuc35.github.io/DPS/">
 
+  <!-- Aperçu de partage. Les URL y sont absolues : un réseau social lit ces
+       balises depuis ses propres serveurs, où un chemin relatif n'a aucun
+       sens. L'image fait 1200 × 630, le format que Facebook, LinkedIn et
+       WhatsApp recadrent le moins. -->
+  <meta property="og:site_name" content="DPS Collective">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Des expériences que vous n’auriez pas vécues autrement">
+  <meta property="og:description" content="Des activités autour de Vitré, en Ille-et-Vilaine : lieux à visiter, savoir-faire locaux, moments à partager. Choisissez celle qui vous donne envie.">
+  <meta property="og:url" content="https://brieuc35.github.io/DPS/">
+  <meta property="og:image" content="https://brieuc35.github.io/DPS/assets/img/apercu-social.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Le sigle DPS Collective sur un dégradé clair, avec la phrase « Des expériences que vous n’auriez pas vécues autrement ».">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- `favicon.ico` à la racine est celui que les navigateurs anciens vont
+       chercher d'eux-mêmes, sans lire le HTML. Le PNG sert aux autres, et
+       l'icône Apple à l'écran d'accueil d'un iPhone. -->
+  <link rel="icon" href="/DPS/favicon.ico" sizes="any">
   <link rel="icon" href="assets/img/favicon.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="preload" href="assets/fonts/outfit.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/styles.css">
@@ -41,8 +59,8 @@
   <header class="entete">
     <div class="conteneur entete__interieur">
       <a class="logo" href="index.html" aria-label="DPS Collective, accueil">
-        <img class="logo__marque" src="assets/img/logo.png" alt=""
-             width="388" height="181" decoding="async">
+        <img class="logo__marque" src="assets/img/logo-entete.png" alt=""
+             width="192" height="90" decoding="async">
         <span class="logo__collective">Collective</span>
       </a>
 
@@ -379,8 +397,8 @@
                nomment déjà le service. `alt` vide, l'image ne porte donc rien
                que le texte voisin ne dise. -->
           <span class="reseau-social__logo">
-            <img src="assets/img/logo.png" alt=""
-                 width="388" height="181" decoding="async" loading="lazy">
+            <img src="assets/img/logo-entete.png" alt=""
+                 width="192" height="90" decoding="async" loading="lazy">
           </span>
 
           <div class="reseau-social__texte">
@@ -403,8 +421,8 @@
       <div class="pied__grille">
         <div>
           <a class="logo" href="index.html">
-            <img class="logo__marque" src="assets/img/logo.png" alt=""
-                 width="388" height="181" decoding="async" loading="lazy">
+            <img class="logo__marque" src="assets/img/logo-entete.png" alt=""
+                 width="192" height="90" decoding="async" loading="lazy">
             <span class="logo__collective">Collective</span>
           </a>
           <p class="pied__texte">
