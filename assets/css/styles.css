@@ -772,6 +772,31 @@ select {
   margin-top: var(--e-1);
 }
 
+/* Ce que l'inscription engage, juste au-dessus du bouton qui la valide.
+   Posé sur un fond creux plutôt qu'en texte libre : trois lignes de mentions
+   perdues entre un champ et un bouton ne se lisent pas, et c'est précisément
+   le moment où elles comptent. Le gras y porte les deux points que l'on doit
+   retenir même en diagonale — pas de paiement, et le délai d'annulation.
+
+   Le fond est un gris à peine posé, et non `--surface-2` : dans cette modale,
+   cette teinte est celle de la note de seuil, juste au-dessus, où elle
+   signale une réserve. La reprendre ici ferait lire une réassurance comme un
+   avertissement de plus. */
+.note-inscription {
+  margin: var(--e-5) 0;
+  padding: var(--e-4);
+  border-radius: var(--r-md);
+  background: var(--fond-alt);
+  border: 1px solid var(--bordure);
+  font-size: var(--t-xs);
+  line-height: 1.55;
+  color: var(--texte-doux);
+}
+
+.note-inscription p { margin: 0; }
+.note-inscription p + p { margin-top: var(--e-3); }
+.note-inscription strong { color: var(--texte); }
+
 /* Un bouton qui ne se donne pas l'air d'un bouton — « Mot de passe oublié ? »
    en bas du formulaire, au même poids typographique que les mentions d'aide
    qui l'entourent : présent quand on le cherche, discret sinon. */

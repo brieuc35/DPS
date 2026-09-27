@@ -702,12 +702,35 @@ function gabaritFormulaire(activite) {
         <span class="champ__erreur">L’adhésion à la charte est nécessaire pour rejoindre un groupe.</span>
       </div>
 
+      <div class="champ">
+        <label style="display:flex;gap:var(--e-3);align-items:flex-start;font-size:var(--t-sm);cursor:pointer">
+          <input type="checkbox" name="majeur" required style="margin-top:0.3em;width:18px;height:18px;flex-shrink:0;accent-color:var(--primaire)">
+          <span><strong>Je confirme être âgé(e) de 18 ans ou plus.</strong></span>
+        </label>
+        <span class="champ__erreur">Les inscriptions sont réservées aux personnes majeures.</span>
+      </div>
+
+      <!-- Ce que l'inscription engage, dit avant de la valider et non après :
+           une fois le bouton pressé, le lecteur n'y revient pas. -->
+      <div class="note-inscription">
+        <p>
+          Votre inscription est enregistrée.
+          <strong>Aucun paiement n’est demandé à ce stade.</strong>
+          Si le nombre minimum de participants est atteint, l’expérience sera
+          confirmée et vous recevrez les informations nécessaires pour finaliser
+          votre participation.
+        </p>
+        <p>
+          Vous pouvez annuler votre inscription à tout moment avant la
+          confirmation de l’expérience. Une fois celle-ci confirmée, vous pouvez
+          encore annuler jusqu’à
+          <strong>48 heures avant le début de l’expérience</strong>.
+        </p>
+      </div>
+
       <button type="submit" class="btn btn--primaire btn--large btn--bloc">
-        Confirmer ma réservation
+        Confirmer mon inscription
       </button>
-      <p style="text-align:center;font-size:var(--t-xs);color:var(--texte-doux);margin:var(--e-3) 0 0">
-        Aucun paiement demandé dans cette démonstration · Annulation libre jusqu’à 48 h avant
-      </p>
     </form>
   `;
 }
@@ -810,6 +833,7 @@ function brancherFormulaire(modale, activite) {
       ['nom', (valeur) => valeur.trim().length >= 2],
       ['email', (valeur) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valeur.trim())],
       ['charte', (valeur) => valeur === 'on'],
+      ['majeur', (valeur) => valeur === 'on'],
     ];
 
     let premierInvalide = null;
