@@ -1,0 +1,13 @@
+# DPS Collective — https://brieuc35.github.io/DPS/
+#
+# Le site est public et destiné à être trouvé : rien n'est interdit à
+# l'indexation. Les pages réservées aux membres (compte, discussions) ne sont
+# pas listées dans le plan du site parce qu'elles n'ont rien à montrer à un
+# visiteur qui arrive d'un moteur — mais elles ne sont pas bloquées non plus :
+# ce qu'elles protègent l'est par les règles Firestore, pas par ce fichier,
+# qu'aucun robot n'est tenu de respecter.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://brieuc35.github.io/DPS/sitemap.xml

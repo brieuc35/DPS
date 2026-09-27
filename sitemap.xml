@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Plan du site de DPS Collective.
+
+  Seules les pages qui ont quelque chose à dire à un visiteur venu d'un moteur
+  de recherche y figurent. `compte.html` et `chat.html` en sont écartées : la
+  première n'est qu'un formulaire, la seconde ne montre rien sans compte.
+  Les `priority` disent l'importance relative des pages entre elles, rien de
+  plus ; les `changefreq` décrivent le rythme réel de mise à jour.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <url>
+    <loc>https://brieuc35.github.io/DPS/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://brieuc35.github.io/DPS/activites.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://brieuc35.github.io/DPS/communaute.html</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://brieuc35.github.io/DPS/vision.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://brieuc35.github.io/DPS/conditions.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://brieuc35.github.io/DPS/confidentialite.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://brieuc35.github.io/DPS/mentions-legales.html</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+</urlset>

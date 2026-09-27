@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page introuvable — DPS Collective</title>
+  <meta name="description" content="Cette page n’existe pas ou a changé d’adresse.">
+  <!-- Une page d’erreur n’a rien à faire dans un index de moteur. -->
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#fff3ea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1f1107" media="(prefers-color-scheme: dark)">
+
+  <link rel="icon" href="/DPS/assets/img/favicon.png" type="image/png">
+  <link rel="preload" href="/DPS/assets/fonts/outfit.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/DPS/assets/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/DPS/assets/css/styles.css">
+
+  <!-- Posé avant le premier rendu : évite que la page change de thème sous
+       les yeux du visiteur. La classe « js » conditionne les apparitions au
+       défilement — sans JavaScript, le contenu reste simplement visible. -->
+  <script>
+    (function () {
+      var racine = document.documentElement;
+      racine.classList.add('js');
+      // L'accueil se fait dans les tons chauds et clairs ; on ne passe au
+      // sombre que si le système le demande explicitement.
+      var sombre = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      racine.setAttribute('data-theme', sombre ? 'dark' : 'light');
+    })();
+  </script>
+</head>
+<body>
+  <a class="saut-contenu" href="#contenu">Aller au contenu principal</a>
+
+  <header class="entete">
+    <div class="conteneur entete__interieur">
+      <a class="logo" href="/DPS/index.html" aria-label="DPS Collective, accueil">
+        <img class="logo__marque" src="/DPS/assets/img/logo.png" alt=""
+             width="388" height="181" decoding="async">
+        <span class="logo__collective">Collective</span>
+      </a>
+
+      <nav class="nav" id="menu-principal" aria-label="Navigation principale">
+        <a class="nav__lien" href="/DPS/index.html">Accueil</a>
+        <a class="nav__lien" href="/DPS/vision.html">Le projet</a>
+        <a class="nav__lien" href="/DPS/communaute.html">Communauté</a>
+
+        <!-- Repli du menu : sous 900 px la barre d'actions n'a plus la place
+             d'accueillir les entrées de compte, elles rejoignent le menu. -->
+        <span class="nav__compte" data-zone-compte>
+          <a class="nav__lien nav__lien--compte" href="/DPS/compte.html#connexion">Se connecter</a>
+          <a class="nav__lien nav__lien--compte" href="/DPS/compte.html#inscription">Créer un compte</a>
+        </span>
+      </nav>
+
+      <div class="entete__actions">
+        <a class="btn btn--primaire btn--cta" href="/DPS/activites.html">Trouver une activité</a>
+
+        <!-- Même contenu que dans le menu, rendu par `comptes.js` : l'un des
+             deux exemplaires seulement est affiché, selon la largeur. -->
+        <span class="entete__compte" data-zone-compte>
+          <a class="nav__lien nav__lien--compte" href="/DPS/compte.html#connexion">Se connecter</a>
+          <a class="nav__lien nav__lien--compte" href="/DPS/compte.html#inscription">Créer un compte</a>
+        </span>
+
+        <button type="button" class="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-principal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenu">
+    <!-- ================= Page introuvable =================
+         Servie par GitHub Pages pour toute adresse inconnue du dépôt. Elle
+         garde l'en-tête et le pied du site : une erreur ne doit pas donner
+         l'impression d'avoir quitté les lieux.
+
+         Les chemins y sont absolus (`/DPS/…`) et non relatifs : cette page
+         répond aussi bien à `/DPS/truc` qu'à `/DPS/un/faux/chemin`, et un
+         lien relatif se résoudrait alors depuis un dossier qui n'existe pas. -->
+    <section class="section" style="padding-block:var(--e-9)">
+      <div class="conteneur conteneur--etroit" style="text-align:center">
+        <p class="sur-titre" style="justify-content:center">Erreur 404</p>
+        <h1>Cette page n’existe pas</h1>
+        <p class="plomb" style="margin:0 auto var(--e-7);text-wrap:balance">
+          L’adresse est peut-être mal recopiée, ou la page a changé de nom
+          depuis le lien que vous avez suivi. Rien n’est perdu&nbsp;: tout le
+          site tient en quelques pages.
+        </p>
+
+        <div class="cta-final__actions" style="margin-bottom:var(--e-8)">
+          <a class="btn btn--primaire btn--large" href="/DPS/activites.html">
+            Voir les prochaines expériences
+          </a>
+          <a class="btn btn--fantome btn--large" href="/DPS/">Revenir à l’accueil</a>
+        </div>
+
+        <nav aria-label="Toutes les pages du site">
+          <p class="sur-titre" style="justify-content:center">Ou bien</p>
+          <ul class="pied__liste" style="display:flex;flex-wrap:wrap;gap:var(--e-3) var(--e-5);justify-content:center;list-style:none;padding:0">
+            <li><a href="/DPS/">Accueil</a></li>
+            <li><a href="/DPS/activites.html">Trouver une activité</a></li>
+            <li><a href="/DPS/communaute.html">Communauté</a></li>
+            <li><a href="/DPS/vision.html">Le projet</a></li>
+            <li><a href="/DPS/compte.html">Mon compte</a></li>
+            <li><a href="/DPS/conditions.html">Conditions d’utilisation</a></li>
+            <li><a href="/DPS/confidentialite.html">Confidentialité</a></li>
+            <li><a href="/DPS/mentions-legales.html">Mentions légales</a></li>
+          </ul>
+        </nav>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pied">
+    <div class="conteneur">
+      <div class="pied__grille">
+        <div>
+          <a class="logo" href="/DPS/index.html">
+            <img class="logo__marque" src="/DPS/assets/img/logo.png" alt=""
+                 width="388" height="181" decoding="async" loading="lazy">
+            <span class="logo__collective">Collective</span>
+          </a>
+          <p class="pied__texte">
+            Des activités à faire autour de Vitré, et une communauté qui se construit
+            avec celles et ceux qui les vivent.
+          </p>
+        </div>
+
+        <div>
+          <p class="pied__titre">Explorer</p>
+          <ul class="pied__liste">
+            <li><a href="/DPS/activites.html">Toutes les expériences</a></li>
+            <li><a href="/DPS/activites.html#patrimoine">Patrimoine</a></li>
+            <li><a href="/DPS/activites.html#entreprise">Visites d’entreprise</a></li>
+            <li><a href="/DPS/activites.html#brasserie">Brasseries</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="pied__titre">Communauté</p>
+          <ul class="pied__liste">
+            <li><a href="/DPS/communaute.html">Fil d’actualité</a></li>
+            <li><a href="/DPS/chat.html">Discussions</a></li>
+            <li><a href="/DPS/communaute.html#charte">Charte de bienveillance</a></li>
+            <li><a href="/DPS/communaute.html#cercles">Les cercles</a></li>
+            <li><a href="https://www.instagram.com/dps_collective/" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href="/DPS/index.html#comment">Comment ça marche</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="pied__titre">Le projet</p>
+          <ul class="pied__liste">
+            <li><a href="/DPS/vision.html">Notre vision</a></li>
+            <li><a href="/DPS/vision.html#concept">Le concept</a></li>
+            <li><a href="/DPS/vision.html#ambition">Notre ambition</a></li>
+            <li><a href="/DPS/vision.html#promesse">Notre promesse</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pied__bas">
+        <p style="margin:0">© <span id="annee">2026</span> DPS Collective — Vitré et alentours, Ille-et-Vilaine</p>
+        <nav class="pied__legal" aria-label="Informations légales">
+          <a href="/DPS/mentions-legales.html">Mentions légales</a>
+          <a href="/DPS/confidentialite.html">Confidentialité</a>
+          <a href="/DPS/conditions.html">Conditions d’utilisation</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/DPS/assets/js/donnees.js"></script>
+  <script src="/DPS/assets/js/app.js"></script>
+  <script src="/DPS/assets/js/firebase-config.js"></script>
+  <script src="/DPS/assets/js/comptes.js"></script>
+  <!-- Après comptes.js : la pastille de non-lus est dessinée par l'en-tête. -->
+  <script src="/DPS/assets/js/notifications.js"></script>
+  <script type="module" src="/DPS/assets/js/firebase-init.js"></script>
+</body>
+</html>
