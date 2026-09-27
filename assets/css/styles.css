@@ -3614,3 +3614,72 @@ select {
 
   .js .apparait { opacity: 1; transform: none; }
 }
+
+/* --- Bandeau de consentement -----------------------------------------------
+   Posé en bas de l'écran, et non en surimpression plein cadre : la question
+   est réelle, mais elle ne vaut pas de prendre le site en otage le temps d'y
+   répondre. Le contenu reste lisible et défilable derrière.
+
+   Les deux boutons sont côte à côte, de même taille et à un clic chacun.
+   Refuser ne coûte pas un geste de plus qu'accepter — c'est la condition que
+   la CNIL vérifie en premier. */
+.bandeau-consentement {
+  position: fixed;
+  left: var(--e-4);
+  right: var(--e-4);
+  bottom: var(--e-4);
+  z-index: 90;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-4);
+  max-width: 900px;
+  margin-inline: auto;
+  padding: var(--e-5);
+  border: 1px solid var(--bordure);
+  border-radius: var(--r-xl);
+  background: var(--surface);
+  box-shadow: var(--ombre-lg);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--transition), transform var(--transition);
+}
+
+.bandeau-consentement.est-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bandeau-consentement { transition: none; transform: none; }
+}
+
+.bandeau-consentement__texte { flex: 1 1 320px; }
+
+.bandeau-consentement__titre {
+  margin: 0 0 var(--e-2);
+  font-weight: 700;
+  color: var(--texte);
+}
+
+.bandeau-consentement__detail {
+  margin: 0;
+  font-size: var(--t-sm);
+  line-height: 1.55;
+  color: var(--texte-doux);
+}
+
+.bandeau-consentement__boutons {
+  display: flex;
+  gap: var(--e-3);
+  flex-wrap: wrap;
+}
+
+/* Sous 560 px, les deux boutons prennent toute la largeur et restent de
+   taille identique : c'est là que la tentation serait de rétrécir « Refuser ». */
+@media (max-width: 560px) {
+  .bandeau-consentement { padding: var(--e-4); }
+  .bandeau-consentement__boutons { width: 100%; }
+  .bandeau-consentement__boutons .btn { flex: 1 1 0; justify-content: center; }
+}

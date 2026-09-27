@@ -137,11 +137,14 @@
 
         <h2>Ce que le site ne fait pas</h2>
         <ul>
-          <li>Aucun cookie publicitaire, aucun traceur, aucune mesure d’audience.</li>
+          <li>Aucun cookie publicitaire, aucun traceur à des fins commerciales.</li>
+          <li>Aucune mesure d’audience tant que vous ne l’avez pas acceptée — et le site
+              fonctionne à l’identique si vous la refusez.</li>
           <li>Aucune revente ni partage de vos données à des fins commerciales.</li>
-          <li>Aucune requête vers un service tiers pour afficher la page : les polices
-              sont servies par le site lui-même, ce qui évite de transmettre votre
-              adresse IP à un tiers.</li>
+          <li>Aucune requête vers un service tiers pour <em>afficher</em> la page : les
+              polices sont servies par le site lui-même, ce qui évite de transmettre votre
+              adresse IP à un tiers. La mesure d’audience, si vous l’acceptez, fait
+              exception — voir plus bas.</li>
           <li>Aucun paiement en ligne à ce jour.</li>
         </ul>
 
@@ -183,7 +186,9 @@
 
         <h2>Stockage dans votre navigateur</h2>
         <p>
-          Le site n’utilise pas de cookies. Il conserve en revanche quelques informations
+          Le site ne dépose aucun cookie de lui-même. Les seuls qui puissent apparaître
+          sont ceux de la mesure d’audience, et uniquement si vous l’avez acceptée.
+          Il conserve en revanche quelques informations
           dans le <em>stockage local</em> de votre navigateur, qui ne quittent pas votre
           appareil et que vous pouvez effacer à tout moment en vidant les données du site :
         </p>
@@ -192,12 +197,55 @@
           <li><code>dps.derniereReservation</code> — le temps d’afficher le bandeau de confirmation, puis effacé</li>
           <li><code>dps.jaimes</code>, <code>dps.reponses</code>, <code>dps.publications</code> — vos réactions et messages en mode hors ligne</li>
           <li><code>firebase:authUser…</code> — le jeton qui vous garde connecté d’une visite à l’autre</li>
+          <li><code>dps.consentement</code> — votre réponse à la question de la mesure
+              d’audience, et sa date. Conservée pour ne pas vous la reposer à chaque
+              visite ; c’est aussi ce qui permet de respecter un refus, et elle est donc
+              posée sans vous demander votre accord</li>
         </ul>
+
+        <h2 id="audience">Mesure d’audience</h2>
+        <p>
+          Le site emploie <strong>Google&nbsp;Analytics</strong> pour savoir combien de
+          personnes le visitent et quelles pages elles consultent. Cela sert à décider
+          quoi améliorer, rien d’autre&nbsp;: les statistiques sont agrégées, et le
+          collectif n’y cherche jamais à reconnaître quelqu’un.
+        </p>
+        <p>
+          <strong>Rien n’est chargé avant votre accord.</strong> Tant que vous n’avez pas
+          répondu, ou si vous refusez, le script de Google n’est pas même demandé — ce qui
+          évite de transmettre votre adresse IP. Refuser se fait en un clic, exactement
+          comme accepter, et n’enlève aucune fonction du site.
+        </p>
+        <ul>
+          <li><strong>Ce qui est collecté si vous acceptez</strong> — pages vues, durée de
+              visite, provenance (moteur de recherche, lien, accès direct), type
+              d’appareil, navigateur, et une localisation approximative déduite de
+              l’adresse IP, laquelle est tronquée avant enregistrement.</li>
+          <li><strong>Cookies déposés</strong> — <code>_ga</code> et <code>_ga_…</code>,
+              qui distinguent les visiteurs les uns des autres sans les nommer.</li>
+          <li><strong>Destinataire</strong> — Google Ireland Limited. Les données peuvent
+              être transférées hors de l’Union européenne, sur la base des clauses
+              contractuelles types de la Commission européenne et du cadre de protection
+              des données UE–États-Unis.</li>
+          <li><strong>Publicité</strong> — les signaux publicitaires sont désactivés&nbsp;:
+              vos visites ne sont pas versées à la régie de Google et ne servent à aucun
+              ciblage.</li>
+          <li><strong>Conservation</strong> — quatorze mois, durée au-delà de laquelle
+              Google efface les données de parcours.</li>
+          <li><strong>Base légale</strong> — votre consentement, et lui seul.</li>
+        </ul>
+        <p>
+          <strong>Revenir sur votre choix&nbsp;:</strong> le lien
+          «&nbsp;<a href="#" data-rouvrir-consentement>Cookies</a>&nbsp;» en bas de chaque
+          page rouvre la question, dans les deux sens. Si vous retirez votre accord, les
+          cookies déjà déposés sont effacés dans la foulée. Votre réponse est de toute
+          façon redemandée au bout de treize mois.
+        </p>
 
         <h2>Base légale</h2>
         <ul>
           <li><strong>Exécution d’une mesure précontractuelle</strong> — pour les réservations : sans ces données, la place ne peut pas être tenue.</li>
-          <li><strong>Consentement</strong> — pour la création d’un compte et la publication de messages, qui relèvent d’une démarche volontaire.</li>
+          <li><strong>Consentement</strong> — pour la création d’un compte et la publication de messages, qui relèvent d’une démarche volontaire, ainsi que pour la mesure d’audience, qui ne démarre qu’après un accord explicite.</li>
         </ul>
 
         <h2>Destinataires et hébergement des données</h2>
@@ -301,6 +349,7 @@
           <a href="mentions-legales.html">Mentions légales</a>
           <a href="confidentialite.html">Confidentialité</a>
           <a href="conditions.html">Conditions d’utilisation</a>
+          <a href="#" data-rouvrir-consentement>Cookies</a>
         </nav>
       </div>
     </div>
@@ -308,6 +357,8 @@
 
   <script src="assets/js/donnees.js"></script>
   <script src="assets/js/app.js"></script>
+  <!-- Après app.js : le bandeau se sert de `notifier`. -->
+  <script src="assets/js/consentement.js"></script>
   <script src="assets/js/firebase-config.js"></script>
   <script src="assets/js/comptes.js"></script>
   <!-- Après comptes.js : la pastille de non-lus est dessinée par l'en-tête. -->
