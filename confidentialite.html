@@ -2,10 +2,31 @@
 <html lang="fr" data-theme="light">
 <head>
   <meta charset="UTF-8">
+  <!-- Bascule en HTTPS avant que la page ne se construise. GitHub Pages
+       impose déjà le chiffrement sur `*.github.io`, mais un nom de domaine
+       propre, ajouté plus tard, ne l'impose que si la case « Enforce HTTPS »
+       est cochée dans les réglages du dépôt. Ce garde-fou coûte une ligne et
+       couvre l'oubli — on y formule des mots de passe et des adresses.
+       `localhost` en est exclu : le serveur de développement est en clair. -->
+  <script>
+    (function () {
+      var h = location.hostname;
+      if (location.protocol === 'http:' && h !== 'localhost' && h !== '127.0.0.1' && h !== '') {
+        location.replace('https:' + location.href.substring(location.protocol.length));
+      }
+    })();
+  </script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Politique de confidentialité — DPS Collective</title>
   <meta name="description" content="Quelles données DPS Collective collecte, pourquoi, combien de temps, et comment exercer vos droits.">
   <meta name="robots" content="index, follow">
+  <!-- Toute ressource appelée en http:// est basculée en https:// avant
+       même d'être demandée. Le site n'en contient aucune aujourd'hui, mais
+       une seule suffirait à faire tomber le cadenas de la barre d'adresse,
+       et l'avertissement qui va avec. -->
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
   <meta name="theme-color" content="#fff3ea" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1f1107" media="(prefers-color-scheme: dark)">
 

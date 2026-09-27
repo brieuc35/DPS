@@ -510,3 +510,85 @@ document.addEventListener('DOMContentLoaded', () => {
   const anneeCourante = $('#annee');
   if (anneeCourante) anneeCourante.textContent = new Date().getFullYear();
 });
+
+/* ==========================================================================
+   Anti-spam des formulaires publics
+   ========================================================================== */
+
+/**
+ * Deux mécaniques, qui n'attrapent pas les mêmes robots et ne se traitent
+ * pas de la même façon.
+ *
+ * 1. Un champ appât, invisible et vide. Un humain ne le voit pas et ne le
+ *    remplit jamais ; un robot qui parcourt le DOM et remplit tout ce qui
+ *    ressemble à une entrée s'y jette. Il est masqué par une position hors
+ *    écran plutôt que par `display:none` : les robots un peu sérieux
+ *    ignorent les champs non affichés, mais pas ceux qui le sont hors cadre.
+ *    `tabindex="-1"`, `autocomplete="off"` et `aria-hidden` le retirent du
+ *    parcours au clavier et des lecteurs d'écran — un piège ne doit jamais
+ *    attraper quelqu'un qui navigue autrement qu'à la souris.
+ *
+ *    Rempli, l'envoi est refusé sans un mot : expliquer le refus apprendrait
+ *    au robot comment l'éviter, et aucune personne ne peut déclencher ce cas.
+ *
+ * 2. Un délai minimum. Un script remplit et envoie en quelques dizaines de
+ *    millisecondes, là où lire et saisir en demande mille fois plus.
+ *
+ *    Mais ce signal-là, on ne s'en sert PAS pour refuser. Un visiteur dont
+ *    le compte préremplit le nom et l'adresse n'a plus que deux cases à
+ *    cocher : il peut franchir le seuil sans être un robot, et son
+ *    inscription disparaîtrait alors en silence — le pire des comportements.
+ *    L'envoi est donc simplement différé jusqu'à l'échéance. La personne
+ *    pressée perd une fraction de seconde qu'elle ne remarque pas ; le robot
+ *    qui envoie et s'en va n'obtient rien, et celui qui attend se retrouve
+ *    limité à un envoi par seconde et demie.
+ *
+ * Aucune des deux ne demande de déchiffrer des caractères tordus. C'est
+ * délibéré : un CAPTCHA reporte sur le visiteur le coût d'un problème qui
+ * n'est pas le sien, et écarte de fait une partie des gens qui les lisent mal.
+ */
+const DELAI_MINIMUM_FORMULAIRE = 1500;
+
+function poserPiegeAntiSpam(formulaire) {
+  if (!formulaire || formulaire.dataset.piegePose) return;
+  formulaire.dataset.piegePose = 'oui';
+  formulaire.dataset.ouvertA = String(Date.now());
+
+  const appat = document.createElement('div');
+  appat.setAttribute('aria-hidden', 'true');
+  appat.style.cssText =
+    'position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden';
+  appat.innerHTML =
+    '<label>Ne remplissez pas ce champ' +
+    '<input type="text" name="site_web" tabindex="-1" autocomplete="off"></label>';
+  formulaire.append(appat);
+}
+
+/** `true` si l'appât a été rempli — le seul cas où l'on refuse. */
+function envoiSuspect(formulaire) {
+  const appat = formulaire && formulaire.elements.site_web;
+  return Boolean(appat && appat.value.trim() !== '');
+}
+
+/**
+ * Le temps restant avant l'échéance, en millisecondes. `0` si elle est déjà
+ * passée. L'appelant s'en sert pour différer, jamais pour refuser.
+ */
+function attenteAntiSpam(formulaire) {
+  const ouvertA = Number(formulaire && formulaire.dataset.ouvertA);
+  if (!ouvertA) return 0;
+  return Math.max(0, DELAI_MINIMUM_FORMULAIRE - (Date.now() - ouvertA));
+}
+
+/**
+ * Exécute `suite` une fois les deux conditions réunies : appât vide, et délai
+ * minimum écoulé. Rend `false` si l'envoi a été refusé, `true` s'il est parti
+ * ou differé.
+ */
+function apresControleAntiSpam(formulaire, suite) {
+  if (envoiSuspect(formulaire)) return false;
+  const reste = attenteAntiSpam(formulaire);
+  if (reste === 0) suite();
+  else setTimeout(suite, reste);
+  return true;
+}

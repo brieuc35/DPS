@@ -825,6 +825,10 @@ function fermerModale() {
 function brancherFormulaire(modale, activite) {
   const formulaire = $('[data-formulaire-reservation]', modale);
 
+  // Posé à l'ouverture : le compte à rebours du délai minimum part d'ici, et
+  // non du chargement de la page, car la modale peut s'ouvrir bien plus tard.
+  poserPiegeAntiSpam(formulaire);
+
   // Retire le signalement d'erreur dès que l'utilisateur corrige son entrée.
   formulaire.addEventListener('input', (evenement) => {
     const champ = evenement.target.closest('.champ');
@@ -863,15 +867,19 @@ function brancherFormulaire(modale, activite) {
       return;
     }
 
-    void enregistrerReservation(activite, {
-      prenom: donnees.get('prenom').trim(),
-      nom: donnees.get('nom').trim(),
-      email: donnees.get('email').trim(),
-      // Une inscription vaut une place et une seule : un compte, une place.
-      // La valeur reste transmise parce que le compteur partagé et les règles
-      // Firestore raisonnent en places, pas en inscriptions.
-      places: 1,
-      mot: (donnees.get('mot') || '').trim(),
+    // La validation des champs a lieu d'abord : une personne qui va vite doit
+    // voir ses erreurs de saisie tout de suite, pas après le délai.
+    apresControleAntiSpam(formulaire, () => {
+      void enregistrerReservation(activite, {
+        prenom: donnees.get('prenom').trim(),
+        nom: donnees.get('nom').trim(),
+        email: donnees.get('email').trim(),
+        // Une inscription vaut une place et une seule : un compte, une place.
+        // La valeur reste transmise parce que le compteur partagé et les
+        // règles Firestore raisonnent en places, pas en inscriptions.
+        places: 1,
+        mot: (donnees.get('mot') || '').trim(),
+      });
     });
   });
 }

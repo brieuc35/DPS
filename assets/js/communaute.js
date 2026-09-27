@@ -738,6 +738,7 @@ function initPortail() {
 
   const formulaire = $('[data-formulaire-portail]', portail);
   const champ = $('#motivation', formulaire);
+  poserPiegeAntiSpam(formulaire);
 
   champ.addEventListener('input', () => {
     champ.closest('.champ').classList.remove('est-invalide');
@@ -753,10 +754,12 @@ function initPortail() {
       return;
     }
 
-    Stockage.ecrire(CLE_ADHESION, { motivation: reponse, creeLe: new Date().toISOString() });
-    ouvrir();
-    espace.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    notifier('Bienvenue — le fil d’actualité est à vous');
+    apresControleAntiSpam(formulaire, () => {
+      Stockage.ecrire(CLE_ADHESION, { motivation: reponse, creeLe: new Date().toISOString() });
+      ouvrir();
+      espace.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      notifier('Bienvenue — le fil d’actualité est à vous');
+    });
   });
 }
 

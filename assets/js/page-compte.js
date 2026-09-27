@@ -517,6 +517,9 @@ function initInscription() {
   if (!formulaire) return;
 
   initExigencesMotDePasse(formulaire);
+  // La création de compte est la porte la plus exposée du site : ouverte à
+  // tous, elle écrit dans Firestore et déclenche un envoi de courriel.
+  poserPiegeAntiSpam(formulaire);
 
   formulaire.addEventListener('input', (evenement) => {
     const champ = evenement.target.closest('.champ');
@@ -549,6 +552,13 @@ function initInscription() {
       premierInvalide.focus();
       return;
     }
+
+    // Les champs sont valides : on passe le contrôle anti-spam avant d'écrire.
+    // L'appât rempli fait échouer sans un mot ; un envoi trop rapide est
+    // seulement différé, jamais perdu.
+    if (envoiSuspect(formulaire)) return;
+    const attente = attenteAntiSpam(formulaire);
+    if (attente) await new Promise((r) => setTimeout(r, attente));
 
     const resultat = await Comptes.creer({
       prenom: champs.prenom.value,
