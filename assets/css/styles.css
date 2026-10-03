@@ -3712,3 +3712,34 @@ select {
   .bandeau-consentement__boutons { width: 100%; }
   .bandeau-consentement__boutons .btn { flex: 1 1 0; justify-content: center; }
 }
+
+/* --- Récit (« Qui sommes-nous ») -------------------------------------------
+   Un texte qui se lit d'un trait. Le corps monte d'un cran au-dessus du texte
+   courant et l'interligne s'ouvre : c'est une histoire, pas une notice.
+
+   Deux paragraphes y jouent un rôle à part. « Puis on rentre chez soi. » est
+   un temps de bascule — il est isolé, en encre pleine, avec plus d'air autour,
+   pour que le retour au quotidien se lise comme une pause et non comme une
+   phrase de plus. La dernière phrase ferme le récit et en donne la morale :
+   elle passe en gras, comme la chute de « Notre vision » plus haut. */
+.recit {
+  font-size: var(--t-md);
+  line-height: 1.7;
+  color: var(--texte-doux);
+}
+
+.recit p { margin: 0 0 var(--e-5); }
+.recit p:last-child { margin-bottom: 0; }
+
+.recit__temps {
+  margin-block: var(--e-6) !important;
+  color: var(--texte);
+  font-weight: 600;
+}
+
+.recit__chute {
+  margin-top: var(--e-6) !important;
+  color: var(--texte);
+  font-weight: 600;
+  text-wrap: balance;
+}
