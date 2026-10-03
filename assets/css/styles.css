@@ -1041,6 +1041,10 @@ select {
   font-weight: 500;
   color: var(--texte-doux);
   text-decoration: none;
+  /* Un libellé de barre ne se coupe jamais : « DPS, en quelques mots » passé
+     sur deux lignes entre 900 et 960 px faisait une pastille de deux étages
+     au milieu d'une rangée qui n'en a qu'un. */
+  white-space: nowrap;
   transition: background-color var(--transition), color var(--transition);
 }
 
@@ -1138,7 +1142,13 @@ select {
   border: 2px solid var(--surface);
 }
 
-@media (max-width: 900px) {
+/* Le menu se replie sous 1000 px, et non plus 900. Avec l'entrée
+   « DPS, en quelques mots », la barre entière — liens, bouton et compte d'un
+   membre au prénom long — ne tient sur une ligne qu'à partir de 981 px, mesurés.
+   Entre les deux, c'était « Trouver une activité » qui s'empilait sur trois
+   lignes. Une barre qui ne tient pas se replie ; elle ne se tasse pas.
+   Ce seuil va de pair avec celui de `.entete__compte`, plus bas. */
+@media (max-width: 1000px) {
   .burger { display: grid; }
 
   .nav {
@@ -2773,7 +2783,7 @@ select {
 
 /* Même seuil que le repli du menu, sinon 900 px exactement afficherait le
    burger et les entrées de compte en même temps. */
-@media (max-width: 900px) {
+@media (max-width: 1000px) {  /* même seuil que le menu replié, plus haut */
   .entete__compte { display: none; }
 
   /* Dans le menu replié la navigation est une colonne : le filet vertical

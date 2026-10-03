@@ -308,7 +308,7 @@ function initEnteteCompte() {
     zone.innerHTML = contenu;
   });
 
-  // Sous 900 px, l'entrée « Discussions » est rangée dans le menu replié : sa
+  // Sous 1000 px, l'entrée « Discussions » est rangée dans le menu replié : sa
   // pastille ne se voit qu'une fois le menu ouvert, ce qui ne prévient
   // personne. Le bouton du menu porte donc le compte tant qu'il reste quelque
   // chose à lire — c'est le seul repère visible sur un téléphone.
