@@ -3722,6 +3722,14 @@ select {
    pour que le retour au quotidien se lise comme une pause et non comme une
    phrase de plus. La dernière phrase ferme le récit et en donne la morale :
    elle passe en gras, comme la chute de « Notre vision » plus haut. */
+/* Calé au bord gauche du conteneur, comme les intertitres des autres
+   sections de la page ; seule la largeur est bornée, à 712 px — la mesure
+   qu'avait la colonne centrée, et qui garde des lignes d'environ 66 signes. */
+.recit,
+.recit__titre {
+  max-width: 44.5rem;
+}
+
 .recit {
   font-size: var(--t-md);
   line-height: 1.7;
