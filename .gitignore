@@ -1,0 +1,5 @@
+
+# Les compétences UI/UX embarquent des scripts Python : leur compilation est
+# produite à l'exécution et n'a rien à faire au dépôt.
+__pycache__/
+*.pyc

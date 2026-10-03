@@ -310,16 +310,58 @@ function initEnteteCompte() {
 
   // Sous 900 px, l'entrée « Discussions » est rangée dans le menu replié : sa
   // pastille ne se voit qu'une fois le menu ouvert, ce qui ne prévient
-  // personne. Le bouton du menu porte donc un point tant qu'il reste quelque
+  // personne. Le bouton du menu porte donc le compte tant qu'il reste quelque
   // chose à lire — c'est le seul repère visible sur un téléphone.
   const burger = $('.burger');
   if (burger) {
     burger.classList.toggle('burger--alerte', nonLus > 0);
+    // Au-delà de 99, le chiffre exact ne sert plus à rien et la pastille
+    // s'allongerait jusqu'à déborder du bouton.
+    burger.dataset.nonLus = nonLus > 99 ? '99+' : String(nonLus);
     burger.setAttribute(
       'aria-label',
       nonLus > 0 ? `Ouvrir le menu — ${nonLus} message${nonLus > 1 ? 's' : ''} non lu${nonLus > 1 ? 's' : ''}` : 'Ouvrir le menu'
     );
   }
+
+  annoncerNonLus(nonLus);
+}
+
+/* Un message qui arrive pendant qu'on lit une autre page ne se signale, pour
+   qui ne voit pas l'écran, que si on le dit. Une seule région vivante dans
+   tout le document, et un message entier plutôt qu'un nombre nu : « 3 »
+   annoncé seul ne dit pas trois de quoi.
+
+   La région n'est alimentée qu'au changement. Réécrire la même phrase à
+   chaque redessin de l'en-tête la ferait relire à chaque fois, ce qui
+   rendrait la navigation insupportable. */
+let dernierCompteAnnonce = null;
+
+function annoncerNonLus(nonLus) {
+  if (dernierCompteAnnonce === null) {
+    // Premier passage : on enregistre sans annoncer. Dire « 3 messages non
+    // lus » à l'ouverture d'une page interromprait la lecture du titre pour
+    // un état qui n'est pas une nouvelle.
+    dernierCompteAnnonce = nonLus;
+    return;
+  }
+  if (nonLus === dernierCompteAnnonce) return;
+
+  const monte = nonLus > dernierCompteAnnonce;
+  dernierCompteAnnonce = nonLus;
+  if (!monte || nonLus === 0) return;
+
+  let region = $('#annonce-non-lus');
+  if (!region) {
+    region = document.createElement('p');
+    region.id = 'annonce-non-lus';
+    region.className = 'sr-only';
+    region.setAttribute('role', 'status');
+    region.setAttribute('aria-atomic', 'true');
+    document.body.appendChild(region);
+  }
+  region.textContent =
+    `${nonLus} message${nonLus > 1 ? 's' : ''} non lu${nonLus > 1 ? 's' : ''} dans vos discussions`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {

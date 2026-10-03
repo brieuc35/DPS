@@ -1098,24 +1098,43 @@ select {
   cursor: pointer;
 }
 
-/* Le point des messages non lus. Un point et non un nombre : le bouton fait
-   40 px, un chiffre lisible y mangerait le trait des trois barres. Le compte
-   exact est juste derrière, sur l'entrée « Discussions » du menu.
+/* Le compte de messages non lus, posé sur le bouton du menu.
 
-   Le liseré couleur fond détache le point du bouton quel que soit le thème,
-   sans lui dessiner un contour qui en ferait une pastille de plus. */
+   Il déborde du bouton au lieu d'y tenir. C'était la raison pour laquelle il
+   n'y avait d'abord qu'un point : à l'intérieur d'un disque de 40 px, un
+   chiffre lisible vient manger le trait des trois barres. Dehors, il ne gêne
+   rien et se lit — c'est le repère des applications depuis toujours.
+
+   Un point disait « il y a quelque chose » ; le nombre dit « il y a trois
+   choses », ce qui n'appelle pas le même geste. Sur un téléphone, c'est le
+   seul endroit où l'information se voit sans ouvrir le menu.
+
+   Le contenu vient de `data-non-lus`, écrit par l'en-tête : un pseudo-élément
+   évite d'ajouter un nœud que le bouton devrait ensuite gérer. */
 .burger--alerte::after {
-  content: '';
+  content: attr(data-non-lus);
   position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 9px;
-  height: 9px;
+  /* Franchement dehors, pas à cheval : à deux chiffres, une pastille posée
+     sur le bord venait couper la barre du haut du pictogramme. Le conteneur
+     de l'en-tête ne rogne rien, le débordement est donc sans risque. */
+  top: -8px;
+  right: -8px;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 5px;
+  box-sizing: border-box;
   border-radius: var(--r-full);
   background: var(--accent-fort);
-  /* La couleur du bouton, pas celle de la page : c'est sur le bouton que le
-     point est posé, et le fond est désormais un dégradé dont ce coin-là ne
-     vaut plus le milieu. */
+  color: var(--sur-accent);
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 15px;
+  text-align: center;
+  /* Jamais sur deux lignes : la pastille s'allonge, elle ne s'empile pas. */
+  white-space: nowrap;
+  /* La couleur du bouton, pas celle de la page : c'est sur le bouton que la
+     pastille est posée, et le fond est un dégradé dont ce coin ne vaut plus
+     le milieu. */
   border: 2px solid var(--surface);
 }
 
