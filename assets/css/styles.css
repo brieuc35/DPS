@@ -3743,3 +3743,18 @@ select {
   font-weight: 600;
   text-wrap: balance;
 }
+
+/* Le titre d'un récit — commun à « Notre vision » (un h1, premier titre de la
+   page) et à « Qui sommes-nous » (un h2). La balise suit la hiérarchie du
+   document ; l'apparence, elle, est la même pour les deux. */
+.recit__titre {
+  font-size: var(--t-xl);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--e-6);
+  text-wrap: balance;
+}
+
+/* La signature, sous le récit de la vision. Son apparence ne change pas ; on
+   lui donne seulement de l'air, maintenant qu'elle suit une colonne de texte. */
+.signature { margin: var(--e-7) 0 0; }
